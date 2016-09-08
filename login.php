@@ -1,5 +1,8 @@
 <?php
 include 'config.php';
+include 'Polaczenie.php';
+include 'Logowanie.php';
+include 'Uzytkownik.php';
 //db_connect();
 $data_godz=date("Y-m-d, H:i");
 $blad=0;
@@ -7,14 +10,30 @@ $blad=0;
 if(!$_SESSION['logged']) {
     // jeśli zostanie naciśnięty przycisk "Zaloguj"
     if (isset($_POST['name'])) {
+        $logowanie = new Logowanie();
         // filtrujemy dane...
-        $_POST['name'] = clear($_POST['name']);
-        $_POST['password'] = clear($_POST['password']);
+        $_POST['name'] = $logowanie->clear($_POST['name']);
+        $_POST['password'] = $logowanie->clear($_POST['password']);
         // i kodujemy hasło
-        $_POST['password'] = codepass($_POST['password']);
+        $_POST['password'] = $logowanie->codepass($_POST['password']);
 
+
+        $polaczenie = new Polaczenie();
+        $db = $polaczenie->polaczenie_z_baza;
         // sprawdzamy prostym zapytaniem sql czy podane dane są prawidłowe
-        $result = mysqli_query($polaczenie,"SELECT `user_id` FROM `users` WHERE `user_name` = '{$_POST['name']}' AND `user_password` = '{$_POST['password']}' LIMIT 1");
+        $zapytanie = $db->query("SELECT `user_id` FROM `users` WHERE `user_name` = '{$_POST['name']}' AND `user_password` = '{$_POST['password']}' LIMIT 1");
+        //$result = mysqli_query($polaczenie,"SELECT `user_id` FROM `users` WHERE `user_name` = '{$_POST['name']}' AND `user_password` = '{$_POST['password']}' LIMIT 1");
+        $wynik = $zapytanie->num_rows;
+        if($wynik>0)
+        {
+            $dane = $zapytanie->fetch_assoc();
+            $_SESSION['logged'] = true;
+            $user = $dane['user_id'];
+            header('Location: index.php');
+
+        }
+
+        /*
         if (mysqli_num_rows($result) > 0) {
             // jeśli tak to ustawiamy sesje "logged" na true oraz do sesji "user_id" wstawiamy id usera
             $row = mysqli_fetch_assoc($result);
@@ -28,7 +47,7 @@ if(!$_SESSION['logged']) {
             header('Location: index.php');
         } else {
             $blad=1;
-        }
+        }*/
     }
 
 ?>

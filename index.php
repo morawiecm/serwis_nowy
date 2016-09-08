@@ -1,11 +1,12 @@
 <?php
 include 'config.php';
+include 'Logowanie.php';
+$logowanie=new Logowanie();
+$logowanie->check_login();
 
-
-check_login();
 
 // dane uzytkownika z sesji
-$user_data = get_user_data();
+//$user_data = get_user_data();
 $uzytkownik_imie = $user_data['imie'];
 $uzytkownik_nazwisko = $user_data['nazwisko'];
 $uzytkownik_nazwa = $user_data['user_name'];

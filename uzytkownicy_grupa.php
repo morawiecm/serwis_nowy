@@ -29,6 +29,7 @@ else
 ?>
 <?php include 'gora.php';?>
 <?php
+include 'pasek.php';
 include 'menu.php';
 ?>
 

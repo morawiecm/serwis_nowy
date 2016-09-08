@@ -29,6 +29,7 @@ else
 ?>
 <?php include 'gora.php';?>
 <?php
+include 'pasek.php';
 include 'menu.php';
 ?>
 
@@ -236,7 +237,7 @@ include 'menu.php';
 
 
 
-                            $zapisz_uzytkownikaDoBazy=mysqli_query($polaczenie,"INSERT INTO users (user_id, user_name, user_password, user_email, user_regdate, user_from, uprawienia, specialne, imie, nazwisko, sekcja)
+                            $zapisz_uzytkownikaDoBazy=mysqli_query($polaczenie,"INSERT INTO users (user_id, user_name, user_password, user_email, user_regdate, wydzial, uprawienia, specialne, imie, nazwisko, sekcja)
                             VALUES ('','$login', '$haslo','$email', '$data', '$wydzial','$specjalne','$specjalne','$imie','$nazwisko','$sekcja')") or die("blad przy zapisz_uzytkownikaDoBazy".mysqli_error($polaczenie));
                             echo "Utworzono konto dla użytkownika: $login  <a href='uzytkownicy.php' class='btn btn-success'>Powrót</a>";
 
@@ -259,7 +260,7 @@ include 'menu.php';
                 {
                     if($uzytkownik_uprawnienia==1)
                     {
-                        $pobierz_daneUzytkownika=mysqli_query($polaczenie,"SELECT imie, nazwisko, user_email, sekcja, specialne, user_from, user_name, funkcja FROM users WHERE user_id='$nrID'") or die("Blad przy pobierz_daneUzytkownika".mysqli_error($polaczenie));
+                        $pobierz_daneUzytkownika=mysqli_query($polaczenie,"SELECT imie, nazwisko, user_email, sekcja, specialne, wydzial, user_name, funkcja FROM users WHERE user_id='$nrID'") or die("Blad przy pobierz_daneUzytkownika".mysqli_error($polaczenie));
                         if(mysqli_num_rows($pobierz_daneUzytkownika)==1)
                         {
                             while($daneUzytkownika=mysqli_fetch_array($pobierz_daneUzytkownika))
@@ -286,13 +287,13 @@ include 'menu.php';
                             echo "<p class='text-red'>Nie podano adresu email</p>";
                         }
                         echo"</td></tr>
-                    <tr><th>Jednostka</th><td><input type='text' name='jednostka' class='form-control' value='$daneUzytkownika[user_from]'>";
+                    <tr><th>Jednostka</th><td><input type='text' name='jednostka' class='form-control' value='$daneUzytkownika[wydzial]'>";
                         if($blad_jednostka>0)
                         {
                             echo"<p class='text-red'>Nie podano jednostki np. KWP</p>";
                         }
                         echo"</td></tr>
-                    <tr><th>Wydzial</th><td><input type='text' name='wydzial' class='form-control' value='$daneUzytkownika[user_from]'>";
+                    <tr><th>Wydzial</th><td><input type='text' name='wydzial' class='form-control' value='$daneUzytkownika[wydzial]'>";
                         if($blad_wydzial>0){
                             echo "<p class='text-red'>Nie podano wydziału !</p>";
                         }
@@ -337,7 +338,7 @@ include 'menu.php';
                     $nieaktywny=1;
                 }
             $aktualizacja_uzytkownicy=mysqli_query($polaczenie,"UPDATE users SET imie='$_POST[imie]', nazwisko='$_POST[nazwisko]', user_email='$_POST[email]', sekcja='$_POST[sekcja]',
-            specialne='$_POST[specjalne]', user_from='$_POST[wydzial]', funkcja='$_POST[funkcja]', aktywny='$nieaktywny' WHERE user_id='$id_usera'")or die("Blad przy aktualizacja_uzytkownicy".mysqli_error($polaczenie));
+            specialne='$_POST[specjalne]', wydzial='$_POST[wydzial]', funkcja='$_POST[funkcja]', aktywny='$nieaktywny' WHERE user_id='$id_usera'")or die("Blad przy aktualizacja_uzytkownicy".mysqli_error($polaczenie));
             echo"Zaktualizowani pomyślnie <a href='uzytkownicy.php'>Powrót</a>";
             }
         }
@@ -374,8 +375,8 @@ include 'menu.php';
             </div>
             <div class="box-body">
                 <?php
-                $pobierz_listaUzytkownikow=mysqli_query($polaczenie,"SELECT user_id, user_name, imie, nazwisko, user_website,
-                 user_email, user_from, ip_a, aktywny FROM `users`") or die("Blad przy pobierz_listaUzytkownikow".mysqli_error($polaczenie));
+                $pobierz_listaUzytkownikow=mysqli_query($polaczenie,"SELECT user_id, user_name, imie, nazwisko, logowanie_ip,
+                 user_email, wydzial, ip_a, aktywny FROM `users`") or die("Blad przy pobierz_listaUzytkownikow".mysqli_error($polaczenie));
                 $licznik_listaUzytkownikow=mysqli_num_rows($pobierz_listaUzytkownikow);
                 ?>
                 <p><a href="uzytkownicy.php?a=dodaj_nowego" class="btn btn-info">Dodaj Nowego Użytkownika</a> </p>
@@ -405,7 +406,7 @@ include 'menu.php';
                         }
                         echo"<td>$listaUzytkownikow[user_name] ($listaUzytkownikow[user_id])</td>
                         <td>$listaUzytkownikow[user_email]</td>
-                        <td>$listaUzytkownikow[user_website]</td>
+                        <td>$listaUzytkownikow[logowanie_ip]</td>
                         <td>$listaUzytkownikow[ip_a]</td>
                         <td><a href='uzytkownicy.php?a=reset_hasla&id=$listaUzytkownikow[user_id]' class='btn-sm btn-info'> Reset hasła</a> <a href='uzytkownicy.php?a=edytuj_uzytkownika&id=$listaUzytkownikow[user_id]' class='btn-sm btn-warning'> Zminana danych </a>";
                         if($listaUzytkownikow['user_id']!='1')
