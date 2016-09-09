@@ -1,8 +1,8 @@
 <?php
 include 'config.php';
-
-
+include 'funkcje/funkcje_uzytkownicy.php';
 check_login();
+
 
 // dane uzytkownika z sesji
 $user_data = get_user_data();
@@ -10,7 +10,8 @@ $uzytkownik_imie=$user_data['imie'];
 $uzytkownik_nazwisko=$user_data['nazwisko'];
 $uzytkownik_nazwa=$user_data['user_name'];
 $uzytkownik_id=$user_data['user_id'];
-$uzytkownik_sekcja=$user_data['sekcja'];
+$uzytkownik_wydzial = $user_data['wydzial'];
+$uzytkownik_sekcja = $user_data['sekcja'];
 $uzytkownik_uprawnienia=$user_data['specialne'];
 $użytkownik_imie_nazwisko=$uzytkownik_imie." ".$uzytkownik_nazwisko;
 //dane z POST
@@ -260,13 +261,14 @@ include 'menu.php';
                 {
                     if($uzytkownik_uprawnienia==1)
                     {
-                        $pobierz_daneUzytkownika=mysqli_query($polaczenie,"SELECT imie, nazwisko, user_email, sekcja, specialne, wydzial, user_name, funkcja FROM users WHERE user_id='$nrID'") or die("Blad przy pobierz_daneUzytkownika".mysqli_error($polaczenie));
+                        $blad_imie=0;
+                        $pobierz_daneUzytkownika=mysqli_query($polaczenie,"SELECT imie, nazwisko, user_email, sekcja, specialne, wydzial, user_name, funkcja, typ_osoby FROM users WHERE user_id='$nrID'") or die("Blad przy pobierz_daneUzytkownika".mysqli_error($polaczenie));
                         if(mysqli_num_rows($pobierz_daneUzytkownika)==1)
                         {
                             while($daneUzytkownika=mysqli_fetch_array($pobierz_daneUzytkownika))
                             {
                         echo"<table class='table table-striped'><form name='edycja_danych' method='post' action='uzytkownicy.php?a=aktualizacja'>
-                    <tr><th>Login:</th><td><input type='text' name='login' class='form-control' value='$daneUzytkownika[user_name]' disabled>";
+                    <tr><th>Login:</th><td><input type='text' class='form-control' value='$daneUzytkownika[user_name]' disabled>";
 
                         echo"</td></tr>
                     <tr><th>Imię</th><td><input type='text' name='imie' class='form-control' value='$daneUzytkownika[imie]'>";
@@ -275,22 +277,26 @@ include 'menu.php';
                             echo"<p class='text-red'>Nie podano imienia !</p>";
                         }
                         echo"</td></tr>
+
                     <tr><th>Nazwisko</th><td><input type='text' name='nazwisko' class='form-control' value='$daneUzytkownika[nazwisko]'>";
                         if($blad_nazwisko>0)
                         {
                             echo"<p class='text-red'>Nie podano nazwiska !</p>";
                         }
                         echo"</td></tr>
+                    <tr><th>Typ osoby:</th><td><select name='typ_osoby' class='form-control'>";
+                                if($daneUzytkownika['typ_osoby']==0)
+                                {
+                                    echo"<option value='0'>Cywil</option>";
+                                }
+                                else{
+                                    echo "<option value='1'>Policjant</option>";
+                                }
+                                echo"<option value='0'>Cywil</option><option value='1'>Policjant</option></select>
                     <tr><th>Email:</th><td><input type='email' class='form-control' name='email' value='$daneUzytkownika[user_email]'>";
                         if($blad_email>0)
                         {
                             echo "<p class='text-red'>Nie podano adresu email</p>";
-                        }
-                        echo"</td></tr>
-                    <tr><th>Jednostka</th><td><input type='text' name='jednostka' class='form-control' value='$daneUzytkownika[wydzial]'>";
-                        if($blad_jednostka>0)
-                        {
-                            echo"<p class='text-red'>Nie podano jednostki np. KWP</p>";
                         }
                         echo"</td></tr>
                     <tr><th>Wydzial</th><td><input type='text' name='wydzial' class='form-control' value='$daneUzytkownika[wydzial]'>";
@@ -298,13 +304,24 @@ include 'menu.php';
                             echo "<p class='text-red'>Nie podano wydziału !</p>";
                         }
                         echo "</td></tr>
-                    <tr><th>Sekcja</th><td><input type='text' name='sekcja' class='form-control' value='$daneUzytkownika[sekcja]'></td></tr>
+                    <tr><th>Sekcja</th><td><select name='sekcja' class='form-control'><option value='$daneUzytkownika[sekcja]'>$daneUzytkownika[sekcja]</option>";
+                                echo pobierz_sekcje();
+                                echo"</select></td></tr>
                     <tr><th>Specjalne</th><th><input type='number' name='specjalne' class='form-control' value='$daneUzytkownika[specjalne]'></th></tr>
-                    <tr><th>Funkcja</th><td><input type='number' class='form-control' name='funkcja' value='$daneUzytkownika[funkcja]'></td></tr>
-                    <tr><th colspan='2' class='text text-center'> 0 -uzytkownik, 1 - kierownik,  2 - koordynator, 3 - naczelnik </th></tr>
-                    <tr><th>Aktywny</th><td><input type='checkbox' checked name='nieaktywny' value='0'></td></tr>
+                    <tr><th>Funkcja</th><td><select class='form-control' name='funkcja'>";
+                                echo wyswietl_pelniona_funkcje_lista($nrID);
+                                echo "</select></td></tr>
                     <tr><td colspan='2'><input type='hidden' name='id_usera' value='$nrID'><input type='submit' name='aktualizuj' value='Aktualizuj dane użytkownika' class='btn btn-warning form-control'></td></tr>
-                    </form></table>";
+                    </form>";
+                         if($daneUzytkownika['aktywny']=='0')
+                         {
+
+                            echo"<tr><td colspan='2'><a href='uzytkownicy.php?a=zablokuj&id=$nrID' class='btn btn-danger form-control'>Zablokuj użytkownika</a> </td></tr></table>";
+                         }
+                         else
+                         {
+                            echo"<tr><td colspan='2'><a href='uzytkownicy.php?a=odblokuj&id=$nrID' class='btn btn-success form-control'>Odblokuj użytkownika</a> </td></tr></table>";
+                         }
                             }
                         }
                         else
@@ -326,21 +343,68 @@ include 'menu.php';
                     }
 
                 }
+
+        elseif ($a=='zablokuj')
+        {
+            if(isset($nrID)!='')
+            {
+                zablokuj_uzytkownika($nrID);
+                echo "Zablokowano użytkownika pomyślnie";
+                echo "<a href='uzytkownicy.php?a=edytuj_uzytkownika&id=$nrID'>Powrót</a>";
+            }
+            else
+            {
+                echo'<div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                        Blad nie znaleziono użytkownika o podanym id..
+                  </div>';
+            }
+        }
+        elseif ($a=='odblokuj')
+        {
+            if(isset($nrID)!='')
+            {
+                odblokuj_uzytkownika($nrID);
+                echo "odblokowano użytkownika pomyślnie";
+                echo "<a href='uzytkownicy.php?a=edytuj_uzytkownika&id=$nrID'>Powrót</a>";
+            }
+            else
+            {
+                echo'<div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                        Blad nie znaleziono użytkownika o podanym id..
+                  </div>';
+            }
+        }
+
         elseif ($a=='aktualizacja')
         {
             if(isset($_POST['aktualizuj']))
             {
-                $nieaktywny=0;
-
-                $id_usera=$_POST['id_usera'];
-                if(!isset($_POST['nieaktywny']))
+                if(isset($_POST['id_usera']))
                 {
-                    $nieaktywny=1;
+                    $id_usera=$_POST['id_usera'];
+                    $nr_grupy = $_POST['sekcja'];
+                    $grupa=sprawdz_nr_grupy($nr_grupy);
+
+
+                    $aktualizacja_uzytkownika=mysqli_query($polaczenie,"UPDATE users SET imie='$_POST[imie]', nazwisko='$_POST[nazwisko]', 
+                    user_email='$_POST[email]', sekcja='$_POST[sekcja]', grupa = '$grupa', specialne='$_POST[specjalne]', wydzial='$_POST[wydzial]', 
+                    funkcja='$_POST[funkcja]', typ_osoby='$_POST[typ_osoby]' WHERE user_id='$id_usera'")
+                        or die("Blad przy aktualizacja_uzytkownika".mysqli_error($polaczenie));
+
+                    echo"Zaktualizowano pomyślnie <a href='uzytkownicy.php?a=edytuj_uzytkownika&id=$id_usera'>Powrót</a>";
+
                 }
-            $aktualizacja_uzytkownicy=mysqli_query($polaczenie,"UPDATE users SET imie='$_POST[imie]', nazwisko='$_POST[nazwisko]', user_email='$_POST[email]', sekcja='$_POST[sekcja]',
-            specialne='$_POST[specjalne]', wydzial='$_POST[wydzial]', funkcja='$_POST[funkcja]', aktywny='$nieaktywny' WHERE user_id='$id_usera'")or die("Blad przy aktualizacja_uzytkownicy".mysqli_error($polaczenie));
-            echo"Zaktualizowani pomyślnie <a href='uzytkownicy.php'>Powrót</a>";
+                else
+                {
+                    echo"Błedny ID";
+                }
+
             }
+            echo"Nie powinno cię tu być..<a href='uzytkownicy.php'>Powrót</a>";
         }
 
         elseif($a=='reset_hasla')
@@ -375,8 +439,13 @@ include 'menu.php';
             </div>
             <div class="box-body">
                 <?php
-                $pobierz_listaUzytkownikow=mysqli_query($polaczenie,"SELECT user_id, user_name, imie, nazwisko, logowanie_ip,
-                 user_email, wydzial, ip_a, aktywny FROM `users`") or die("Blad przy pobierz_listaUzytkownikow".mysqli_error($polaczenie));
+
+
+                /*
+                $pobierz_listeUzytkownikow = mysqli_query($polaczenie,"SELECT user_id, user_name, imie, nazwisko, logowanie_ip, user_email, wydzial, ip_a, aktywny FROM `users`");
+                */
+                $pobierz_listaUzytkownikow=mysqli_query($polaczenie,"SELECT user_id, user_name, imie, nazwisko, logowanie_ip, logowanie_data,
+                 user_email, wydzial, aktywny FROM `users`") or die("Blad przy pobierz_listaUzytkownikow".mysqli_error($polaczenie));
                 $licznik_listaUzytkownikow=mysqli_num_rows($pobierz_listaUzytkownikow);
                 ?>
                 <p><a href="uzytkownicy.php?a=dodaj_nowego" class="btn btn-info">Dodaj Nowego Użytkownika</a> </p>
@@ -395,7 +464,7 @@ include 'menu.php';
                     <?php
                     while($listaUzytkownikow=mysqli_fetch_array($pobierz_listaUzytkownikow))
                     {
-                        if($listaUzytkownikow[8]!=0)
+                        if($listaUzytkownikow['aktywny']!=0)
                         {
                             echo"<tr><td class='text text-red'><span class='fa fa-frown-o'></span>$listaUzytkownikow[imie] $listaUzytkownikow[nazwisko]<span class='label label-danger'>Nieaktywny</span></td>";
                         }
@@ -406,8 +475,8 @@ include 'menu.php';
                         }
                         echo"<td>$listaUzytkownikow[user_name] ($listaUzytkownikow[user_id])</td>
                         <td>$listaUzytkownikow[user_email]</td>
+                        <td>$listaUzytkownikow[logowanie_data]</td>
                         <td>$listaUzytkownikow[logowanie_ip]</td>
-                        <td>$listaUzytkownikow[ip_a]</td>
                         <td><a href='uzytkownicy.php?a=reset_hasla&id=$listaUzytkownikow[user_id]' class='btn-sm btn-info'> Reset hasła</a> <a href='uzytkownicy.php?a=edytuj_uzytkownika&id=$listaUzytkownikow[user_id]' class='btn-sm btn-warning'> Zminana danych </a>";
                         if($listaUzytkownikow['user_id']!='1')
                         {

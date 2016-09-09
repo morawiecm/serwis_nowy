@@ -5,12 +5,8 @@
  * Date: 2016-09-08
  * Time: 12:06
  */
-include 'Polaczenie.php';
-include 'Uzytkownik.php';
+include 'config.php';
+include 'funkcje/funkcje_uzytkownicy.php';
 
-$polaczenie = new Polaczenie();
-$pracownik = new Uzytkownik(56);
-
-echo $pracownik->uzytkownik_imie;
-
+echo wyswietl_pelniona_funkcje_lista(1);
 

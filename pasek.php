@@ -110,7 +110,7 @@
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <img src="./dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
-                            <span class="hidden-xs">Imię i Nazisko</span>
+                            <span class="hidden-xs"><?php echo"$uzytkownik_imie $uzytkownik_nazwisko"; ?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
@@ -118,21 +118,15 @@
                                 <img src="./dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
 
                                 <p>
-                                    Imię i naziwsko
-                                    <small>Wydzial XYZ</small>
+                                    <?php echo"$uzytkownik_imie $uzytkownik_nazwisko"; ?>
+                                    <small> <?php echo $uzytkownik_wydzial; ?></small>
                                 </p>
                             </li>
                             <!-- Menu Body -->
                             <li class="user-body">
                                 <div class="row">
                                     <div class="col-xs-4 text-center">
-                                        <a href="#">Followers</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Sales</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Friends</a>
+                                        <a href="#"><?php echo $uzytkownik_sekcja; ?></a>
                                     </div>
                                 </div>
                                 <!-- /.row -->
@@ -143,7 +137,7 @@
                                     <a href="#" class="btn btn-default btn-flat">Profil</a>
                                 </div>
                                 <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Wyloguj</a>
+                                    <a href="logout.php" class="btn btn-default btn-flat">Wyloguj</a>
                                 </div>
                             </li>
                         </ul>

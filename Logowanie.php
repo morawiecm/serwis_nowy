@@ -6,7 +6,9 @@
  * Date: 2016-09-08
  * Time: 12:11
  */
-class Logowanie
+
+
+class Logowanie extends Polaczenie
 {
     public $logowanie_login;
     public $logowanie_haslo;
@@ -16,6 +18,8 @@ class Logowanie
     public $logowanie_niepoprawnie_data;
     public $logowanie_reset_hasla;
     public $logowanie_aktywny;
+
+
 
     function clear($text) {
         // jeśli serwer automatycznie dodaje slashe to je usuwamy
@@ -41,17 +45,17 @@ class Logowanie
     }
 
     function get_user_data($user_id = -1) {
+
+        $polaczenie = $this->polaczenie_z_baza;
         // jeśli nie podamy id usera to podstawiamy id aktualnie zalogowanego
         if($user_id == -1) {
             $user_id = $_SESSION['user_id'];
         }
-        $polaczenie=mysqli_connect(DBHOST,DBUSER,DBPASS,DBNAME) or die('Blad czy polaczniu'.mysqli_connect_error());
-        mysqli_set_charset($polaczenie, "utf8");
-        $result = mysqli_query($polaczenie,"SELECT * FROM `users` WHERE `user_id` = '{$user_id}' LIMIT 1");
-        if(mysqli_num_rows($result) == 0) {
+        $result =$polaczenie->query("SELECT * FROM `users` WHERE `user_id` = '{$user_id}' LIMIT 1");
+        if($result->num_rows == 0) {
             return false;
         }
-        return mysqli_fetch_assoc($result);
+        return $result->fetch_assoc();
     }
 
 

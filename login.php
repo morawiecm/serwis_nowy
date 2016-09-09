@@ -1,8 +1,9 @@
 <?php
+
 include 'config.php';
-include 'Polaczenie.php';
-include 'Logowanie.php';
-include 'Uzytkownik.php';
+//include 'Polaczenie.php';
+//include 'Logowanie.php';
+////include 'Uzytkownik.php';
 //db_connect();
 $data_godz=date("Y-m-d, H:i");
 $blad=0;
@@ -10,30 +11,30 @@ $blad=0;
 if(!$_SESSION['logged']) {
     // jeśli zostanie naciśnięty przycisk "Zaloguj"
     if (isset($_POST['name'])) {
-        $logowanie = new Logowanie();
+        //$logowanie = new Logowanie();
         // filtrujemy dane...
-        $_POST['name'] = $logowanie->clear($_POST['name']);
-        $_POST['password'] = $logowanie->clear($_POST['password']);
+        $_POST['name'] = clear($_POST['name']);
+        $_POST['password'] = clear($_POST['password']);
         // i kodujemy hasło
-        $_POST['password'] = $logowanie->codepass($_POST['password']);
+        $_POST['password'] = codepass($_POST['password']);
 
 
-        $polaczenie = new Polaczenie();
-        $db = $polaczenie->polaczenie_z_baza;
+        //$polaczenie = new Polaczenie();
+       // $db = $polaczenie->polaczenie_z_baza;
         // sprawdzamy prostym zapytaniem sql czy podane dane są prawidłowe
-        $zapytanie = $db->query("SELECT `user_id` FROM `users` WHERE `user_name` = '{$_POST['name']}' AND `user_password` = '{$_POST['password']}' LIMIT 1");
-        //$result = mysqli_query($polaczenie,"SELECT `user_id` FROM `users` WHERE `user_name` = '{$_POST['name']}' AND `user_password` = '{$_POST['password']}' LIMIT 1");
-        $wynik = $zapytanie->num_rows;
-        if($wynik>0)
+       // $zapytanie = $db->query("SELECT `user_id` FROM `users` WHERE `user_name` = '{$_POST['name']}' AND `user_password` = '{$_POST['password']}' LIMIT 1");
+        $result = mysqli_query($polaczenie,"SELECT `user_id` FROM `users` WHERE `user_name` = '{$_POST['name']}' AND `user_password` = '{$_POST['password']}' LIMIT 1");
+        //$wynik = $zapytanie->num_rows;
+        /*if($wynik>0)
         {
             $dane = $zapytanie->fetch_assoc();
             $_SESSION['logged'] = true;
-            $user = $dane['user_id'];
+            $_SESSION['user_id'] = $dane['user_id'];
             header('Location: index.php');
 
         }
 
-        /*
+        */
         if (mysqli_num_rows($result) > 0) {
             // jeśli tak to ustawiamy sesje "logged" na true oraz do sesji "user_id" wstawiamy id usera
             $row = mysqli_fetch_assoc($result);
@@ -47,7 +48,7 @@ if(!$_SESSION['logged']) {
             header('Location: index.php');
         } else {
             $blad=1;
-        }*/
+        }
     }
 
 ?>
@@ -87,8 +88,15 @@ if(!$_SESSION['logged']) {
         <form action="login.php" method="post">
             <div class="form-group has-feedback">
                 <?php
+                if(isset($_POST['name']))
+                {
+                    echo'<input type="text" class="form-control" placeholder="Login" name="name" value="'.$_POST['name'].'">';
+                }
+                else
+                {
+                    echo'<input type="text" class="form-control" placeholder="Login" name="name"/>';
+                }
                 echo'
-                 <input type="text" class="form-control" placeholder="Login" name="name" value="'.$_POST['name'].'">
                 <span class="glyphicon glyphicon-pencil form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">

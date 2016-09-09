@@ -1,32 +1,19 @@
 <?php
 include 'config.php';
-include 'Logowanie.php';
-$logowanie=new Logowanie();
-$logowanie->check_login();
-
-
+check_login();
 // dane uzytkownika z sesji
-//$user_data = get_user_data();
+$user_data = get_user_data();
 $uzytkownik_imie = $user_data['imie'];
 $uzytkownik_nazwisko = $user_data['nazwisko'];
 $uzytkownik_nazwa = $user_data['user_name'];
 $uzytkownik_id = $user_data['user_id'];
+$uzytkownik_wydzial = $user_data['wydzial'];
 $uzytkownik_sekcja = $user_data['sekcja'];
 $uzytkownik_uprawnienia = $user_data['specialne'];
 $użytkownik_imie_nazwisko = $uzytkownik_imie . " " . $uzytkownik_nazwisko;
 //dane z POST
 
-if (isset($_REQUEST['a']))
-{
-$a = trim($_REQUEST['a']);
-}
-else{
-    $a='';
-}
-if (isset($_REQUEST['id']))
-{
-$nrID = trim($_REQUEST['id']);
-}
+
 
 if(isset($_POST['dokument']))
 {
