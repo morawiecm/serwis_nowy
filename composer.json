@@ -10,6 +10,7 @@
     }
   ],
   "require": {
-    "almasaeed2010/adminlte": "v2.3.6"
+    "almasaeed2010/adminlte": "v2.3.6",
+    "components/bootstrap-datetimepicker": "2.3.8"
   }
 }

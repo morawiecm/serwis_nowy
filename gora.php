@@ -18,6 +18,16 @@
          folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="./dist/css/skins/_all-skins.min.css">
 
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker.css">
+    <!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="./plugins/datepicker/datepicker3.css">
+
+    <!-- Bootstrap time Picker -->
+    <link rel="stylesheet" href="./plugins/timepicker/bootstrap-timepicker.min.css">
+
+
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

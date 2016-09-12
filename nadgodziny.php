@@ -77,12 +77,53 @@ include 'menu.php';
                 </div>
             </div>
             <div class="box-body">
-                Start creating your amazing application!
+                <form action="nadgodziny.php?a=zapisz" method="post">
+                <table class="table table-striped">
+                <tr>
+                    <th>Typ wyjscia/wejscia</th>
+                <td>
+                    <select name="typ" class="form-control">
+                        <option value="0">Służbowe</option>
+                        <option value="1">Osobiste</option>
+                    </select>
+                </td>
+                </tr>
+                <tr>
+                <th>OD:</th><td>
+                
+                    <input type="text" class="form-control timepicker" id="nadgodziny-od" name="od"/>
+                    
+               </td></tr>
+                <tr><th>DO:</th><td><input type="text" class="form-control timepicker2" name="do" id="nadgodziny-do"></td></tr>
+                <tr><th>UWAGA:</th><td><input type="text" class="form-control" name="uwaga"></td></tr>
+                <tr><td colspan="2"><input type="submit" name="zapisz_godziny" value="Dodaj wpis" class="btn btn-success form-control"></td></tr>
+</table></form>
             </div>
             <!-- /.box-body -->
            
         </div>
         <!-- /.box -->';
+        }
+        elseif ($a=='zapisz')
+        {
+            if(isset($_POST['zapisz_godziny']))
+            {
+                //dane z POST
+                $typ=$_POST['typ'];
+                $od = $_POST['od'];
+                $do= $_POST['do'];
+                $data= date("Y-m-d H:i:s");
+                $uwaga = $_POST['uwaga'];
+
+                $zarestruj_czas=mysqli_query($polaczenie,"INSERT INTO nadgodziny (id_usera, typ_wyjscia, od, do, minut, akceptacja, data_rejestracji, uwagi, wazne_do)
+                VALUES ('$uzytkownik_id','$typ','$od','$do','','','$data','$uwaga','')") or die("Bład przy zarestruj_czas".mysqli_error($polaczenie));
+                echo "Zapisano poprawnie czas : minut";
+
+            }
+            else
+            {
+                echo"Nastąpił bład";
+            }
         }
         else
         {
