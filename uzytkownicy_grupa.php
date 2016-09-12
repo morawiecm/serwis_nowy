@@ -1,6 +1,6 @@
 <?php
 include 'config.php';
-
+include 'funkcje/funkcje_nadgodziny.php';
 
 check_login();
 
@@ -155,18 +155,19 @@ include 'menu.php';
                             echo"<p>Grupa: $daneGrupy[1]</p>";
                             echo"<p>Kierownik: $daneGrupy[3] $daneGrupy[4]</p>";
                         }
-                        echo"<p><a href='uzytkownicy_grupa.php?a=dodaj_uzytkownika&id=$nrID' class='btn btn-info'>Dodaj użytkowników do grupy</a></p>";
+                       // echo"<p><a href='uzytkownicy_grupa.php?a=dodaj_uzytkownika&id=$nrID' class='btn btn-info'>Dodaj użytkowników do grupy</a></p>";
                         echo"<table class='table table-striped table-hover'>";
                     $pobierz_uzytkownikowGrupy=mysqli_query($polaczenie,"SELECT users.imie, users.nazwisko, users.user_id FROM users WHERE users.grupa='$nrID' ORDER BY users.imie") or die("blad przy pobierz_uzytkownikowGrupy".mysqli_error($polaczenie));
                     if(mysqli_num_rows($pobierz_uzytkownikowGrupy)>0)
                     {
-                        echo"<tr><th>LP</th><th>Imie i Nazwisko</th><th>Akcja</th></tr>";
+                        echo"<tr><th>LP</th><th>Imie i Nazwisko</th><th>Nadgodziny/Niedogodziny</th><th>Akcja</th></tr>";
                         $lp=0;
                         while ($uzytkownicyGrupy=mysqli_fetch_array($pobierz_uzytkownikowGrupy))
                         {
                             $lp++;
-                            echo"<tr><td>$lp</td><td>$uzytkownicyGrupy[imie] $uzytkownicyGrupy[nazwisko]</td><td><a href='uzytkownicy_grupa.php?a=usun_uzytkownika_grupa&id=$uzytkownicyGrupy[user_id]' class='btn-sm btn-danger'>
-                            Usuń</a> </td></tr>";
+                            $minuty = PoliczMinuty($uzytkownicyGrupy['user_id']);
+                            echo"<tr><td>$lp</td><td>$uzytkownicyGrupy[imie] $uzytkownicyGrupy[nazwisko]</td><td>$minuty minut</td><td><a href='nadgodziny.php?a=przeglad&id=$uzytkownicyGrupy[user_id]' class='btn-sm btn-danger'>
+                            Pokaż ewidencje godzin</a> </td></tr>";
                         }
                         echo"</table>";
                     }

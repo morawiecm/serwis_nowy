@@ -104,3 +104,22 @@ function sprawdz_nr_grupy($sekcja)
 
     return $nr_grupy;
 }
+function PobierzImieNazwisko($id_uzytkownika)
+{
+    $polaczenie= polaczenie_z_baza();
+    $imie_nazwisko='';
+    $pobierz_imie_i_nazwisko=mysqli_query($polaczenie,"SELECT imie, nazwisko FROM users WHERE user_id='$id_uzytkownika'")
+        or die("Bład przy pobierz_imie_i_nazwisko".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_imie_i_nazwisko)>0)
+    {
+        while ($dane=mysqli_fetch_array($pobierz_imie_i_nazwisko))
+        {
+            $imie_nazwisko = $dane['imie']." ".$dane['nazwisko'];
+        }
+    }
+    else
+    {
+        $imie_nazwisko="Bład pobierania danych uzytkownika!";
+    }
+    return $imie_nazwisko;
+}
