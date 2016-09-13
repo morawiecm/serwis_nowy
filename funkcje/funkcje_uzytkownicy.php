@@ -123,3 +123,59 @@ function PobierzImieNazwisko($id_uzytkownika)
     }
     return $imie_nazwisko;
 }
+
+function PobierzUzytkownikow()
+{
+    $polaczenie= polaczenie_z_baza();
+    $id_imie_nazwisko='';
+    $pobierz_imie_i_nazwisko=mysqli_query($polaczenie,"SELECT user_id, imie, nazwisko FROM users WHERE aktywny='0' ORDER BY nazwisko ASC")
+    or die("Bład przy pobierz_imie_i_nazwisko".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_imie_i_nazwisko)>0)
+    {
+        while ($dane=mysqli_fetch_array($pobierz_imie_i_nazwisko))
+        {
+            $id_imie_nazwisko .="<option value='".$dane['user_id']."'>".$dane['nazwisko']." ".$dane['imie']."</option>";
+        }
+    }
+    else
+    {
+        $id_imie_nazwisko="Bład pobierania danych uzytkownika!";
+    }
+    return $id_imie_nazwisko;
+}
+
+
+function PobierzKierownikow()
+{
+    $polaczenie= polaczenie_z_baza();
+    $lista='';
+    $pobierz_kierownikow=mysqli_query($polaczenie,"SELECT user_id, imie, nazwisko FROM users WHERE funkcja>0 AND aktywny='0'")
+        or die("Blad przy pobierz_kierownikow".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_kierownikow)>0)
+    {
+        while ($kierownicy=mysqli_fetch_array($pobierz_kierownikow))
+        {
+            $lista.="<option value='".$kierownicy['user_id']."'>".$kierownicy['imie']." ".$kierownicy['nazwisko']."</option>";
+        }
+    }
+    else
+    {
+        $lista="<option>Brak kadry zarządzającej. Dodaj funkcje</option>";
+    }
+    return $lista;
+}
+function PobierzGrupeKierownika($id_uzytkownika)
+{
+    $polaczenie= polaczenie_z_baza();
+    $id_grupy='';
+    $pobierz_grupe=mysqli_query($polaczenie,"SELECT grupa FROM users WHERE user_id='$id_uzytkownika'")
+    or die("Bład przy pobierz_imie_i_nazwisko".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_grupe)>0)
+    {
+        while ($dane=mysqli_fetch_array($pobierz_grupe))
+        {
+            $id_grupy = $dane['grupa'];
+        }
+    }
+    return $id_grupy;
+}

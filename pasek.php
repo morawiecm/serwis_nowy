@@ -125,7 +125,7 @@
                             <!-- Menu Body -->
                             <li class="user-body">
                                 <div class="row">
-                                    <div class="col-xs-4 text-center">
+                                    <div class="text-center">
                                         <a href="#"><?php echo $uzytkownik_sekcja; ?></a>
                                     </div>
                                 </div>
@@ -134,7 +134,10 @@
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat">Profil</a>
+                                    <a href="profil.php" class="btn btn-default btn-flat">Profil</a>
+                                </div>
+                                <div class="pull-left">
+                                    <a href="nadgodziny.php" class="btn btn-default btn-flat">Nadgodziny</a>
                                 </div>
                                 <div class="pull-right">
                                     <a href="logout.php" class="btn btn-default btn-flat">Wyloguj</a>

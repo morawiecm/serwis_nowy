@@ -10,6 +10,7 @@ $uzytkownik_id = $user_data['user_id'];
 $uzytkownik_wydzial = $user_data['wydzial'];
 $uzytkownik_sekcja = $user_data['sekcja'];
 $uzytkownik_uprawnienia = $user_data['specialne'];
+$uzytkownik_funkcja=$user_data['funkcja'];
 $użytkownik_imie_nazwisko = $uzytkownik_imie . " " . $uzytkownik_nazwisko;
 //dane z POST
 

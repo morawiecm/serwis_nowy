@@ -262,7 +262,7 @@ include 'menu.php';
                     if($uzytkownik_uprawnienia==1)
                     {
                         $blad_imie=0;
-                        $pobierz_daneUzytkownika=mysqli_query($polaczenie,"SELECT imie, nazwisko, user_email, sekcja, specialne, wydzial, user_name, funkcja, typ_osoby FROM users WHERE user_id='$nrID'") or die("Blad przy pobierz_daneUzytkownika".mysqli_error($polaczenie));
+                        $pobierz_daneUzytkownika=mysqli_query($polaczenie,"SELECT imie, nazwisko, user_email, sekcja, specialne, wydzial, user_name, funkcja, typ_osoby, aktywny FROM users WHERE user_id='$nrID'") or die("Blad przy pobierz_daneUzytkownika".mysqli_error($polaczenie));
                         if(mysqli_num_rows($pobierz_daneUzytkownika)==1)
                         {
                             while($daneUzytkownika=mysqli_fetch_array($pobierz_daneUzytkownika))
@@ -307,18 +307,18 @@ include 'menu.php';
                     <tr><th>Sekcja</th><td><select name='sekcja' class='form-control'><option value='$daneUzytkownika[sekcja]'>$daneUzytkownika[sekcja]</option>";
                                 echo pobierz_sekcje();
                                 echo"</select></td></tr>
-                    <tr><th>Specjalne</th><th><input type='number' name='specjalne' class='form-control' value='$daneUzytkownika[specjalne]'></th></tr>
+                    <tr><th>Specjalne</th><th><input type='number' name='specjalne' class='form-control' value='$daneUzytkownika[specialne]'></th></tr>
                     <tr><th>Funkcja</th><td><select class='form-control' name='funkcja'>";
                                 echo wyswietl_pelniona_funkcje_lista($nrID);
                                 echo "</select></td></tr>
                     <tr><td colspan='2'><input type='hidden' name='id_usera' value='$nrID'><input type='submit' name='aktualizuj' value='Aktualizuj dane użytkownika' class='btn btn-warning form-control'></td></tr>
                     </form>";
-                         if($daneUzytkownika['aktywny']=='0')
+                         if($daneUzytkownika['aktywny']==0)
                          {
 
                             echo"<tr><td colspan='2'><a href='uzytkownicy.php?a=zablokuj&id=$nrID' class='btn btn-danger form-control'>Zablokuj użytkownika</a> </td></tr></table>";
                          }
-                         else
+                         elseif($daneUzytkownika['aktywny']==1)
                          {
                             echo"<tr><td colspan='2'><a href='uzytkownicy.php?a=odblokuj&id=$nrID' class='btn btn-success form-control'>Odblokuj użytkownika</a> </td></tr></table>";
                          }
@@ -404,7 +404,10 @@ include 'menu.php';
                 }
 
             }
-            echo"Nie powinno cię tu być..<a href='uzytkownicy.php'>Powrót</a>";
+            else
+            {
+                echo"Nie powinno cię tu być..<a href='uzytkownicy.php'>Powrót</a>";
+            }
         }
 
         elseif($a=='reset_hasla')

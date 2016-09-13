@@ -3,7 +3,6 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/adminlte" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/almasaeed2010/adminlte" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/components/bootstrap" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/components/bootstrap-datetimepicker" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/components/jquery" />
@@ -24,18 +23,12 @@
     <orderEntry type="module-library">
       <library name="PHP">
         <CLASSES>
-          <root url="file://$MODULE_DIR$/vendor/almasaeed2010/adminlte" />
-          <root url="file://$MODULE_DIR$/vendor/components/bootstrap" />
-          <root url="file://$MODULE_DIR$/vendor/components/bootstrap-datetimepicker" />
-          <root url="file://$MODULE_DIR$/vendor/components/jquery" />
           <root url="file://$MODULE_DIR$/vendor/composer" />
+          <root url="file://$MODULE_DIR$/../../php/pear" />
         </CLASSES>
         <SOURCES>
-          <root url="file://$MODULE_DIR$/vendor/almasaeed2010/adminlte" />
-          <root url="file://$MODULE_DIR$/vendor/components/bootstrap" />
-          <root url="file://$MODULE_DIR$/vendor/components/bootstrap-datetimepicker" />
-          <root url="file://$MODULE_DIR$/vendor/components/jquery" />
           <root url="file://$MODULE_DIR$/vendor/composer" />
+          <root url="file://$MODULE_DIR$/../../php/pear" />
         </SOURCES>
       </library>
     </orderEntry>

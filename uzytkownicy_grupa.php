@@ -1,5 +1,6 @@
 <?php
 include 'config.php';
+include 'funkcje/funkcje_uzytkownicy.php';
 include 'funkcje/funkcje_nadgodziny.php';
 
 check_login();
@@ -66,18 +67,7 @@ include 'menu.php';
                     echo"<table class='table table-striped'><form method='post' action='uzytkownicy_grupa.php?a=zapisz'>";
                     echo"<tr><th>Nazwa Grupy:</th><td><input type='text' class='form-control' name='nazwa_grupy'></td></tr>";
                     echo"<tr><th>Kierownik/Koordynator</th><td><select name='kierownik' class='form-control'>";
-                    $pobierz_listeKierownikow=mysqli_query($polaczenie,"SELECT user_id, imie,nazwisko FROM users WHERE funkcja=1 or funkcja=2 or funkcja=3 ")or die("Blad przy pobierz_listeKierownikow".mysqli_error($polaczenie));
-                    if(mysqli_num_rows($pobierz_listeKierownikow)>0)
-                    {
-                        while ($listaKierownikow=mysqli_fetch_array($pobierz_listeKierownikow))
-                        {
-                            echo "<option value='$listaKierownikow[user_id]'>$listaKierownikow[imie] $listaKierownikow[nazwisko] </option>";
-                        }
-                    }
-                    else
-                    {
-                        echo"<option>Brak kierowniów. Zdefiniuj najpierw...</option>";
-                    }
+                    echo PobierzKierownikow();
                     echo"</select></td></tr>";
                     echo"<tr><th colspan='2' ><input type='submit' name='zapisz_grupe' value='Zapisz' class='btn btn-warning form-control'></th> </tr>";
                     echo"</form></table>";
@@ -235,6 +225,37 @@ include 'menu.php';
                 {
 
                 }
+                elseif ($a=='zmien_kierownika')
+                {
+                    if(isset($nrID))
+                    {
+                        echo "<table class='table table-bordered tabl-striped'><form method='post' action='uzytkownicy_grupa.php?a=aktualizuj_kierownika'>";
+                        echo "<tr><th>Wybierz Kierownika/Kordynatora Sekcji</th><td><select name='id_kierownika' class='form-control'>";
+                        echo PobierzKierownikow();
+                        echo "</select><input type='hidden' name='id_grupy' value='$nrID'></td></tr>";
+                        echo "<tr><th colspan='2'><input type='submit' name='przycisk_aktualizuj' value='Aktualiuj Grupę' class='btn btn-info form-control'></th></tr>";
+                        echo "</form></table>";
+                    }
+                    else
+                    {
+                        echo "Bład. Zły ID Grupy";
+                    }
+                }
+                elseif ($a=='aktualizuj_kierownika')
+                {
+                    if(isset($_POST['przycisk_aktualizuj']))
+                    {
+                        $id_kierownika=$_POST['id_kierownika'];
+                        $id_grupy=$_POST['id_grupy'];
+                        $aktulizacja_kierownika_grupy=mysqli_query($polaczenie,"UPDATE uzytkownicy_grupy SET id_kierownika='$id_kierownika' WHERE id ='$id_grupy'")
+                            or die("Blad przy aktualizacja_kierownika_grupy".mysqli_error($polaczenie));
+                        echo "Zmieniono pomyślnie Kierownika/Kordynatora grupy <a href='uzytkownicy_grupa.php'>Powrót</a>";
+                    }
+                    else
+                    {
+                        echo "Bład <a href='uzytkownicy_grupa.php'>Powrót</a>";
+                    }
+                }
                 else{
 
                     echo "<p><a href='uzytkownicy_grupa.php?a=dodaj_grupe' class='btn btn-success'>Dodaj Grupę</a> </p>";
@@ -245,7 +266,7 @@ include 'menu.php';
                         echo "<tr><th>LP</th><th>Nazwa Grupy</th><th>Kierownik Grupy</th><th>Akcja</th></tr>";
                         while ($grupa = mysqli_fetch_array($pobierz_Grupy)) {
                             $lp++;
-                            echo "<tr><td>$lp</td><td>$grupa[1]</td><td>$grupa[3] $grupa[4]</td><td><a href='uzytkownicy_grupa.php?a=pokaz_grupe&id=$grupa[0]' class='btn-sm btn-info'>POKAŻ</a><a href='uzytkownicy_grupa.php?a=usun&id=$grupa[0]' class='btn-sm btn-danger'>USUŃ</a> </td></tr>";
+                            echo "<tr><td>$lp</td><td>$grupa[1]</td><td>$grupa[3] $grupa[4]</td><td><a href='uzytkownicy_grupa.php?a=pokaz_grupe&id=$grupa[0]' class='btn-sm btn-info'>POKAŻ</a><a href='uzytkownicy_grupa.php?a=zmien_kierownika&id=$grupa[0]' class='btn-sm btn-primary'>Zmień kierownika</a><a href='uzytkownicy_grupa.php?a=usun&id=$grupa[0]' class='btn-sm btn-danger'>USUŃ</a> </td></tr>";
                         }
                         echo "</table>";
 
