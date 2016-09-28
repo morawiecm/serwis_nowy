@@ -109,35 +109,55 @@
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="./dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <?php
+                            if (mb_strtolower(mb_substr($uzytkownik_imie, -1)) == 'a') {
+                                echo '<img src="dist/img/avatar3.png" class="user-image" alt="User Image">';
+                            }
+                            else
+                            {
+                                echo'<img src="dist/img/avatar5.png" class="user-image" alt="User Image">';
+                            }
+                            ?>
                             <span class="hidden-xs"><?php echo"$uzytkownik_imie $uzytkownik_nazwisko"; ?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- User image -->
                             <li class="user-header">
-                                <img src="./dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                <?php
+                                if (mb_strtolower(mb_substr($uzytkownik_imie, -1)) == 'a') {
+                                    echo '<img src="dist/img/avatar3.png" class="img-circle" alt="User Image">';
+                                }
+                                else
+                                {
+                                    echo'<img src="dist/img/avatar5.png" class="img-circle" alt="User Image">';
+                                }
+                                ?>
+
 
                                 <p>
-                                    <?php echo"$uzytkownik_imie $uzytkownik_nazwisko"; ?>
-                                    <small> <?php echo $uzytkownik_wydzial; ?></small>
+                                    <?php
+
+
+                                    echo"$użytkownik_imie_nazwisko   - $uprawienia
+                                    <small>$uzytkownik_sekcja</small>"?>
                                 </p>
                             </li>
                             <!-- Menu Body -->
-                            <li class="user-body">
-                                <div class="row">
-                                    <div class="text-center">
-                                        <a href="#"><?php echo $uzytkownik_sekcja; ?></a>
-                                    </div>
-                                </div>
-                                <!-- /.row -->
-                            </li>
-                            <!-- Menu Footer-->
+                            <!-- <li class="user-body">
+                                 <div class="col-xs-4 text-center">
+                                     <a href="#">Followers</a>
+                                 </div>
+                                 <div class="col-xs-4 text-center">
+                                     <a href="#">Sales</a>
+                                 </div>
+                                 <div class="col-xs-4 text-center">
+                                     <a href="#">Friends</a>
+                                 </div>
+                             </li>
+                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="profil.php" class="btn btn-default btn-flat">Profil</a>
-                                </div>
-                                <div class="pull-left">
-                                    <a href="nadgodziny.php" class="btn btn-default btn-flat">Nadgodziny</a>
+                                    <a href="profil.php<?php echo"?id=$uzytkownik_id";?>" class="btn btn-default btn-flat">Profil</a>
                                 </div>
                                 <div class="pull-right">
                                     <a href="logout.php" class="btn btn-default btn-flat">Wyloguj</a>

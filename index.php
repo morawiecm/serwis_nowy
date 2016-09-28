@@ -1,16 +1,18 @@
 <?php
 include 'config.php';
+include './funkcje/funkcje_index.php';
+
+
 check_login();
+
 // dane uzytkownika z sesji
 $user_data = get_user_data();
 $uzytkownik_imie = $user_data['imie'];
 $uzytkownik_nazwisko = $user_data['nazwisko'];
 $uzytkownik_nazwa = $user_data['user_name'];
 $uzytkownik_id = $user_data['user_id'];
-$uzytkownik_wydzial = $user_data['wydzial'];
 $uzytkownik_sekcja = $user_data['sekcja'];
 $uzytkownik_uprawnienia = $user_data['specialne'];
-$uzytkownik_funkcja=$user_data['funkcja'];
 $użytkownik_imie_nazwisko = $uzytkownik_imie . " " . $uzytkownik_nazwisko;
 //dane z POST
 

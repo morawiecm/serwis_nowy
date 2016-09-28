@@ -57,6 +57,44 @@ function check_login() {
     }
 }
 
+function sprawdzWazanoscHasla($idus)
+{
+    $haslo_status=true;
+    $polaczeniebaza=polaczenie_z_baza();
+    $pobierzDateHaslaUzytkownika=mysqli_query($polaczeniebaza,"SELECT data_zmiany_hasla FROM users WHERE user_id='$idus'")
+    or die("Blad przy pobierzDateHaslaUzytkownika".mysqli_error($polaczeniebaza));
+    if(mysqli_num_rows($pobierzDateHaslaUzytkownika)>0)
+    {
+        while ($data_hasla_uzytkownika=mysqli_fetch_array($pobierzDateHaslaUzytkownika))
+        {
+            $dataWaznosci=$data_hasla_uzytkownika['data_zmiany_hasla'];
+            if($dataWaznosci =='0000-00-00')
+            {
+                $haslo_status=false;
+                $nowa_data=0;
+
+            }
+            else
+            {
+                $aktualna_data=date("Y-m-d");
+                $jeden_dzien = strtotime(date("Y-m-d", strtotime($dataWaznosci)) . " +30 day");
+                $jeden_dzien=date('Y-m-d', $jeden_dzien);
+                $nowa_data=(strtotime($jeden_dzien)-strtotime($aktualna_data))/86400;
+                $nowa_data=number_format($nowa_data,0);
+                if ($nowa_data<0)
+                {
+                    $nowa_data=0;
+                    $haslo_status=false;
+                }
+
+            }
+        }
+    }
+    $status[0]=$haslo_status;
+    $status[1]=$nowa_data;
+    return $status;
+}
+
 function get_user_data($user_id = -1) {
     // jeśli nie podamy id usera to podstawiamy id aktualnie zalogowanego
     if($user_id == -1) {

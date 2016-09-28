@@ -4,11 +4,20 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="./dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <?php
+                if (mb_strtolower(mb_substr($uzytkownik_imie, -1)) == 'a') {
+                    echo '<img src="dist/img/avatar3.png" class="img-circle" alt="User Image">';
+                }
+                else
+                {
+                    echo'<img src="dist/img/avatar5.png" class="img-circle" alt="User Image">';
+                }
+                ?>
             </div>
             <div class="pull-left info">
                 <p><?php echo"$uzytkownik_imie $uzytkownik_nazwisko"; ?></p>
-                <a href="#"><i class="fa fa-circle text-success"></i> Hasło wygasa za: XX dni</a>
+                <a href="#"><i class="fa fa-circle text-success"></i> <?php $haslo_waznosc=sprawdzWazanoscHasla($uzytkownik_id);
+                    echo"Hasło wygasa za: $haslo_waznosc[1] dni";?></a>
             </div>
         </div>
         <!-- search form -->
