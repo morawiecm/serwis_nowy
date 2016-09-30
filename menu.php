@@ -39,26 +39,10 @@
                     <i class="fa fa-dashboard"></i><span>Strona Główna</span>
                 </a>
             </li>
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-pie-chart"></i>
-                    <span>Nadgodziny</span>
-                    <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="nadgodziny.php?a=rejestracja"><i class="fa fa-circle-o"></i>Nowy wniosek</a></li>
-                    <li><a href="nadgodziny.php"><i class="fa fa-circle-o"></i> Przegląd</a></li>
-                    <?php
-                    if($uzytkownik_funkcja>0 or $uzytkownik_uprawnienia==1)
-                    {
-                        echo '<li><a href="nadgodziny.php?a=przeglad_grupa"><i class="fa fa-circle-o"></i> Przegląd Grupy</a></li>';
-                        echo '<li><a href="nadgodziny.php?a=przeglad_grupa_osoby"><i class="fa fa-circle-o"></i> Przegląd Grupy Osoby</a></li>';
-                    }
-                    ?>
-                </ul>
-            </li>
+
+
+
+
            <!-- <li class="treeview">
                 <a href="#">
                     <i class="fa fa-files-o"></i>
@@ -137,6 +121,7 @@
             </li>
             <li><a href="./documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>-->
             <li class="header">ADMINISTRACJA</li>
+            <li><a href="zglos_blad.php?a=pokaz_zgloszenia_status"><i class="fa fa-gear"></i> <span>Zgłoszenia</span></a></li>
             <li><a href="uzytkownicy.php"><i class="fa fa-circle-o text-red"></i> <span>Użytkownicy</span></a></li>
             <li><a href="uzytkownicy_grupa.php"><i class="fa fa-circle-o text-yellow"></i> <span>Użytkownicy Grupy</span></a></li>
         </ul>

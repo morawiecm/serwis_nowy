@@ -1,6 +1,6 @@
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-        <b>Wersja</b> 2.0
+        <b>Wersja Progamu</b> 2.0  <a href="zglos_blad.php">Zgłoś bład</a>
     </div>
     <strong>Oprogramowanie stworzył:<a href="#">Mariusz Morawiec</a>.</strong> tel 79 11614
 </footer>
