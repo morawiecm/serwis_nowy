@@ -68,7 +68,7 @@ include 'menu.php';
         if ($a == 'wyszukaj') {
 
             $typ = $_POST['numer'];
-            $dokument = $_POST['dokument'];
+            //$dokument = $_POST['dokument'];
             if ($typ != '') {
 
                 //kombinacje numerow inwentarzowych
@@ -99,7 +99,7 @@ include 'menu.php';
                 $n41 = "1491$numer_inwent";
                 $n42 = "$numer_inwent";
 
-                $wyszukaj_numer = mysqli_query($polaczenie, "SELECT lp, nr_inwentarzowy, nr_inwentarzowy_1, nr_inwentarzowy_2, nr_fabryczny, nazwa_sprzetu, likwidacja FROM baza Where `lp`='$idd' or (`nr_inwentarzowy`='$num22' or `nr_inwentarzowy_1`='$num22' or `nr_inwentarzowy_2`='$num22'
+                $wyszukaj_numer = mysqli_query($polaczenie, "SELECT lp, nr_inwentarzowy, nr_inwentarzowy_1, nr_inwentarzowy_2, nr_fabryczny, nazwa_sprzetu, likwidacja FROM baza Where `lp`='$nrID' or (`nr_inwentarzowy`='$num22' or `nr_inwentarzowy_1`='$num22' or `nr_inwentarzowy_2`='$num22'
                         or `nr_inwentarzowy`='$n20' or `nr_inwentarzowy_1`='$n20' or `nr_inwentarzowy_2`='$n20'
                         or `nr_inwentarzowy`='$n200' or `nr_inwentarzowy_1`='$n200' or `nr_inwentarzowy_2`='$n200'
                         or `nr_inwentarzowy`='$n21' or `nr_inwentarzowy_1`='$n21' or `nr_inwentarzowy_2`='$n21'
@@ -169,8 +169,14 @@ include 'menu.php';
                         } else {
                             $aktualny_nr = '';
                         }
-
-                        echo "</td><td>$aktualny_nr $nr_stary_format</td><td>$NrInwentarzowy[4]</td><td>$NrInwentarzowy[5]</td><td><a href='index.php?a=wyswietl&id=$NrInwentarzowy[0]' class='btn btn-info'>Wybierz</a></td><td>";
+                        if(isset($nr_stary_format))
+                        {
+                            echo "</td><td>$aktualny_nr $nr_stary_format</td><td>$NrInwentarzowy[4]</td><td>$NrInwentarzowy[5]</td><td><a href='index.php?a=wyswietl&id=$NrInwentarzowy[0]' class='btn btn-info'>Wybierz</a></td><td>";
+                        }
+                        else
+                        {
+                            echo "</td><td>$aktualny_nr</td><td>$NrInwentarzowy[4]</td><td>$NrInwentarzowy[5]</td><td><a href='index.php?a=wyswietl&id=$NrInwentarzowy[0]' class='btn btn-info'>Wybierz</a></td><td>";
+                        }
 
                         echo "</td></tr>";
                     }
@@ -358,7 +364,8 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                 baza.wartosc,
                 baza.uwagi,
                 baza.likwidacja
-                FROM baza INNER JOIN jednostki ON baza.jed_uzytkujaca=jednostki.id WHERE baza.lp='$nrID'") or die("Blad przy pobierzDaneOsprzecie" . mysqli_error($polaczenie));
+                FROM baza INNER JOIN jednostki ON baza.jed_uzytkujaca=jednostki.id WHERE baza.lp='$nrID'")
+            or die("Blad przy pobierzDaneOsprzecie" . mysqli_error($polaczenie));
             $licznik_dane = mysqli_num_rows($pobierzDaneOsprzecie);
             if ($licznik_dane == 1) {
                 while ($dane = mysqli_fetch_array($pobierzDaneOsprzecie)) {
@@ -469,6 +476,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     {
                         $pobierzDaneOsprzecie_inveo = mysqli_query($polaczenie, "SELECT ST_OPIS, ST_ID FROM inveo WHERE ST_NR_INWENTARZOWY='$dane[1]'") or die("Bład przy pobierzDaneOsprzecie_inveo" . mysqli_error($polaczenie));
                     }
+                    // DANE BAZA INVEO
                     if (mysqli_num_rows($pobierzDaneOsprzecie_inveo) > 0) {
                         while ($inveo = mysqli_fetch_array($pobierzDaneOsprzecie_inveo)) {
                             echo "<tr><th colspan='4' class='text-center'>Baza INVEO:</th> </tr>";
@@ -476,6 +484,10 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                             $id_inveo = $inveo[1];
                         }
                     }
+                    // KONIEC - DANA BAZA INVEO
+
+                    // SKŁADNIKI INVEO
+
                     $pobierzDaneOskladniki_inveo = mysqli_query($polaczenie, "SELECT STS_LP, STS_OPIS FROM `inveo_skladniki` WHERE STS_ST_ID='$id_inveo'")
                     or die("blad przy pobierzDaneSkladnik_inveo" . mysqli_error($polaczenie));
                     if (mysqli_num_rows($pobierzDaneOskladniki_inveo)) {
@@ -485,7 +497,11 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                         }
                     }
                     echo "</table>";
+
+                    // KONIEC - SKŁADNIKI INVEO
                         echo'</div>';
+
+
                     echo '<div class="tab-pane" id="tab_zdarzenia">';
                     echo "<table class='table'>";
                     echo "<tr><th class='text-bold text-center'>Utwórz protokół:</th></tr>";
