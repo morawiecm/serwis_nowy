@@ -24,10 +24,6 @@ else
 }
 
 
-// funkcja na sprawdzanie czy user jest zalogowany, jeśli nie to wyświetlamy komunikat
-
-// startujemy sesje
-
 function polaczenie_z_baza()
 {
     $polaczenie=mysqli_connect(DBHOST,DBUSER,DBPASS,DBNAME) or die('Blad czy polaczniu'.mysqli_connect_error());
@@ -36,6 +32,24 @@ function polaczenie_z_baza()
     return $polaczenie;
 }
 
+function Przekierowanie($komunikat,$strona)
+{
+    if($komunikat=='')
+    {
+        $komunikat= "Nie możesz tu być..zachwile zostaniesz przekierowany na strone główną";
+    }
+    if($strona=='')
+    {
+        $strona = "index.php";
+    }
+    echo $komunikat;
+    echo "<script>
+                    setTimeout(function () {
+                        window.location.href= '$strona'; // the redirect goes here
+
+                    },3000);
+                        </script>";
+}
 session_start();
 function clear($text) {
     // jeśli serwer automatycznie dodaje slashe to je usuwamy

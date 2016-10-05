@@ -54,10 +54,7 @@ include 'menu.php';
             Strona Główna
             <small>Wyszukiwarka</small>
         </h1>
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li class="active">Dashboard</li>
-        </ol>
+
     </section>
 
     <!-- Main content -->
@@ -462,6 +459,11 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     {
                         echo "<tr><th>Nr inwentarzowy</th><td>$dane[1] $seryjny_stary_format $dane[3]</td><th>Nr fabryczny</th><td>$dane[4]</tr>";
                     }
+                    $nr_inwent_naklejka = $dane[1];
+                    if(!isset($nr_inwent_naklejka))
+                    {
+                        $nr_inwent_naklejka =$dane[3];
+                    }
                     echo "<tr><th>Nr inwentarzowy</th><td>$dane[1]  $dane[3]</td><th>Nr fabryczny</th><td>$dane[4]</tr>";
                     echo "<tr><th>Na stanie:</th><td>$dane[6]</td><th>Data wprowadzenia:</th><td>$formatowanie_daty</td></tr>";
                     echo "<tr><th>Źródło finansowania:</th><td>$dane[8]</td><th>Wartość:</th><td>$formatowanie_wartosc zł</td></tr>";
@@ -488,12 +490,17 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
 
                     // SKŁADNIKI INVEO
 
-                    $pobierzDaneOskladniki_inveo = mysqli_query($polaczenie, "SELECT STS_LP, STS_OPIS FROM `inveo_skladniki` WHERE STS_ST_ID='$id_inveo'")
+                    $pobierzDaneOskladniki_inveo = mysqli_query($polaczenie, "SELECT id, STS_LP, STS_OPIS FROM `inveo_skladniki` WHERE STS_ST_ID='$id_inveo'")
                     or die("blad przy pobierzDaneSkladnik_inveo" . mysqli_error($polaczenie));
                     if (mysqli_num_rows($pobierzDaneOskladniki_inveo)) {
                         echo "<tr><th colspan='4' class='text-center'>Składniki z INVEO</th></tr>";
+                        echo "<tr><th>LP</th><th colspan='2'>SKŁADNIK</th><th>AKCJA</th></tr>";
                         while ($skladnikiInveo = mysqli_fetch_array($pobierzDaneOskladniki_inveo)) {
-                            echo "<tr><td>$skladnikiInveo[0]</td><td colspan='3'>$skladnikiInveo[1]</td></tr>";
+                            echo "<tr><td>$skladnikiInveo[STS_LP]</td><td colspan='2'>$skladnikiInveo[STS_OPIS]</td><td>
+                            <a class='btn-sm btn-info' href='naklejka.php?a=skladnik_inveo&id=$skladnikiInveo[id]&nr_inwentarzowy=$nr_inwent_naklejka'>NAKLEJKA</a> 
+                            <a class='btn-sm bg-purple'>ROZKOMPLETOWANIE</a>
+                            <a class='btn-sm btn-danger'>USUŃ</a>
+                            </td></tr>";
                         }
                     }
                     echo "</table>";
