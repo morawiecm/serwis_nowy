@@ -1,12 +1,34 @@
+
+
+
+<html>
+<body>
+
 <?php
-/**
- * Created by PhpStorm.
- * User: mario
- * Date: 2016-09-08
- * Time: 12:06
- */
-include 'config.php';
-include 'funkcje/funkcje_uzytkownicy.php';
+if (isset($_REQUEST['email']))
+//jeśli "email" jest wypełnione, Wyślij e-mail
+{
+    // Wyślij e-mail
+    $email = $_REQUEST['email'] ;
+    $subject = $_REQUEST['subject'] ;
+    $message = $_REQUEST['message'] ;
+    mail("serwiskwppolicja@gmail.com", $subject,
+        $message, "From:" . $email);
+    echo " Dziękujemy za skorzystanie z naszego formularza e-mail ";
+}
+else
+//jeśli "email" nie jest ustawiony, wyświetl formularz
+{
+    echo "<form method='post' action='test_klasy.php'>
+  Email: <input name='email' type='text'><br>
+  Subject: <input name='subject' type='text'><br>
+  Message:<br>
+  <textarea name='message' rows='15' cols='40'>
+  </textarea><br>
+  <input type='submit'>
+  </form>";
+}
+?>
 
-echo wyswietl_pelniona_funkcje_lista(1);
-
+</body>
+</html>

@@ -366,7 +366,9 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
             $licznik_dane = mysqli_num_rows($pobierzDaneOsprzecie);
             if ($licznik_dane == 1) {
                 while ($dane = mysqli_fetch_array($pobierzDaneOsprzecie)) {
+                    $nazwa_naklejka=$dane[5];
                     echo "<div class='box box-warning'>
+                    
                             <div class='box-header with-border''>";
                     if ($dane[2] != '') {
                         $ciag = $dane[2];
@@ -517,7 +519,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo"<tr><td><a href='#' class='btn btn-warning form-control'>Skompletowania</a></td></tr>";
                     echo "<tr><th class='text-bold text-center'>Utwórz Dokument:</th></tr>";
                     echo"<tr><td><a href='#' class='btn btn-success form-control'>Asygnata</a></td></tr>";
-                    echo"<tr><td><a href='#' class='btn btn-danger form-control'>Naklejka</a></td></tr>";
+                    echo"<tr><td><a href='naklejka.php?a=srodek_trwaly&nr_inwentarzowy=$nr_inwent_naklejka&nazwa_srtw=$nazwa_naklejka' class='btn btn-danger form-control'>Naklejka</a></td></tr>";
                     echo "<tr><th class='text-bold text-center'>Magazyn:</th></tr>";
                     echo"<tr><td><a href='#' class='btn btn-info form-control'><span class='fa fa-truck'> Wyślij na Magazyn</span></a></td></tr>";
                     echo"<tr><td><a href='#' class='btn btn-info form-control'>Wyślij na Magazyn</a></td></tr>";

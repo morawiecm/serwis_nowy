@@ -13,6 +13,7 @@ $uzytkownik_sekcja = $user_data['sekcja'];
 $uzytkownik_uprawnienia = $user_data['specialne'];
 $uzytkownik_pokoj = $user_data['pomieszczenie'];
 $użytkownik_imie_nazwisko = $uzytkownik_imie . " " . $uzytkownik_nazwisko;
+$data_aktualna_pelna = date("Y-m-d H:i:s");
 //dane z POST
 
 if(isset($_REQUEST['nr_inwentarzowy']))
@@ -83,7 +84,12 @@ include 'menu.php';
                 // KREATOR PROJEKTOWANIA NAKLEJKI
                 if($a=='projekt')
                 {
-
+                    echo "<table class='table'><form action='naklejka.php?a=zapisz_projekt' method='post'>";
+                    echo "<tr><th>Nr Ewidencyjny</th><td><input type='text' class='form-control' name='naklejka_nr_ewidencyjny' placeholder='tutaj wpisz nr ewidencyjny'></td></tr>";
+                    echo "<tr><th>Treść (Max 70 znaków):</th><td><input type='text' class='form-control' name='naklejka_tresc' placeholder='tutaj wpisz treść / nazwę środka trwałego'></td></tr>";
+                    echo "<tr><th>Naklejkę dostarczyć do: </th><td><input type='text' name='naklejka_przeznacznie' class='form-control' value='$użytkownik_imie_nazwisko pok: $uzytkownik_pokoj'></td></tr>";
+                    echo "<tr><th colspan='2'><input type='submit' name='przycisk_zapisz' class='btn btn-primary form-control' value='Zapisz naklejkę'></th></tr>";
+                    echo "</form></table>";
                 }
                 // KONIEC PROJEKTOWANIA NAKLEJKI
 
@@ -96,7 +102,7 @@ include 'menu.php';
                         {
                             $naklejka_tresc=PobierzOpisInveo($nrID);
                             echo "<table class='table'><form action='naklejka.php?a=zapisz_projekt' method='post'>";
-                            echo "<tr><th>Nr Ewidencyjny</th><td><input type='text' class='form-control' disabled='disabled' name='naklejka_nr_ewidencyjny' value='$nr_inwentarzowy'></td></tr>";
+                            echo "<tr><th>Nr Ewidencyjny</th><td><input type='text' class='form-control'   value='$nr_inwentarzowy' disabled='disabled'><input type='hidden' name='naklejka_nr_ewidencyjny' value='$nr_inwentarzowy'></td></tr>";
                             echo "<tr><th>Treść (Max 70 znaków):</th><td><input type='text' class='form-control' name='naklejka_tresc' value='$naklejka_tresc'></td></tr>";
                             echo "<tr><th>Naklejkę dostarczyć do: </th><td><input type='text' name='naklejka_przeznacznie' class='form-control' value='$użytkownik_imie_nazwisko pok: $uzytkownik_pokoj'></td></tr>";
                             echo "<tr><th colspan='2'><input type='submit' name='przycisk_zapisz' class='btn btn-primary form-control' value='Zapisz naklejkę'></th></tr>";
@@ -117,7 +123,20 @@ include 'menu.php';
                 // NAKLEJKI - SRODEK TRWAŁY
                 elseif ($a=='srodek_trwaly')
                 {
-
+                    if (isset($nr_inwentarzowy))
+                    {
+                        $naklejka_tresc=$_REQUEST['nazwa_srtw'];
+                        echo "<table class='table'><form action='naklejka.php?a=zapisz_projekt' method='post'>";
+                        echo "<tr><th>Nr Ewidencyjny</th><td><input type='text' class='form-control'   value='$nr_inwentarzowy' disabled='disabled'><input type='hidden' name='naklejka_nr_ewidencyjny' value='$nr_inwentarzowy'></td></tr>";
+                        echo "<tr><th>Treść (Max 70 znaków):</th><td><input type='text' class='form-control' name='naklejka_tresc' value='$naklejka_tresc'></td></tr>";
+                        echo "<tr><th>Naklejkę dostarczyć do: </th><td><input type='text' name='naklejka_przeznacznie' class='form-control' value='$użytkownik_imie_nazwisko pok: $uzytkownik_pokoj'></td></tr>";
+                        echo "<tr><th colspan='2'><input type='submit' name='przycisk_zapisz' class='btn btn-primary form-control' value='Zapisz naklejkę'></th></tr>";
+                        echo "</form></table>";
+                    }
+                    else
+                    {
+                        echo"<p>Błąd! Brak Nr inwentarzowego głownego składnika lub wybrany składnik nie istnieje. Spróbuj jeszcze raz</p>";
+                    }
                 }
                 // KONIEC NAKLEJKI - SRODEK TRWAŁY
 
@@ -127,7 +146,14 @@ include 'menu.php';
                 {
                     if(isset($_POST['przycisk_zapisz']))
                     {
-
+                        $zapis_nr_ewidencyjny = $_POST['naklejka_nr_ewidencyjny'];
+                        $zapis_tresc = $_POST['naklejka_tresc'];
+                        $zapis_przeznaczenie = $_POST['naklejka_przeznacznie'];
+                        $zapiszNaklejkeDoBazy = mysqli_query($polaczenie,"INSERT INTO naklejki (nr_inwent, pokoj, kto, data_dodania, nazwa) 
+                        VALUES ('$zapis_nr_ewidencyjny', '$zapis_przeznaczenie', '$użytkownik_imie_nazwisko', '$data_aktualna_pelna', '$zapis_tresc')")
+                            or die("Bład przy zapiszNaklejkeDoBazy. ".mysqli_error($polaczenie));
+                        $id_naklejki = mysqli_insert_id($polaczenie);
+                        echo "<p>Utworzono naklejkę pomyślnie dla nr $zapis_nr_ewidencyjny. <a href='naklejka.php' class='btn'>POWRÓT</a> <a href='fpdf17/generuj_naklejka.php?a=naklejka&id=$id_naklejki'>GENERUJ NAKLEJKĘ</a></p>";
                     }
                     else
                     {
