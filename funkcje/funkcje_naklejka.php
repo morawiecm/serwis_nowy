@@ -25,3 +25,26 @@ function PobierzOpisInveo($nr_id_rekordu)
     }
     return $opis;
 }
+
+function ZmienStatusWydrukowane($nr_id_rekordu)
+{
+    $polaczenie = polaczenie_z_baza();
+    $aktualna_data = date("Y-m-d H:i:s");
+    $zmien_status_wydrukowane = mysqli_query($polaczenie,"UPDATE naklejki SET status = '1', data_druku = '$aktualna_data' 
+    WHERE id = '$nr_id_rekordu'") or die("Blad przy zmien_status_wydrukowane ".mysqli_error($polaczenie));
+}
+
+function UsunNaklejke($nr_id_rekordu)
+{
+    $polaczenie = polaczenie_z_baza();
+    $usun_naklejke = mysqli_query($polaczenie,"DELETE FROM naklejki WHERE id = '$nr_id_rekordu'")
+        or die("Blad przy usun_naklejke ".mysqli_error($polaczenie));
+}
+function UsunStareNaklejki()
+{
+    $aktualna_data = date("Y-m-d");
+
+    $polaczenie = polaczenie_z_baza();
+    $usun_naklejke = mysqli_query($polaczenie,"DELETE FROM naklejki WHERE status = 1 AND  data_druku < '0000-00-00'")
+    or die("Blad przy usun_naklejke ".mysqli_error($polaczenie));
+}

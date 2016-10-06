@@ -167,6 +167,57 @@ include 'menu.php';
                 else
                 {
                     echo"<p><a href='naklejka.php?a=projekt' class='btn btn-success'>Zaprojektuj naklejkę</a></p>";
+                    // POCZĄTEK ZAKŁADKA - MENU
+                    echo '<div class="nav-tabs-custom">';
+                    echo'<ul class="nav nav-tabs">';
+                        echo "<li class='active'><a href='#zakladka_niewydrukowane' data-toggle='tab'>Naklejki niewydrukowane</a></li>";
+                        echo "<li><a href='#zakladka_wydrukowane' data-toggle='tab'>Naklejki wydrukowane</a></li>";
+                    echo  '</ul>';
+                    // KONIEC ZAKŁADKA - MENU DEKLARACJA
+
+                    // POCZATEK ZAKŁADEK ZAWARTOŚĆ
+                    echo'<div class="tab-content">';
+               
+                    //ZAKŁADKA - WYDRUKOWANE
+                    echo'<div class="tab-pane active" id="zakladka_niewydrukowane">';
+                    echo "<table class='table' id='example1'>";
+                    echo "<thead><tr><th>Nr inwentarzowy</th><th>Treść</th><th>Data zamówienia</th><th>Zamawiający</th><th>Przeznaczenie / Dostarczyć do</th><th>Akcja</th></tr></thead>";
+                    $pobierz_niewydrukowane_naklejki=mysqli_query($polaczenie,"SELECT id, nr_inwent, pokoj, kto, data_dodania, nazwa FROM naklejki WHERE status = '0'")
+                        or die("Bład przy pobierz_niewydrukowane_naklejki ".mysqli_error($polaczenie));
+                    if(mysqli_num_rows($pobierz_niewydrukowane_naklejki)>0)
+                    {
+                        while ($niewydrukowane_naklejki = mysqli_fetch_array($pobierz_niewydrukowane_naklejki))
+                        {
+                            echo "<tr><td>$niewydrukowane_naklejki[nr_inwent]</td><td>$niewydrukowane_naklejki[nazwa]</td><td>$niewydrukowane_naklejki[data_dodania]</td>
+                            <td>$niewydrukowane_naklejki[kto]</td><td>$niewydrukowane_naklejki[pokoj]</td><td>";
+                            echo "<a href='fpdf17/generuj_naklejka.php?a=naklejka&id=$niewydrukowane_naklejki[id]' class='btn-sm bg-fuchsia'>DRUKUJ</a>";
+                            echo "<a href='naklejka.php?a=usun&id=$niewydrukowane_naklejki[id]' class='btn-sm btn-danger'>USUŃ</a>";
+                            echo"<td></tr>";
+                        }
+                    }
+                    echo "</table>";
+                    echo"</div>";
+                    // KONIEC ZAKŁADKA - WYDRUKOWANE
+
+                    //ZAKŁADKA - WYDRUKOWANE
+                    echo '<div class="tab-pane" id="zakladka_wydrukowane">';
+                    echo "<table class='table' id='example3'>";
+                    echo "<thead><tr><th>Nr inwentarzowy</th><th>Treść</th><th>Data zamówienia</th><th>Zamawiający</th><th>Przeznaczenie / Dostarczyć do</th></tr></thead>";
+                    $pobierz_niewydrukowane_naklejki=mysqli_query($polaczenie,"SELECT id, nr_inwent, pokoj, kto, data_dodania, nazwa FROM naklejki WHERE status = '1'")
+                    or die("Bład przy pobierz_niewydrukowane_naklejki ".mysqli_error($polaczenie));
+                    if(mysqli_num_rows($pobierz_niewydrukowane_naklejki)>0)
+                    {
+                        while ($niewydrukowane_naklejki = mysqli_fetch_array($pobierz_niewydrukowane_naklejki))
+                        {
+                            echo "<tr><td>$niewydrukowane_naklejki[nr_inwent]</td><td>$niewydrukowane_naklejki[nazwa]</td><td>$niewydrukowane_naklejki[data_dodania]</td>
+                            <td>$niewydrukowane_naklejki[kto]</td><td>$niewydrukowane_naklejki[pokoj]</td></tr>";
+                        }
+                    }
+                    echo "</table>";
+                    echo"</div>";
+                    //KONIEC ZAKŁADKA - WYDRUKOWANE
+                    echo '</div>';// KONIEC ZAKŁADKA - MENU
+                    echo '</div>';// KONIEC ZAKŁADEK ZAWARTOŚĆ
 
                 }
                 // KONIEC WYWIETL WSZYSTKIE NAKLEJKI
