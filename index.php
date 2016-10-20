@@ -360,7 +360,8 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                 baza.zrodlo_finansowania,
                 baza.wartosc,
                 baza.uwagi,
-                baza.likwidacja
+                baza.likwidacja,
+                baza.rodzaj_ewidencyjny
                 FROM baza INNER JOIN jednostki ON baza.jed_uzytkujaca=jednostki.id WHERE baza.lp='$nrID'")
             or die("Blad przy pobierzDaneOsprzecie" . mysqli_error($polaczenie));
             $licznik_dane = mysqli_num_rows($pobierzDaneOsprzecie);
@@ -378,7 +379,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                         $seryjny_stary_format = $podziel . '-' . $podziel2 . '-' . $podziel3;
                     }
                     if ($dane[11] != '') {
-                        echo "<h4 class='text-center text-danger'><span class='fa fa-exclamation-circle'></span> $dane[5] - Sprzęt wybrakowano dnia: $dane[11]";
+                        echo "<h4 class='text-center text-danger'><span class='fa fa-exclamation-circle'></span> $dane[5] ($dane[12]) - Sprzęt wybrakowano dnia: $dane[11]";
                         $poszukajProtokolu = mysqli_query($polaczenie, "SELECT id, id_protokol FROM protokol_skladniki WHERE nr_ewidencyjny='$dane[1]' or nr_ewidencyjny='$seryjny_stary_format'") or die("Blad przy poszukajProtokol" . mysqli_error($polacznie));
                         if (mysqli_num_rows($poszukajProtokolu) > 0) {
                             while ($protokol = mysqli_fetch_array($poszukajProtokolu)) {
@@ -386,7 +387,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                             }
                         }
                     } else {
-                        echo "<h4 class='text-center text-green'><span class='fa fa-check-circle'></span> $dane[5]";
+                        echo "<h4 class='text-center text-green'><span class='fa fa-check-circle'></span> $dane[5] [$dane[12]]";
                     }
                     echo "</h4>
                                 <div class='box-tools pull-right'>
@@ -428,7 +429,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     $licznik_magazyn = mysqli_num_rows($wyszukaj_magazyn);
                     echo '<div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">';
-                        echo "<li class='active'><a href='#tab_1' data-toggle='tab'>Informacje o Środku trwałym</a></li>";
+                        echo "<li class='active'><a href='#tab_1' data-toggle='tab'>Informacje o Środku Trwałym</a></li>";
                         echo "<li><a href='#tab_zdarzenia' data-toggle='tab'>Zdarzenia</a></li>";
                     if ($licznik_wyszukajHistoria > 0) {
                         //zakladka historia
