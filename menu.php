@@ -122,6 +122,7 @@
             <li><a href="./documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>-->
             <li class="header">EWIDENCJA</li>
             <li><a href="zglos_blad.php?a=pokaz_zgloszenia_status"><i class="fa fa-gear"></i> <span>ASYGNATY</span></a></li>
+            <li><a href="naklejka.php"><i class="fa fa-gear"></i> <span>Naklejki</span></a></li>
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-share"></i> <span>Protokoły</span>
@@ -146,11 +147,13 @@
                 <ul class="treeview-menu">
                     <li><a href="slownik_zrodlo_finiansowania.php"><i class="fa fa-circle-o"></i> Źród. Finansowania</a></li>
                     <li><a href="slownik_sposob_likwidacji.php"><i class="fa fa-circle-o"></i> Sposób likwidacji</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Rodzaj Ewidencji</a></li>
+                    <li><a href="slownik_rodzaj_ewidencji.php"><i class="fa fa-circle-o"></i> Rodzaj Ewidencji</a></li>
+                    <li><a href="slownik_jednostki.php"><i class="fa fa-circle-o"></i> Jednostki</a></li>
                 </ul>
 
             </li>
             <li><a href="zglos_blad.php?a=pokaz_zgloszenia_status"><i class="fa fa-gear"></i> <span>Stany Wydziałów</span></a></li>
+            <li><a href="srodek_trwaly.php?a=dodaj"><i class="fa fa-gear"></i> <span>Dodaj Nowy</span></a></li>
 
             <li class="header">ADMINISTRACJA</li>
             <li><a href="zglos_blad.php?a=pokaz_zgloszenia_status"><i class="fa fa-gear"></i> <span>Zgłoszenia</span></a></li>

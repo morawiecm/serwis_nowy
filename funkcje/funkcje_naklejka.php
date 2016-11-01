@@ -48,3 +48,7 @@ function UsunStareNaklejki()
     $usun_naklejke = mysqli_query($polaczenie,"DELETE FROM naklejki WHERE status = 1 AND  data_druku < '0000-00-00'")
     or die("Blad przy usun_naklejke ".mysqli_error($polaczenie));
 }
+function ZamowNaklejke($id_srodka_trwalego)
+{
+
+}

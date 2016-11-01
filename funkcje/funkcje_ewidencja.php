@@ -127,7 +127,7 @@ function PobierzJednostki($wartosc)
 
     if($nazwa_jednostki!='')
     {
-        $pobierz_jednostke = mysqli_query($polaczenie,"SELECT nazwa, kod_jednostki FROM jednostki WHERE kod_jednostki = '$wartosc'")
+        $pobierz_jednostke = mysqli_query($polaczenie,"SELECT nazwa, kod_jednostki FROM jednostki WHERE kod_jednostki = '$wartosc' ORDER BY nazwa ASC")
             or die("Blad przy pobierz_jednsotke".mysqli_error($polaczenie));
         if(mysqli_num_rows($pobierz_jednostke)>0)
         {
@@ -145,7 +145,7 @@ function PobierzJednostki($wartosc)
     }
     else
     {
-        $pobierz_jednostki = mysqli_query($polaczenie,"SELECT nazwa, kod_jednostki FROM jednostki WHERE aktywny = '0'")
+        $pobierz_jednostki = mysqli_query($polaczenie,"SELECT nazwa, kod_jednostki FROM jednostki WHERE aktywny = '0' ORDER BY nazwa ASC")
         or die("Blad przy pobierz_jednsotke".mysqli_error($polaczenie));
         if(mysqli_num_rows($pobierz_jednostki)>0)
         {
