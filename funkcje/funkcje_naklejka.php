@@ -50,5 +50,25 @@ function UsunStareNaklejki()
 }
 function ZamowNaklejke($id_srodka_trwalego)
 {
+    $polaczenie = polaczenie_z_baza();
+    $naklejka_nr_ewidencyjny = '';
+    $naklejka_tresc = '';
+    $naklejka_przeznaczenie = '306B';
+    $naklejka_zamawiajacy = 'System - dodanie nowego wpisu';
+    $naklejka_data_dodania = date("Y-m-d H:i:s");
 
+    $pobierzDaneNaklejka = mysqli_query($polaczenie,"SELECT nazwa_sprzetu, nr_inwentarzowy FROM baza WHERE lp ='$id_srodka_trwalego'")
+        or die("Blad przy pobierzDaneNaklejka".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierzDaneNaklejka)>0)
+    {
+        while ($dane_naklejka = mysqli_fetch_array($pobierzDaneNaklejka))
+        {
+            $naklejka_nr_ewidencyjny = $dane_naklejka['nr_inwentarzowy'];
+            $naklejka_tresc = $dane_naklejka['nazwa_sprzetu'];
+        }
+    }
+
+    $zapiszNaklejkeDoBazy = mysqli_query($polaczenie,"INSERT INTO naklejki (nr_inwent, pokoj, kto, data_dodania, nazwa) 
+    VALUES ('$naklejka_nr_ewidencyjny','$naklejka_przeznaczenie','$naklejka_zamawiajacy','$naklejka_data_dodania','$naklejka_tresc')")
+    or die("Bład przy zapiszNaklejkeDoBazy. ".mysqli_error($polaczenie));
 }

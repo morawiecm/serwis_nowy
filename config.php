@@ -47,7 +47,7 @@ function Przekierowanie($komunikat,$strona)
                     setTimeout(function () {
                         window.location.href= '$strona'; // the redirect goes here
 
-                    },3000);
+                    },9000);
                         </script>";
 }
 session_start();

@@ -122,12 +122,13 @@ function PobierzRodzajEwidencji($wartosc)
 function PobierzJednostki($wartosc)
 {
     $nazwa_jednostki=$wartosc;
+    $nazwa_jednostki2=$wartosc;
     $polaczenie = polaczenie_z_baza();
     $lista='';
 
     if($nazwa_jednostki!='')
     {
-        $pobierz_jednostke = mysqli_query($polaczenie,"SELECT nazwa, kod_jednostki FROM jednostki WHERE kod_jednostki = '$wartosc' ORDER BY nazwa ASC")
+        $pobierz_jednostke = mysqli_query($polaczenie,"SELECT nazwa, kod_jednostki FROM jednostki WHERE nazwa LIKE '$wartosc' ORDER BY nazwa ASC")
             or die("Blad przy pobierz_jednsotke".mysqli_error($polaczenie));
         if(mysqli_num_rows($pobierz_jednostke)>0)
         {
@@ -137,28 +138,41 @@ function PobierzJednostki($wartosc)
                 $lista.=$nazwa_jednostki;
             }
         }
+        elseif (mysqli_num_rows($pobierz_jednostke)==0)
+        {
+            $pobierz_jednostke2 = mysqli_query($polaczenie,"SELECT nazwa, kod_jednostki FROM jednostki WHERE kod_jednostki LIKE '$wartosc' ORDER BY nazwa ASC")
+            or die("Blad przy pobierz_jednsotke".mysqli_error($polaczenie));
+            if(mysqli_num_rows($pobierz_jednostke2)>0)
+            {
+                while ($jednostka2 = mysqli_fetch_array($pobierz_jednostke2))
+                {
+                    $nazwa_jednostki2 .= "<option value='$jednostka2[kod_jednostki]' selected='selected'>$jednostka2[nazwa]</option>";
+                    $lista.=$nazwa_jednostki2;
+                }
+            }
+        }
         else
         {
             $nazwa_jednostki .="<option value='$wartosc'>Brak jednostki lub została usunięta o kodzie : $wartosc</option>";
             $lista.=$nazwa_jednostki;
         }
     }
-    else
-    {
+
+
         $pobierz_jednostki = mysqli_query($polaczenie,"SELECT nazwa, kod_jednostki FROM jednostki WHERE aktywny = '0' ORDER BY nazwa ASC")
         or die("Blad przy pobierz_jednsotke".mysqli_error($polaczenie));
         if(mysqli_num_rows($pobierz_jednostki)>0)
         {
             while ($jednostka = mysqli_fetch_array($pobierz_jednostki))
             {
-                $lista.= "<option value='$jednostka[kod_jednostki]' selected='selected'>$jednostka[nazwa]</option>";
+                $lista.= "<option value='$jednostka[kod_jednostki]' >$jednostka[nazwa]</option>";
             }
         }
         else
         {
             $lista .= "<option value='$wartosc'>Brak dodanych jednostek w bazie dodaj w słowniku</option>";
         }
-    }
+
 
     return $lista;
 }

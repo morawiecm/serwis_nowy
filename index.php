@@ -3,6 +3,7 @@ include 'config.php';
 include './funkcje/funkcje_index.php';
 
 
+
 check_login();
 
 // dane uzytkownika z sesji
@@ -362,7 +363,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                 baza.uwagi,
                 baza.likwidacja,
                 baza.rodzaj_ewidencyjny
-                FROM baza INNER JOIN jednostki ON baza.jed_uzytkujaca=jednostki.id WHERE baza.lp='$nrID'")
+                FROM baza INNER JOIN jednostki ON baza.jed_uzytkujaca=jednostki.kod_jednostki WHERE baza.lp='$nrID'")
             or die("Blad przy pobierzDaneOsprzecie" . mysqli_error($polaczenie));
             $licznik_dane = mysqli_num_rows($pobierzDaneOsprzecie);
             if ($licznik_dane == 1) {
@@ -569,8 +570,13 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                                     echo "$drukarki33[3] - Wymieniony: $drukarki33[7] przez: $drukarki33[1]. Stan licznika: $drukarki33[10]</td></tr>";
                                 }
                             } elseif ($historia[4] == '7') {
-                                //tu cos bedzie
+                                //Dodanie ST
+                                 echo"<tr><td>$historia[3]</td><td>Dodanie wpisu do bazy przez: $historia[1]</td></tr>";
                             }
+                             elseif ($historia[4] == '8') {
+                            //Dodanie ST
+                                 echo"<tr><td>$historia[3]</td><td>Edycja danych danych przez: $historia[1]</td></tr>";
+                             }
 
                         }
                         echo "</table>";
