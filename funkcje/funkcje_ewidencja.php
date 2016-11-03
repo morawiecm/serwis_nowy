@@ -128,25 +128,25 @@ function PobierzJednostki($wartosc)
 
     if($nazwa_jednostki!='')
     {
-        $pobierz_jednostke = mysqli_query($polaczenie,"SELECT nazwa, kod_jednostki FROM jednostki WHERE nazwa LIKE '$wartosc' ORDER BY nazwa ASC")
+        $pobierz_jednostke = mysqli_query($polaczenie,"SELECT nazwa, id FROM jednostki WHERE nazwa LIKE '$wartosc' ORDER BY nazwa ASC")
             or die("Blad przy pobierz_jednsotke".mysqli_error($polaczenie));
         if(mysqli_num_rows($pobierz_jednostke)>0)
         {
             while ($jednostka = mysqli_fetch_array($pobierz_jednostke))
             {
-                $nazwa_jednostki .= "<option value='$jednostka[kod_jednostki]' selected='selected'>$jednostka[nazwa]</option>";
+                $nazwa_jednostki .= "<option value='$jednostka[id]' selected='selected'>$jednostka[nazwa]</option>";
                 $lista.=$nazwa_jednostki;
             }
         }
         elseif (mysqli_num_rows($pobierz_jednostke)==0)
         {
-            $pobierz_jednostke2 = mysqli_query($polaczenie,"SELECT nazwa, kod_jednostki FROM jednostki WHERE kod_jednostki LIKE '$wartosc' ORDER BY nazwa ASC")
+            $pobierz_jednostke2 = mysqli_query($polaczenie,"SELECT nazwa, id FROM jednostki WHERE id LIKE '$wartosc' ORDER BY nazwa ASC")
             or die("Blad przy pobierz_jednsotke".mysqli_error($polaczenie));
             if(mysqli_num_rows($pobierz_jednostke2)>0)
             {
                 while ($jednostka2 = mysqli_fetch_array($pobierz_jednostke2))
                 {
-                    $nazwa_jednostki2 .= "<option value='$jednostka2[kod_jednostki]' selected='selected'>$jednostka2[nazwa]</option>";
+                    $nazwa_jednostki2 .= "<option value='$jednostka2[id]' selected='selected'>$jednostka2[nazwa]</option>";
                     $lista.=$nazwa_jednostki2;
                 }
             }
@@ -159,13 +159,13 @@ function PobierzJednostki($wartosc)
     }
 
 
-        $pobierz_jednostki = mysqli_query($polaczenie,"SELECT nazwa, kod_jednostki FROM jednostki WHERE aktywny = '0' ORDER BY nazwa ASC")
+        $pobierz_jednostki = mysqli_query($polaczenie,"SELECT nazwa, id FROM jednostki WHERE aktywny = '0' ORDER BY nazwa ASC")
         or die("Blad przy pobierz_jednsotke".mysqli_error($polaczenie));
         if(mysqli_num_rows($pobierz_jednostki)>0)
         {
             while ($jednostka = mysqli_fetch_array($pobierz_jednostki))
             {
-                $lista.= "<option value='$jednostka[kod_jednostki]' >$jednostka[nazwa]</option>";
+                $lista.= "<option value='$jednostka[id]' >$jednostka[nazwa]</option>";
             }
         }
         else
@@ -175,4 +175,15 @@ function PobierzJednostki($wartosc)
 
 
     return $lista;
+}
+
+function PoliczStanWydzialu($id_wydzialu)
+{
+    $stan = 0;
+    $polaczenie = polaczenie_z_baza();
+
+    $pobierz_stan_wydzialu = mysqli_query($polaczenie,"SELECT lp FROM baza  WHERE jed_uzytkujaca = $id_wydzialu AND sposob_likwidacji IS NULL ");
+    $stan = mysqli_num_rows($pobierz_stan_wydzialu);
+
+    return $stan;
 }

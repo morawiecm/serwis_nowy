@@ -175,6 +175,42 @@ include 'menu.php';
 
                 }
 
+                elseif($a=='wydzialy')
+                {
+                    $zapytanie_pobierz_wydzialy = "SELECT id, nazwa,kod_jednostki FROM jednostki WHERE aktywny = 0 AND kod_jednostki NOT LIKE  '666'";
+                    $pobierz_wydzialy_stan = mysqli_query($polaczenie,$zapytanie_pobierz_wydzialy) or die("Blad przy pobierz_wydzialy_stan".mysqli_query($polaczenie));
+                    if(mysqli_num_rows($pobierz_wydzialy_stan)>0)
+                    {
+                        echo "<table class='table table-bordered' id='example1'>";
+                        echo "<thead><tr><th>Nazwa jednostki</th><th>Kod jednostki</th><th>Stan</th><th>Akcja</th></tr></thead>";
+                        while ($wydzialy_stan = mysqli_fetch_array($pobierz_wydzialy_stan))
+                        {
+                            $stan_wydzialu = PoliczStanWydzialu($wydzialy_stan['id']);
+                            echo "<tr><td>$wydzialy_stan[nazwa]</td><td>$wydzialy_stan[kod_jednostki]</td><td>$stan_wydzialu</td>
+                            <td><a href='srodek_trwaly.php?a=pokaz_wydzial&id=$wydzialy_stan[id]' class='btn-xs btn-primary'>Pokaz Wydział</a>
+                            <a href='srodek_trwaly.php?a=wydzial_export&id=$wydzialy_stan[id]' class='btn-xs btn-success'>Export do Excela</a>
+                            </td></tr>";
+                        }
+                        echo "</table>";
+                    }
+                }
+                elseif ($a=='pokaz_wydzial')
+                {
+                    if($nrID!='')
+                    {
+
+                    }
+                    else
+                    {
+                        echo Przekierowanie("Nie wybrano wydziału / jednostki, spróbuj ponownie","srodek_trwaly.php?a=wydzialy");
+                    }
+                }
+
+                elseif ($a=='wydzial_export')
+                {
+
+                }
+
                 elseif ($a=='aktualizuj')
                 {
 

@@ -152,7 +152,7 @@
                 </ul>
 
             </li>
-            <li><a href="zglos_blad.php?a=pokaz_zgloszenia_status"><i class="fa fa-gear"></i> <span>Stany Wydziałów</span></a></li>
+            <li><a href="srodek_trwaly.php?a=wydzialy"><i class="fa fa-gear"></i> <span>Stany Wydziałów</span></a></li>
             <li><a href="srodek_trwaly.php?a=dodaj"><i class="fa fa-gear"></i> <span>Dodaj Nowy</span></a></li>
 
             <li class="header">ADMINISTRACJA</li>
