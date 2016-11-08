@@ -363,7 +363,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                 baza.uwagi,
                 baza.likwidacja,
                 baza.rodzaj_ewidencyjny
-                FROM baza INNER JOIN jednostki ON baza.jed_uzytkujaca=jednostki.kod_jednostki WHERE baza.lp='$nrID'")
+                FROM baza INNER JOIN jednostki ON baza.jed_uzytkujaca=jednostki.id WHERE baza.lp='$nrID'")
             or die("Blad przy pobierzDaneOsprzecie" . mysqli_error($polaczenie));
             $licznik_dane = mysqli_num_rows($pobierzDaneOsprzecie);
             if ($licznik_dane == 1) {
@@ -520,7 +520,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo"<tr><td><a href='#' class='btn btn-primary form-control'>Rozkompletowania</a></td></tr>";
                     echo"<tr><td><a href='#' class='btn btn-warning form-control'>Skompletowania</a></td></tr>";
                     echo "<tr><th class='text-bold text-center'>Utwórz Dokument:</th></tr>";
-                    echo"<tr><td><a href='#' class='btn btn-success form-control'>Asygnata</a></td></tr>";
+                    echo"<tr><td><a href='asygnata_koszyk.php?a=dodaj_do_koszyka&id=$nrID' class='btn btn-success form-control'>Asygnata</a></td></tr>";
                     echo"<tr><td><a href='naklejka.php?a=srodek_trwaly&nr_inwentarzowy=$nr_inwent_naklejka&nazwa_srtw=$nazwa_naklejka' class='btn btn-danger form-control'>Naklejka</a></td></tr>";
                     echo "<tr><th class='text-bold text-center'>Magazyn:</th></tr>";
                     echo"<tr><td><a href='#' class='btn btn-info form-control'><span class='fa fa-truck'> Wyślij na Magazyn</span></a></td></tr>";

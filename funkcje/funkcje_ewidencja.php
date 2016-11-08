@@ -187,3 +187,44 @@ function PoliczStanWydzialu($id_wydzialu)
 
     return $stan;
 }
+
+function PobierzNazweWydzialu($id_wydzialu)
+{
+    $nazwa_wydzialu = "";
+
+    $polaczenie = polaczenie_z_baza();
+
+    $pobierz_nazwe_wydzialu  =  mysqli_query($polaczenie,"SELECT nazwa FROM jednostki WHERE id = '$id_wydzialu'")
+        or die("Bład przy pobierz_nazwe_wydzialu");
+    if(mysqli_num_rows($pobierz_nazwe_wydzialu)>0)
+    {
+        while ($wydzial = mysqli_fetch_array($pobierz_nazwe_wydzialu))
+        {
+            $nazwa_wydzialu = $wydzial['nazwa'];
+        }
+    }
+    else
+    {
+        $nazwa_wydzialu = "Brak wydziału o podanym ID lub został usunięty";
+    }
+
+    return $nazwa_wydzialu;
+}
+
+function PobierzIdJednostki($id_srodtka_trwalego)
+{
+    $polaczenie = polaczenie_z_baza();
+    $id_jednostki = '';
+
+    $pobierz_id_jednostki  = mysqli_query($polaczenie, "SELECT id_jednoski FROM baza WHERE lp = '$id_srodtka_trwalego'")
+        or die("Blad przy pobierz_id_jednostki".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_id_jednostki)>0)
+    {
+        while ($jednostka_id = mysqli_fetch_array($pobierz_id_jednostki))
+        {
+            $id_jednostki = $jednostka_id['id_jednostki'];
+        }
+    }
+    return $id_jednostki;
+
+}
