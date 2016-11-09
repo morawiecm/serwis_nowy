@@ -159,6 +159,7 @@
             <li><a href="zglos_blad.php?a=pokaz_zgloszenia_status"><i class="fa fa-gear"></i> <span>Zgłoszenia</span></a></li>
             <li><a href="uzytkownicy.php"><i class="fa fa-circle-o text-red"></i> <span>Użytkownicy</span></a></li>
             <li><a href="uzytkownicy_grupa.php"><i class="fa fa-circle-o text-yellow"></i> <span>Użytkownicy Grupy</span></a></li>
+            <li><a href="import_danych.php"><i class="fa fa-circle-o text-yellow"></i> <span>Import danych Serwis1.0</span></a></li>
         </ul>
     </section>
     <!-- /.sidebar -->

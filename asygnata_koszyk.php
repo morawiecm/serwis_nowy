@@ -74,7 +74,7 @@ include 'menu.php';
                         $dodaj_do_koszyka_st = mysqli_query($polaczenie, "INSERT INTO asygnata_koszyk (id_lp, id_wydzialu, data_dodania, kto_dodal) VALUES 
                         ('$nrID','$id_wydzialu_asygnata','$data_pelana','$użytkownik_imie_nazwisko')")
                         or die("Blad przy dodaj_do_koszyka_st");
-                        Przekierowanie("Dodano do koszyka. Nastapi przekierowania","asygnata_koszyk.php");
+                        Przekierowanie("Dodano do koszyka. Nastapi przekierowanie do koszyka asygnat","asygnata_koszyk.php");
                     }
                     else
                     {

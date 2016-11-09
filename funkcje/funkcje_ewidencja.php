@@ -222,7 +222,7 @@ function PobierzIdJednostki($id_srodtka_trwalego)
     {
         while ($jednostka_id = mysqli_fetch_array($pobierz_id_jednostki))
         {
-            $id_jednostki = $jednostka_id['id_jednostki'];
+            $id_jednostki = $jednostka_id['id_jednoski'];
         }
     }
     return $id_jednostki;
