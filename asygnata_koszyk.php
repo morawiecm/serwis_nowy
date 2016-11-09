@@ -81,14 +81,43 @@ include 'menu.php';
                         Przekierowanie("Bledny nr ID ! Spróbuj jeszcze raz","index.php");
                     }
                 }
+                elseif ($a=='generuj')
+                {
+                    //var_dump($_POST);
+                    $id_sprzetu = $_POST['id_sprzetu'];
+                    $liczba_elementow = count($id_sprzetu);
+
+                    echo "<table class='table table-bordered'><form method='post' action='asygnata_koszyk.php?a=zapisz'>";
+                    //Glowne elementy
+                    echo "<tr><th>Typ Asygnaty:</th><td><select class='form-control' name='typ_asygnaty'><option value='0'>Wydania</option><option value='1'>Przyjecia</option></select></td></tr>";
+                    echo "<tr><th>Na stan:</th><td><select name='wydzial_do' class='form-control'>";
+                    echo PobierzJednostki("");
+                    echo "</select> </td></tr>";
+                    echo "<tr><th>Uwagi:</th><td><textarea class='form-control' rows='6' name='uwagi'></textarea></td></tr>";
+                    echo "<tr><th class='text-center' colspan='2'>Skladniki Asygnaty:</th></tr>";
+                    //Elementy Asygnaty
+                    for ($i=0;$i<$liczba_elementow;$i++)
+                    {
+                        $nazwa_sprzetu = PobierzNazweSprzetu($id_sprzetu[$i]);
+                        echo "<tr><th colspan='2'>$i. $nazwa_sprzetu</th><input type='hidden' name='tablica_id[]' value='$id_sprzetu[$i]'></tr>";
+                        echo "<tr><th>Uwaga:</th><td><input type='text' name='uwaga_osobno[]' class='form-control'></td></tr>";
+
+                    }
+                    echo "<tr><th colspan='2'><input type='submit' value='Zapisz Asygnate' class='btn btn-primary form-control'></th></tr>";
+                    echo "</form></table>";
+
+                }
+                elseif ($a=='zapisz')
+                {
+                    var_dump($_POST);
+                }
                 else
                 {
                     $zapytanie_pobierz_elemnty_do_asygnaty = "SELECT baza.lp, baza.nazwa_sprzetu, baza.nr_inwentarzowy, baza.id_jednoski, baza.wartosc, asygnata_koszyk.uwaga
                     FROM asygnata_koszyk
                     INNER JOIN baza ON asygnata_koszyk.id_lp = baza.lp";
 
-                    echo"<p><a href='asygnata.php' class='btn btn-success'>Generuj Asygnate</a> </p>";
-                    echo "<table class='table table-responsive table-bordered'>";
+                    echo "<table class='table table-responsive table-bordered'><form action='asygnata_koszyk.php?a=generuj' method='post'>";
                     echo "<thead><tr><th>Nr ewidencyjny</th><th>Nazwa</th><th>Na stanie</th><td>Wartosc</td><th>Uwagi</th><th>Wybierz</th></tr></thead>";
                     $pobierz_skladniki_asygnaty  = mysqli_query($polaczenie, $zapytanie_pobierz_elemnty_do_asygnaty) or die("Blad przy pobierz_skladniki_asygnaty".mysqli_error($polaczenie));
                     if(mysqli_num_rows($pobierz_skladniki_asygnaty)>0)
@@ -105,7 +134,8 @@ include 'menu.php';
                         echo "<tr><td colspan='6'>Koszyk pusty..dodaj składnik by stworzyć protokół</td></tr>";
                     }
 
-                    echo"</table>";
+                    echo"<p><input type='submit' class='btn btn-success' value='Generuj Asygnate'> </p>";
+                    echo"</form></table>";
                 }
 
                 ?>

@@ -228,3 +228,19 @@ function PobierzIdJednostki($id_srodtka_trwalego)
     return $id_jednostki;
 
 }
+function PobierzNazweSprzetu($id_srodka_trwalego)
+{
+    $polaczenie = polaczenie_z_baza();
+    $nazwa_sprzetu = '';
+
+    $pobierz_nazwe_sprzetu =  mysqli_query($polaczenie,"SELECT nazwa_sprzetu, nr_inwentarzowy FROM baza WHERE lp ='$id_srodka_trwalego'") or die(mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_nazwe_sprzetu)>0)
+    {
+        while ($sprzet = mysqli_fetch_array($pobierz_nazwe_sprzetu))
+        {
+            $nazwa_sprzetu = $sprzet['nr_inwentarzowy']." ".$sprzet['nazwa_sprzetu'];
+        }
+    }
+
+    return $nazwa_sprzetu;
+}
