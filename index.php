@@ -363,7 +363,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                 baza.uwagi,
                 baza.likwidacja,
                 baza.rodzaj_ewidencyjny
-                FROM baza INNER JOIN jednostki ON baza.jed_uzytkujaca=jednostki.id WHERE baza.lp='$nrID'")
+                FROM baza INNER JOIN jednostki ON baza.id_jednoski=jednostki.id WHERE baza.lp='$nrID'")
             or die("Blad przy pobierzDaneOsprzecie" . mysqli_error($polaczenie));
             $licznik_dane = mysqli_num_rows($pobierzDaneOsprzecie);
             if ($licznik_dane == 1) {
@@ -379,7 +379,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                         $podziel3 = substr($ciag, 4 - 8);
                         $seryjny_stary_format = $podziel . '-' . $podziel2 . '-' . $podziel3;
                     }
-                    if ($dane[11] != '') {
+                    if ($dane[11] != '0000-00-00') {
                         echo "<h4 class='text-center text-danger'><span class='fa fa-exclamation-circle'></span> $dane[5] ($dane[12]) - Sprzęt wybrakowano dnia: $dane[11]";
                         $poszukajProtokolu = mysqli_query($polaczenie, "SELECT id, id_protokol FROM protokol_skladniki WHERE nr_ewidencyjny='$dane[1]' or nr_ewidencyjny='$seryjny_stary_format'") or die("Blad przy poszukajProtokol" . mysqli_error($polacznie));
                         if (mysqli_num_rows($poszukajProtokolu) > 0) {

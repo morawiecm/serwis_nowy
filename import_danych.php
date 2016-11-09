@@ -86,25 +86,48 @@ include 'menu.php';
                     while ($dane = mysqli_fetch_array($pobierz_orginal))
                     {
                         //zmienne:
+                        $nr_inwentarzowy= '';
+                        $nr_inwentarzowy_1= '';
+                        $nr_inwentarzowy_2= '';
+                        $nr_fabryczny= '';
+                        $nazwa_sprzetu='';
+                        $nr_inwentarzowy_klasyfikacja= '';
+                        $nr_inwentarzowy_rodzaj= '';
+                        $nr_inwentarzowy_4_id= '';
+                        $wartosc= '';
+                        $jed_miary= '';
+                        $jed_uzytkujaca= '';
+                        $uwagi= '';
+                        $likwidacja= '';
+                        $id_jednoski= '';
+                        $data_wprowadzenia= '';
+                        $zrodlo_finansowania= '';
+                        $notatki= '';
+                        $rodzaj_ewidencyjny= '';
+                        $sposob_likwidacji= '';
+                        $Podstawa= '';
+                        $nr_dokmentu= '';
+
+
                         $nr_inwentarzowy= $dane['nr_aktualny'];
-                        $nr_inwentarzowy_1= $dane['	nr_inwentarzowy'];
+                        $nr_inwentarzowy_1= $dane['nr_inwentarzowy'];
                         $nr_inwentarzowy_2= $dane['inwentarzowy2'];
                         $nr_fabryczny= $dane['nr_fabryczny'];
-                        $nazwa_sprzetu= $dane['Materiał'];
+                        $nazwa_sprzetu=addslashes($dane['Materiał']);
                         $nr_inwentarzowy_klasyfikacja= $dane['nr_inwentarzowy_klasyfikacja'];
                         $nr_inwentarzowy_rodzaj= $dane['nr_inwentarzowy_rodzaj'];
                         $nr_inwentarzowy_4_id= $dane['nrinwentnowy'];
                         $wartosc= $dane['wartość'];
                         $jed_miary= $dane['jed_miary'];
                         $jed_uzytkujaca= $dane['jed_użytkuj'];
-                        $uwagi= $dane['uwagi'];
+                        $uwagi= addslashes($dane['uwagi']);
                         $likwidacja= $dane['Likwidacja'];
                         $id_jednoski= '';
                         $data_wprowadzenia= $dane['data wprowadzenia'];
                         $zrodlo_finansowania= $dane['Żródło finansowania'];
-                        $notatki= $dane['NOTATKI'];
+                        $notatki= addslashes($dane['NOTATKI']);
                         $rodzaj_ewidencyjny= $dane['Rodzaj ewidencyjny'];
-                        $sposob_likwidacji= $dane['	Sposób likwidacji'];
+                        $sposob_likwidacji= $dane['Sposób likwidacji'];
                         $Podstawa= $dane['Podstawa'];
                         $nr_dokmentu= $dane['nr_dokmentu'];
 
@@ -122,7 +145,29 @@ include 'menu.php';
             }
             elseif ($a=='jednostki')
             {
+                $pobierz_dane_z_bazy = mysqli_query($polaczenie,"SELECT lp, jed_uzytkujaca FROM baza") or die("Blad przy pobierz_dane_z_bazy");
+                if(mysqli_num_rows($pobierz_dane_z_bazy)>0)
+                {
+                    while ($dane = mysqli_fetch_array($pobierz_dane_z_bazy))
+                    {
+                        $jednostka_id='';
+                        $jednostka_nazwa = $dane['jed_uzytkujaca'];
+                        $id_rekordu = $dane['lp'];
+                        $polaczenie2 = polaczenie_z_baza();
+                        $polaczenie3 = polaczenie_z_baza();
+                        //wyszukanie wartosci w bazie
+                        $wyszukaj_jednostke = mysqli_query($polaczenie2,"SELECT id FROM jednostki WHERE nazwa LIKE '$jednostka_nazwa'") or die(mysqli_error($polaczenie2));
+                        if(mysqli_num_rows($wyszukaj_jednostke)>0)
+                        {
+                            while ($jed = mysqli_fetch_array($wyszukaj_jednostke))
+                            {
+                                $jednostka_id = $jed['id'];
+                                $zaktualizuj_rekord = mysqli_query($polaczenie3,"UPDATE baza SET id_jednoski = '$jednostka_id' WHERE lp = '$id_rekordu'") or die(mysqli_error($polaczenie3));
+                            }
+                        }
 
+                    }
+                }
             }
             else
             {
