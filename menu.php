@@ -121,7 +121,7 @@
             </li>
             <li><a href="./documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>-->
             <li class="header">EWIDENCJA</li>
-            <li><a href="asygnata_koszyk.php"><i class="fa fa-gear"></i> <span>ASYGNATY</span></a></li>
+            <li><a href="asygnaty.php"><i class="fa fa-gear"></i> <span>ASYGNATY</span></a></li>
             <li><a href="naklejka.php"><i class="fa fa-gear"></i> <span>Naklejki</span></a></li>
             <li class="treeview">
                 <a href="#">
@@ -131,7 +131,7 @@
             </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Stanu technicznego</a></li>
+                    <li><a href="protokol_stanu_technicznego.php"><i class="fa fa-circle-o"></i> Stanu technicznego</a></li>
                     <li><a href="#"><i class="fa fa-circle-o"></i> Rozkompletowania</a></li>
                     <li><a href="#"><i class="fa fa-circle-o"></i> Skompletowania</a></li>
                 </ul>

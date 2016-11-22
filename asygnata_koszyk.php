@@ -30,44 +30,10 @@ if ($uzytkownik_uprawnienia == 1) {
 include 'gora.php';
 include 'pasek.php';
 include 'menu.php';
-?>
 
-<!-- =============================================== -->
-
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>
-            Blank page
-            <small>it all starts here</small>
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li><a href="#">Examples</a></li>
-            <li class="active">Blank page</li>
-        </ol>
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-
-        <!-- Default box -->
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Title</h3>
-
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-                        <i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-                        <i class="fa fa-times"></i></button>
-                </div>
-            </div>
-            <div class="box-body">
-                <?php
                 if($a=='dodaj_do_koszyka')
                 {
+                    echo NaglowekStrony("Asygnata","Tworzenie dokumentu","Dodawanie do koszyka");
                     if($nrID!='')
                     {
                         $id_wydzialu_asygnata = PobierzIdJednostki($nrID);
@@ -83,6 +49,7 @@ include 'menu.php';
                 }
                 elseif ($a=='generuj')
                 {
+                    echo NaglowekStrony("Asygnata","Tworzenie dokumentu","Szczegóły dokumentu");
                     //var_dump($_POST);
                     $id_sprzetu = $_POST['id_sprzetu'];
                     $liczba_elementow = count($id_sprzetu);
@@ -169,7 +136,7 @@ include 'menu.php';
                     //usun pozyje z koszyka
                         $usun_z_koszyka = mysqli_query($polaczenie,"DELETE FROM asygnata_koszyk WHERE id_lp = '$id_lp'") or die("Blad przy usun_z_koszyka".mysqli_error($polaczenie));
                     }
-
+                    echo NaglowekStrony("Asygnata","Tworzenie dokumentu","Zapis dokumentu");
                     echo "Zapisano Pomyśnie asygnate $asygnata_numer. Liczba składników asygnaty $liczba_elementow_tablicy";
 
 
@@ -179,6 +146,7 @@ include 'menu.php';
                 }
                 else
                 {
+                    echo NaglowekStrony("Asygnata","Tworzenie dokumentu","Wybór z koszyka");
                     $zapytanie_pobierz_elemnty_do_asygnaty = "SELECT baza.lp, baza.nazwa_sprzetu, baza.nr_inwentarzowy, baza.id_jednoski, baza.wartosc, asygnata_koszyk.uwaga
                     FROM asygnata_koszyk
                     INNER JOIN baza ON asygnata_koszyk.id_lp = baza.lp";

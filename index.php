@@ -405,7 +405,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     $wyszukaj_oprogramowanie = mysqli_query($polaczenie, "SELECT nazwa, typ, klucz FROM oprogramowanie WHERE numer_in='$dane[1]'") or die("blad przy wyszukaj_oprogamowanie" . mysqli_error($polaczenie));
                     $licznik_wyszukajOprogramowanie = mysqli_num_rows($wyszukaj_oprogramowanie);
                     //dokumenty
-                    $wyszukaj_dokumenty = mysqli_query($polaczenie, "SELECT * FROM historia WHERE nr_inwentarzowy='$dane[1]' AND (kod='1' OR kod='2') ") or die("blad przy wyszukaj_dokumenty" . mysqli_error($polaczenie));
+                    $wyszukaj_dokumenty = mysqli_query($polaczenie, "SELECT * FROM historia WHERE (nr_inwentarzowy='$dane[1]' OR id_srodka_trwalego = '$nrID') AND (kod='1' OR kod='2' OR kod='9') ") or die("blad przy wyszukaj_dokumenty" . mysqli_error($polaczenie));
                     $licznik_dokumenty = mysqli_num_rows($wyszukaj_dokumenty);
                     //raporty
                     $wyszukaj_raporty = mysqli_query($polaczenie, "SELECT * FROM historia WHERE nr_inwentarzowy='$dane[1]' AND kod='5'");
@@ -471,7 +471,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo "<tr><th>Nr inwentarzowy</th><td>$dane[1]  $dane[3]</td><th>Nr fabryczny</th><td>$dane[4]</tr>";
                     echo "<tr><th>Na stanie:</th><td>$dane[6]</td><th>Data wprowadzenia:</th><td>$formatowanie_daty</td></tr>";
                     echo "<tr><th>Źródło finansowania:</th><td>$dane[8]</td><th>Wartość:</th><td>$formatowanie_wartosc zł</td></tr>";
-                    echo "<tr><th>Gwarancja / UMOWA:</th><td></td><th>Gwarancja do:</th><td></td></tr>";
+                    //echo "<tr><th>Gwarancja / UMOWA:</th><td></td><th>Gwarancja do:</th><td></td></tr>";
                     echo "<tr><th>Uwagi</th><td colspan='3' class='text-justify'>$dane[10]</td></tr>";
 
                     if(isset($seryjny_stary_format))
@@ -516,7 +516,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo '<div class="tab-pane" id="tab_zdarzenia">';
                     echo "<table class='table'>";
                     echo "<tr><th class='text-bold text-center'>Utwórz protokół:</th></tr>";
-                    echo"<tr><td><a href='#' class='btn btn-info form-control'>Stanu technicznego</a></td></tr>";
+                    echo"<tr><td><a href='protokol_stanu_technicznego.php?a=dodaj_do_koszyka&id=$nrID' class='btn btn-info form-control'>Stanu technicznego</a></td></tr>";
                     echo"<tr><td><a href='#' class='btn btn-primary form-control'>Rozkompletowania</a></td></tr>";
                     echo"<tr><td><a href='#' class='btn btn-warning form-control'>Skompletowania</a></td></tr>";
                     echo "<tr><th class='text-bold text-center'>Utwórz Dokument:</th></tr>";
@@ -577,6 +577,11 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                             //Dodanie ST
                                  echo"<tr><td>$historia[3]</td><td>Edycja danych danych przez: $historia[1]</td></tr>";
                              }
+                            elseif ($historia[4] == '9') {
+                                //Dodanie ST
+                                echo"<tr><td>$historia[3]</td><td>Utworzono Asygnatę o nr: $historia[9] dnia: $historia[3] na podstawie której przepisano z Jednostki/Wydziału: $historia[8].
+                     na Jednostkę/Wydział: $historia[7]. <a href='./fpdf17/generuj_asygnate.php?id=$historia[10]'>POKAŻ DOKUMENT</a> </td></tr>";
+                            }
 
                         }
                         echo "</table>";
@@ -584,11 +589,16 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo '</div><!-- /.tab-pane -->
                   <div class="tab-pane" id="tab_3">';
                     //oprogramowanie
+                    echo "<table class='table table-bordered'>";
+                    echo "<thead><tr><th>Nazwa Programu</th><th>KLUCZ</tr></thead>";
                     if ($licznik_wyszukajOprogramowanie > 0) {
+
                         while ($oprogramowanie = mysqli_fetch_array($wyszukaj_oprogramowanie)) {
-                            echo "$oprogramowanie[0] $oprogramowanie[1] $oprogramowanie[2] </br>";
+                            echo "<td>$oprogramowanie[0] $oprogramowanie[1]</td><td> $oprogramowanie[2] </td>";
                         }
                     }
+                    else "<td colspan='2'>Brak oprogramowania w bazie</td>";
+                    echo "</table>";
                     echo '</div><!-- /.tab-pane -->
                   <div class="tab-pane" id="tab_4">';
                     //dokumenty
@@ -604,17 +614,24 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                             //Protokół Stanu technicznego
                             echo "<tr><td>$dokumenty[3]</td><td>Uworzono protokół Stanu Technicznego nr: $dokumenty[9] Protokół stworzył : $dokumenty[1] dnia: $dokumenty[7]</td></tr>";
                         }
+                        elseif ($dokumenty[4] == '9')
+                        {
+                            echo"<tr><td>$dokumenty[3]</td><td>Utworzono Asygnatę o nr: $dokumenty[9] dnia: $dokumenty[3] na podstawie której przepisano z Jednostki/Wydziału: $dokumenty[8].
+                        na Jednostkę/Wydział: $dokumenty[7]. <a href='./fpdf17/generuj_asygnate.php?id=$dokumenty[10]'>POKAŻ DOKUMENT</a></td></tr>";
+                        }
                     }
+
                     echo "</table>";
                     echo '</div><!-- /.tab-pane -->
                   <div class="tab-pane" id="tab_5">';
                     //raport + spis
                     while ($raporty = mysqli_fetch_array($wyszukaj_raporty)) {
 
-                        echo "Wpis posiada raport z dnia: $raporty[3] utworzony przez: $raporty[1]. Wyswietl</br>";
+                        echo "Wpis posiada raport z dnia: $raporty[3] utworzony przez: $raporty[1]. <a href='index.php?a=pokaz_raport_spis&id=$spis[0]'>Wyswietl</a></br>";
                     }
                     while ($spis = mysqli_fetch_array($wyszukaj_spis)) {
-                        echo "Wpis posiada raport z dnia: $spis[23] utworzony przez: $spis[24]. Wyswietl</br>";
+                        echo "Wpis posiada raport z dnia: $spis[23] utworzony przez: $spis[24]. <a href='index.php?a=pokaz_raport_spis&id=$spis[0]'>Wyswietl</a></br>";
+
                     }
 
                     echo '</div><!-- /.tab-pane -->

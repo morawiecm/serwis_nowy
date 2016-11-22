@@ -211,6 +211,29 @@ function PobierzNazweWydzialu($id_wydzialu)
     return $nazwa_wydzialu;
 }
 
+function PobierzNumerWydzialu($nazwa_wydzialu)
+{
+    $numer_wydzialu = "";
+
+    $polaczenie = polaczenie_z_baza();
+
+    $pobierz_numer_wydzialu  =  mysqli_query($polaczenie,"SELECT id FROM jednostki WHERE nazwa LIKE '$nazwa_wydzialu'")
+    or die("Bład przy pobierz_numer_wydzialu");
+    if(mysqli_num_rows($pobierz_numer_wydzialu)>0)
+    {
+        while ($numer = mysqli_fetch_array($pobierz_numer_wydzialu))
+        {
+            $numer_wydzialu = $numer['id'];
+        }
+    }
+    else
+    {
+        $numer_wydzialu = "Brak wydziału o podanej nazwie lub został usunięty";
+    }
+
+    return $numer_wydzialu;
+}
+
 function PobierzIdJednostki($id_srodtka_trwalego)
 {
     $polaczenie = polaczenie_z_baza();
@@ -243,4 +266,119 @@ function PobierzNazweSprzetu($id_srodka_trwalego)
     }
 
     return $nazwa_sprzetu;
+}
+function PobierzWydzialSprzetu($id_srodka_trwalego)
+{
+    $polaczenie = polaczenie_z_baza();
+    $wydzial_sprzetu = '';
+
+    $pobierz_nazwe_sprzetu =  mysqli_query($polaczenie,"SELECT id_jednoski FROM baza WHERE lp ='$id_srodka_trwalego'") or die(mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_nazwe_sprzetu)>0)
+    {
+        while ($sprzet = mysqli_fetch_array($pobierz_nazwe_sprzetu))
+        {
+            $wydzial_sprzetu = $sprzet['id_jednoski'];
+        }
+    }
+
+    return $wydzial_sprzetu;
+}
+function PobierzNrAsygnaty()
+{
+    $polaczenie = polaczenie_z_baza();
+    $nr_asygnaty = '';
+
+    $pobierz_nr_asygnaty = mysqli_query($polaczenie,"SELECT tresc FROM ustawienia WHERE id ='3'") or die("Blad przy pobierz_nr_asygnaty".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_nr_asygnaty)>0)
+    {
+        while ($asygnatanr = mysqli_fetch_array($pobierz_nr_asygnaty))
+        {
+            $nr_asygnaty = $asygnatanr['tresc'];
+            // w przypadku gdy w bazie bedzie nr 0 zwieksz o 1 nr
+            if($nr_asygnaty =='0')
+            {
+                AktualizujNrAsygnaty($nr_asygnaty);
+            }
+        }
+    }
+    else
+    {
+        $nr_asygnaty = "Blad przy pobraniu nr! usunieto rekord w bazie";
+    }
+
+    return $nr_asygnaty;
+}
+
+function PobierzDateAsygnaty($id_asygnaty)
+{
+    $polaczenie = polaczenie_z_baza();
+    $data_asygnaty = '';
+
+    $pobierz_date_asygnaty = mysqli_query($polaczenie,"SELECT data_asygnaty FROM asygnata WHERE id ='$id_asygnaty'") or die("Blad przy pobierz_date_asygnaty".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_date_asygnaty)>0)
+    {
+        while ($asygnatadata = mysqli_fetch_array($pobierz_date_asygnaty))
+        {
+            $data_asygnaty = $asygnatadata['data_asygnaty'];
+        }
+    }
+
+    return $data_asygnaty;
+}
+
+function SprawdzWydzialyAsygnata($id_sprzetu)
+{
+
+    $czy_zgodne = true;
+    //$liczba_sprzetu = count($id_sprzetu);
+    $ll = 0;
+    foreach ($id_sprzetu as $nr_sprzetu)
+    {
+        $wydzialy[$ll] = PobierzWydzialSprzetu($nr_sprzetu);
+        $ll++;
+    }
+
+    $liczba_wydzialow =  count($id_sprzetu);
+    $wydzial_id = $wydzialy[0];
+    for($i=1;$i<$liczba_wydzialow;$i++)
+    {
+        if ($wydzial_id!=$wydzialy[$i])
+        {
+            $czy_zgodne = false;
+        }
+    }
+    return $czy_zgodne;
+}
+function AktualizujNrAsygnaty($wartosc)
+{
+    //zmienne
+    $polaczenie = polaczenie_z_baza();
+    $nr_aktualny = $wartosc;
+    $nr_aktualny++;
+    //zaktualizuj dane w bazie
+    $zwieksz_nr_asygnaty = mysqli_query($polaczenie,"UPDATE ustawienia SET tresc = '$nr_aktualny' WHERE id = 3")
+    or die("Blad przy zwieksz_nr_asygnaty".mysqli_error($polaczenie));
+
+}
+function WyslijNaMagazyn($id_sprzetu)
+{
+    
+}
+
+function PorownajNrAsygnat($id_asygnaty)
+{
+    $polaczenie = polaczenie_z_baza();
+    $polaczenie2 = polaczenie_z_baza();
+
+    $pobierz_nr_asygnaty_aktualny = mysqli_query($polaczenie,"SELECT nr_asygnaty, id_do FROM asygnata WHERE id = '$id_asygnaty'")
+        or die("Blad przy pobierz_nr_asygnaty_aktualny".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_nr_asygnaty_aktualny)>0)
+    {
+        while ($asygnata_glowna = mysqli_fetch_array($pobierz_nr_asygnaty_aktualny))
+        {
+            $do_nazwa = PobierzNazweWydzialu($asygnata_glowna['id_do']);
+            $aktualizuj_skladnik_asygnaty = mysqli_query($polaczenie2,"UPDATE asygnata_skladniki SET nr_asygnaty = '$asygnata_glowna[nr_asygnaty]', do = '$do_nazwa' WHERE id_asygnaty = '$id_asygnaty'")
+                or die("Blad przy aktualizuj_skladnik_asygnaty".mysqli_error($polaczenie2));
+        }
+    }
 }
