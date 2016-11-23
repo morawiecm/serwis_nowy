@@ -669,17 +669,18 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                   </div><!-- /.box-tools -->
                 </div><!-- /.box-header -->
                 <div class="box-body">
-                <form name="wyszukiwarka" method="post" action="index.php?a=wyszukaj">
-            <input type="text" name="wyszukiwarka" class="form-control">
-            <table><tr>
-            <th><input type="submit" class="form-control btn btn-warning" name="numer" value="Numer"></th>
-            <td><input type="submit" class="form-control btn btn-danger" name="dokument" value="Dokument"></td>
-            </tr></table>
-            </form>
+                
+                <table class="table table-bordered"><form name="wyszukiwarka" method="post" action="index.php?a=wyszukaj">
+                <tr><td><input type="text" name="wyszukiwarka" class="form-control"></td></tr>
+            
+            <tr><td><input type="submit" class="btn btn-warning form-control" name="numer" value="Wyszukaj"></td>';
+            //echo'<td><input type="submit" class="form-control btn btn-danger" name="dokument" value="Dokument"></td>';
+            echo'</tr></form></table>
+            
             </div><!-- /.box-body -->
               </div><!-- /.box -->';
 
-            echo '
+           /* echo '
                 <div class="box box-warning">
                 <div class="box-header with-border">
                   <h3 class="box-title">Lista Zmian</h3>
@@ -701,7 +702,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
             echo'</table>
             
             </div><!-- /.box-body -->
-              </div><!-- /.box -->';
+              </div><!-- /.box -->';*/
         }
         ?>
     </section>

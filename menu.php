@@ -120,6 +120,12 @@
                 </ul>
             </li>
             <li><a href="./documentation/index.html"><i class="fa fa-book"></i> <span>Documentation</span></a></li>-->
+            <?php
+            //echo $uzytkownik_sekcja;
+            if($uzytkownik_sekcja =='Zespół Ewidencji Rozliczeń i Zaopatrzenia' OR $uzytkownik_sekcja =='Sekcja Wsparcia Merytorycznego i Technologii')
+            {
+            echo'
+            
             <li class="header">EWIDENCJA</li>
             <li><a href="asygnaty.php"><i class="fa fa-gear"></i> <span>ASYGNATY</span></a></li>
             <li><a href="naklejka.php"><i class="fa fa-gear"></i> <span>Naklejki</span></a></li>
@@ -154,13 +160,21 @@
             </li>
             <li><a href="srodek_trwaly.php?a=wydzialy"><i class="fa fa-gear"></i> <span>Stany Wydziałów</span></a></li>
             <li><a href="srodek_trwaly.php?a=dodaj"><i class="fa fa-gear"></i> <span>Dodaj Nowy</span></a></li>
+';
+            }
+            if($uzytkownik_sekcja == 'Sekcja Wsparcia Merytorycznego i Technologii')
+            {
 
+            echo'
             <li class="header">ADMINISTRACJA</li>
             <li><a href="zglos_blad.php?a=pokaz_zgloszenia_status"><i class="fa fa-gear"></i> <span>Zgłoszenia</span></a></li>
             <li><a href="uzytkownicy.php"><i class="fa fa-circle-o text-red"></i> <span>Użytkownicy</span></a></li>
             <li><a href="uzytkownicy_grupa.php"><i class="fa fa-circle-o text-yellow"></i> <span>Użytkownicy Grupy</span></a></li>
             <li><a href="import_danych.php"><i class="fa fa-circle-o text-yellow"></i> <span>Import danych Serwis1.0</span></a></li>
-        </ul>
+        </ul>';
+            }
+
+        ?>
     </section>
     <!-- /.sidebar -->
 </aside>

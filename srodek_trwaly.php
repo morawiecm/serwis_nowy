@@ -182,16 +182,17 @@ include 'menu.php';
                     if(mysqli_num_rows($pobierz_wydzialy_stan)>0)
                     {
                         echo "<table class='table table-bordered' id='example1'>";
-                        echo "<thead><tr><th>Nazwa jednostki</th><th>Kod jednostki</th><th>Stan</th><th>Akcja</th></tr></thead>";
+                        echo "<thead><tr><th>Nazwa jednostki</th><th>Kod jednostki</th><th>Akcja</th></tr></thead>";
                         while ($wydzialy_stan = mysqli_fetch_array($pobierz_wydzialy_stan))
                         {
                             $stan_wydzialu = PoliczStanWydzialu($wydzialy_stan['id']);
-                            echo "<tr><td>$wydzialy_stan[nazwa]</td><td>$wydzialy_stan[kod_jednostki]</td><td>$stan_wydzialu</td>
-                            <td><a href='srodek_trwaly.php?a=pokaz_wydzial&id=$wydzialy_stan[id]' class='btn-xs btn-primary'>Pokaz Wydział</a>
-                            <a href='srodek_trwaly.php?a=wydzial_export&id=$wydzialy_stan[id]' class='btn-xs btn-success'>Export do Excela</a>
+                            echo "<tr><td>$wydzialy_stan[nazwa]</td><td>$wydzialy_stan[kod_jednostki]</td>
+                            <td>
+                            <a href='export_wydzial.php?id=$wydzialy_stan[id]' class='btn-xs btn-success'>Export do Excela</a>
                             </td></tr>";
                         }
                         echo "</table>";
+                        //<a href='srodek_trwaly.php?a=pokaz_wydzial&id=$wydzialy_stan[id]' class='btn-xs btn-primary'>Pokaz Wydział</a>
                     }
                 }
                 elseif ($a=='pokaz_wydzial')
@@ -206,10 +207,7 @@ include 'menu.php';
                     }
                 }
 
-                elseif ($a=='wydzial_export')
-                {
 
-                }
 
                 elseif ($a=='aktualizuj')
                 {
