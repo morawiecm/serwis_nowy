@@ -538,11 +538,11 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                                 echo "<tr><td>$historia[3]</td><td>Utworzono protokół Rozkompletowania nr: $historia[9] Protokół stworzył : $historia[1] dnia: $historia[7]</td></tr>";
                             } elseif ($historia[4] == '2') {
                                 //Protokół Stanu technicznego
-                                echo "$historia[3] - Utworzono protokół Stanu Technicznego nr: $historia[9] Protokół stworzył : $historia[1] dnia: $historia[7]</td></tr>";
+                                echo "<tr><td>$historia[3]</td><td>Utworzono protokół Stanu Technicznego nr: $historia[9] Protokół stworzył : $historia[1] dnia: $historia[7]<a href='generuj_protokol_st.php?a=generuj&id=$historia[0]'>Pokaż</a></td></tr>";
                             } elseif ($historia[4] == '3') {
                                 //Serwis
-                                echo "<div class='bg-yellow disabled color-palette'>";
-                                echo "$historia[3]- Zdarzenie Serwisowe </br>";
+                                //echo "<div class='bg-yellow disabled color-palette'>";
+                                echo"<tr><td>$historia[3]</td><td> Zdarzenie Serwisowe </br>";
                                 echo "<b>Problem:</b> $historia[7]</br>";
                                 echo "<b>Rozwiązanie:</b> $historia[8]</br>";
                                 if ($historia[9] != '') {
@@ -567,7 +567,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                                 //Drukarki
                                 while ($drukarki33 = mysqli_fetch_array($wyszkuja_wymiane)) {
 
-                                    echo "$drukarki33[3] - Wymieniony: $drukarki33[7] przez: $drukarki33[1]. Stan licznika: $drukarki33[10]</td></tr>";
+                                    echo "<tr><td>$drukarki33[3]</td><td>Wymieniony: $drukarki33[7] przez: $drukarki33[1]. Stan licznika: $drukarki33[10]</td></tr>";
                                 }
                             } elseif ($historia[4] == '7') {
                                 //Dodanie ST
@@ -612,7 +612,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                             echo "<tr><td>$dokumenty[3]</td><td>Utworzono protokół Rozkompletowania nr: $dokumenty[9] Protokół stworzył : $dokumenty[1] dnia: $dokumenty[7]</td></tr>";
                         } elseif ($dokumenty[4] == '2') {
                             //Protokół Stanu technicznego
-                            echo "<tr><td>$dokumenty[3]</td><td>Uworzono protokół Stanu Technicznego nr: $dokumenty[9] Protokół stworzył : $dokumenty[1] dnia: $dokumenty[7]</td></tr>";
+                            echo "<tr><td>$dokumenty[3]</td><td>Uworzono protokół Stanu Technicznego nr: $dokumenty[9] Protokół stworzył : $dokumenty[1] dnia: $dokumenty[7] <a href='generuj_protokol_st.php?a=generuj&id=$dokumenty[0]'>Pokaż</a></td></tr>";
                         }
                         elseif ($dokumenty[4] == '9')
                         {

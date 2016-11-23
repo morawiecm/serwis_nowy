@@ -174,6 +174,7 @@ include 'menu.php';
                 echo "<p>Menu:</p>";
                 echo "<p>1. Import danych z Serwis 1.0 do Serwis 2.0 <a href='import_danych.php?a=baza_przeniesienie' class='btn btn-danger'>Wykonaj</a></p>";
                 echo "<p>2. Zamiana jedostek na kody (id_jednostki) wq tabeli jednostki <a href='import_danych.php?a=jednostki' class='btn btn-danger'>Wykonaj</a></p> ";
+                echo "<p>3. Import z tabeli seriws do Historia <a href='aktualizacja_tabeli_serwis.php' class='btn btn-danger'>Wykonaj</a></p> ";
             }
 
 
