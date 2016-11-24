@@ -21,15 +21,17 @@
             </div>
         </div>
         <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
+        <form action="index.php?a=wyszukaj" method="post" class="sidebar-form">
             <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Wyszukaj...">
+                <input type="text" name="wyszukiwarka" class="form-control" placeholder="Wyszukaj..">
                 <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+                <button type="submit" name="numer" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
               </span>
             </div>
         </form>
+
+
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
@@ -138,7 +140,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="protokol_stanu_technicznego.php"><i class="fa fa-circle-o"></i> Stanu technicznego</a></li>
-                    <li><a href="#"><i class="fa fa-circle-o"></i> Rozkompletowania</a></li>
+                    <li><a href="protokol_rozkompletowania.php"><i class="fa fa-circle-o"></i> Rozkompletowania</a></li>
                     <li><a href="#"><i class="fa fa-circle-o"></i> Skompletowania</a></li>
                 </ul>
 
