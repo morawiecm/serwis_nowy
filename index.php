@@ -67,7 +67,7 @@ include 'menu.php';
 
             $typ = $_POST['numer'];
             //$dokument = $_POST['dokument'];
-            if ($typ != '') {
+
 
                 //kombinacje numerow inwentarzowych
                 $numer_inwent = trim($_POST["wyszukiwarka"]);
@@ -304,7 +304,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
 
             </div><!-- /.box -->';
                 }
-            }
+
 
 
         } elseif ($dokument != '') {
@@ -609,10 +609,10 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     while ($dokumenty = mysqli_fetch_array($wyszukaj_dokumenty)) {
                         if ($dokumenty[4] == '1') {
                             //Rozkompletowanie
-                            echo "<tr><td>$dokumenty[3]</td><td>Utworzono protokół Rozkompletowania nr: $dokumenty[9] Protokół stworzył : $dokumenty[1] dnia: $dokumenty[7]</td></tr>";
+                            echo "<tr><td>$dokumenty[3]</td><td>Utworzono protokół Rozkompletowania nr: $dokumenty[9] Protokół stworzył : $dokumenty[1] dnia: $dokumenty[7]<a href='/fpdf17/generuj_rozkompletowanie.php?id=$dokumenty[0]'>Pokaż protokół rozkompletowania<a/></td></tr>";
                         } elseif ($dokumenty[4] == '2') {
                             //Protokół Stanu technicznego
-                            echo "<tr><td>$dokumenty[3]</td><td>Uworzono protokół Stanu Technicznego nr: $dokumenty[9] Protokół stworzył : $dokumenty[1] dnia: $dokumenty[7] <a href='generuj_protokol_st.php?a=generuj&id=$dokumenty[0]'>Pokaż</a></td></tr>";
+                            echo "<tr><td>$dokumenty[3]</td><td>Uworzono protokół Stanu Technicznego nr: $dokumenty[9] Protokół stworzył : $dokumenty[1] dnia: $dokumenty[7] <a href='/fpdf17/generuj_protokol_st.php?a=generuj&id=$dokumenty[0]'>Pokaż</a></td></tr>";
                         }
                         elseif ($dokumenty[4] == '9')
                         {
