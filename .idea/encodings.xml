@@ -5,8 +5,9 @@
     <file url="file://$PROJECT_DIR$/fpdf17/generuj_asygnate.php" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/fpdf17/generuj_naklejka.php" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/fpdf17/generuj_protokol_st.php" charset="windows-1250" />
-    <file url="file://$PROJECT_DIR$/pdf2.php" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/fpdf17/generuj_rozkompletowanie.php" charset="windows-1250" />
     <file url="file://$PROJECT_DIR$/../serwiskwp/pdf2.php" charset="windows-1250" />
+    <file url="file://$PROJECT_DIR$/../serwiskwp/rr2.php" charset="windows-1250" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
