@@ -157,6 +157,7 @@
                     <li><a href="slownik_sposob_likwidacji.php"><i class="fa fa-circle-o"></i> Sposób likwidacji</a></li>
                     <li><a href="slownik_rodzaj_ewidencji.php"><i class="fa fa-circle-o"></i> Rodzaj Ewidencji</a></li>
                     <li><a href="slownik_jednostki.php"><i class="fa fa-circle-o"></i> Jednostki</a></li>
+                    <li><a href="liczniki_stan.php"><i class="fa fa-circle-o"></i> Liczniki</a></li>
                 </ul>
 
             </li>

@@ -34,7 +34,7 @@ include 'menu.php';
 
 if($a=='dodaj')
 {
-    echo NaglowekStrony("Asygnaty","Lista","Lista asygnat");
+    echo NaglowekStrony("Protokół rozkompletowania","Tworzenie dokumentu","Tworzenie protokołu rozkompletowania");
 
 }
 elseif ($a=='edycja')
@@ -62,11 +62,19 @@ elseif ($a=='edycja')
         echo"<tr><td colspan='5' class='text-center'>SKŁADNIKI PROTOKOŁU($liczba_skladnikow_rozkompletowania):</td></tr>";
         if($liczba_skladnikow_rozkompletowania>0)
         {
-            echo "<tr><th>Nr iwnetarzowy</th><th>Nazwa sprzetu</th><th>Wartośc</th><th>Akcja</th></tr>";
+            echo "<tr><th>Nr inwetarzowy</th><th>Nazwa sprzetu</th><th>Wartośc</th><th>Akcja</th></tr>";
             while ($skladnik_rozkompletowania = mysqli_fetch_array($pobierz_skladniki_rozkompletowania))
             {
                 $wartosc_format = number_format($skladnik_rozkompletowania['wartosc_wykomplet_sprzetu'],2,'.','');
-                echo"<tr><td>$skladnik_rozkompletowania[nr_inwentarzowy_nowy]</td><td>$skladnik_rozkompletowania[nazwa_wykomplet_sprzetu]</td><td>$wartosc_format zł</td><td><a HREF='protokol_rozkompletowania.php?a=edytuj_skladnik&id=$skladnik_rozkompletowania[id]' class='btn-xs btn-primary'>EDYTUJ</a><a href='protokol_rozkompletowania.php?a=usun_skladnik&id=$skladnik_rozkompletowania[id]' class='btn-xs btn-info'>USUŃ</a><a href='protokol_rozkompletowania.php?a=dodaj_skladnik&id=$skladnik_rozkompletowania[id]' class='btn-xs btn-success'>DODAJ DO BAZY</a></td></tr>";
+                echo"<tr><td>$skladnik_rozkompletowania[nr_inwentarzowy_nowy]</td><td>$skladnik_rozkompletowania[nazwa_wykomplet_sprzetu]</td><td>$wartosc_format zł</td><td>
+                <a HREF='protokol_rozkompletowania.php?a=edytuj_skladnik&id=$skladnik_rozkompletowania[id]' class='btn-xs btn-primary'>EDYTUJ</a>
+                <a href='srodek_trwaly.php?a=dodaj&id=$skladnik_rozkompletowania[id]' class='btn-xs btn-success'>DODAJ DO BAZY</a>";
+                if($liczba_skladnikow_rozkompletowania>1)
+                {
+                    echo "<a href='protokol_rozkompletowania.php?a=usun_skladnik&id=$skladnik_rozkompletowania[id]' class='btn-xs btn-info'>USUŃ</a>";
+                }
+                echo "</td></tr>";
+                echo "<tr><td colspan='4'><a href='protokol_rozkompletowania.php?a=dodaj_skladnik&id=$protokol_glowny[id]' class='btn btn-danger form-control'>Dodaj kolejny składnik do protokołu $protokol_glowny[nr_protokolu]</a></td></tr>";
             }
         }
         echo"</table>";

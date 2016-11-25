@@ -39,53 +39,74 @@ include 'menu.php';
 <!-- =============================================== -->
 
 <!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>
-            Dodanie nowego
-        </h1>
 
-    </section>
-
-    <!-- Main content -->
-    <section class="content">
-
-        <!-- Default box -->
-        <div class="box">
-            <div class="box-header with-border">
-                <h3 class="box-title">Ewidencja - dodanie nowego składnika</h3>
-
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
-                        <i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
-                        <i class="fa fa-times"></i></button>
-                </div>
-            </div>
-            <div class="box-body">
                 <?php
                 if($a=='dodaj')
                 {
-                    echo"<table class='table table-bordered table-striped'><form action='srodek_trwaly.php?a=zapisz' method='post'>";
-                    echo "<tr><th>Nazwa</th><td><input type='text' name='ewidencja_nazwa' class='form-control'></td></tr>";
-                    echo "<tr><th>Nr Ewidencyjny</th><td><input type='text' name='ewidencja_nr_ewidencyjny' class='form-control'></td></tr>";
-                    echo "<tr><th>Nr Seryjny</th><td><input type='text' name='ewidencja_nr_seryjny' class='form-control'></td></tr>";
-                    echo "<tr><th>Wartość</th><td><input type='text' name='ewidencja_wartosc' class='form-control'></td></tr>";
-                    echo "<tr><th>Jednostka miary</th><td><input type='text' name='ewidencja_jednostka_miary' class='form-control' value='szt.'></td></tr>";
-                    echo "<tr><th>Jednostka Użytkująca</th><td><select name='ewidencja_jednostka_uzytkujaca' class='form-control'>";
-                    echo PobierzJednostki('Wybierz z listy');
-                    echo "</select></td></tr>";
-                    echo "<tr><th>Rodzaj Ewidencji</th><td><select name='ewidencja_rodzaj_ewidencyjny' class='form-control'>";
-                    echo PobierzRodzajEwidencji('Wybierz z listy');
-                    echo"</select></td></tr>";
-                    echo "<tr><th>Źródło Finansowania</th><td><select name='ewidencja_zrodlo_finansowania' class='form-control'>";
-                    echo PobierzZrodloFinasowania('Wybierz z listy');
-                    echo"</select></td></tr>";
-                    echo "<tr><th>Data Przyjęcia</th><td><input type='text' name='ewidencja_data_przyjecia' class='form-control' id='datepicker'></td></tr>";
-                    echo "<tr><th>Notatki/Uwagi</th><td><textarea name='ewidencja_uwagi' class='form-control'></textarea></td></tr>";
-                    echo "<tr><th colspan='2'><input type='submit' name='przycisk_zapis' value='Dodaj do ewidencji' class='btn btn-danger form-control'></th></tr>";
-                    echo"</form></table>";
+                    if($nrID=='')
+                    {
+                        echo NaglowekStrony("Ewidencja ","dodanie nowego składnika","Dodanie nowego składnika do bazy");
+                        echo"<table class='table table-bordered table-striped'><form action='srodek_trwaly.php?a=zapisz' method='post'>";
+                        echo "<tr><th>Nazwa</th><td><input type='text' name='ewidencja_nazwa' class='form-control'></td></tr>";
+                        echo "<tr><th>Nr Ewidencyjny</th><td><input type='text' name='ewidencja_nr_ewidencyjny' class='form-control'></td></tr>";
+                        echo "<tr><th>Nr Seryjny</th><td><input type='text' name='ewidencja_nr_seryjny' class='form-control'></td></tr>";
+                        echo "<tr><th>Wartość</th><td><input type='text' name='ewidencja_wartosc' class='form-control'></td></tr>";
+                        echo "<tr><th>Jednostka miary</th><td><input type='text' name='ewidencja_jednostka_miary' class='form-control' value='szt.'></td></tr>";
+                        echo "<tr><th>Jednostka Użytkująca</th><td><select name='ewidencja_jednostka_uzytkujaca' class='form-control'>";
+                        echo PobierzJednostki('Wybierz z listy');
+                        echo "</select></td></tr>";
+                        echo "<tr><th>Rodzaj Ewidencji</th><td><select name='ewidencja_rodzaj_ewidencyjny' class='form-control'>";
+                        echo PobierzRodzajEwidencji('Wybierz z listy');
+                        echo"</select></td></tr>";
+                        echo "<tr><th>Źródło Finansowania</th><td><select name='ewidencja_zrodlo_finansowania' class='form-control'>";
+                        echo PobierzZrodloFinasowania('Wybierz z listy');
+                        echo"</select></td></tr>";
+                        echo "<tr><th>Data Przyjęcia</th><td><input type='text' name='ewidencja_data_przyjecia' class='form-control' id='datepicker'></td></tr>";
+                        echo "<tr><th>Notatki/Uwagi</th><td><textarea name='ewidencja_uwagi' class='form-control'></textarea></td></tr>";
+                        echo "<tr><th colspan='2'><input type='submit' name='przycisk_zapis' value='Dodaj do ewidencji' class='btn btn-danger form-control'></th></tr>";
+                        echo"</form></table>";
+                    }
+                    else
+                    {
+                        echo NaglowekStrony("Ewidencja ","dodanie nowego składnika","Dodanie nowego składnika do bazy na podstawie protokołu rozkompletowania");
+                        $pobierz_dane_z_protokolu_rozkompletowania = mysqli_query($polaczenie,"SELECT nazwa_wykomplet_sprzetu,nr_seryjny,wartosc_wykomplet_sprzetu,jednostka_miary_wykomplet_sprzetu,
+                        jednostka_uzytkujaca,nr_protokolu,id_protokolu
+                        FROM rozkompletowanie_skladniki WHERE id = '$nrID'")
+                            or die("Blad przy pobierz_dane_z_protokolu_rozkompletowania: ".mysqli_error($polaczenie));
+                        if(mysqli_num_rows($pobierz_dane_z_protokolu_rozkompletowania)>0)
+                        {
+                            while ($dane_protokol = mysqli_fetch_array($pobierz_dane_z_protokolu_rozkompletowania))
+                            {
+                                $nazwa_sprzetu_rozkompletowanego = PobierzNazweDateSprzetuZRozkompletowania($dane_protokol['id_protokolu']);
+                                $wartosc_format = number_format($dane_protokol['wartosc_wykomplet_sprzetu'],2,'.','');
+                                $tresc_uwaga = "Wyceniono i przyjęto na stan: $dane_protokol[jednostka_uzytkujaca], na podstawie Protokołu rozkompletowania: $dane_protokol[nr_protokolu] z dnia $nazwa_sprzetu_rozkompletowanego[1].(Rozkompletowanie: $nazwa_sprzetu_rozkompletowanego[2] - $nazwa_sprzetu_rozkompletowanego[0])";
+
+
+                                echo "<table class='table table-bordered table-striped'><form action='srodek_trwaly.php?a=zapisz' method='post'>";
+                                echo "<tr><th>Nazwa</th><td><input type='text' name='ewidencja_nazwa' class='form-control' value='$dane_protokol[nazwa_wykomplet_sprzetu]'></td></tr>";
+                                echo "<tr><th>Nr Ewidencyjny</th><td><input type='text' name='ewidencja_nr_ewidencyjny' class='form-control'></td></tr>";
+                                echo "<tr><th>Nr Seryjny</th><td><input type='text' name='ewidencja_nr_seryjny' class='form-control' value='$dane_protokol[nr_seryjny]'></td></tr>";
+                                echo "<tr><th>Wartość</th><td><input type='text' name='ewidencja_wartosc' class='form-control' value='$wartosc_format'></td></tr>";
+                                echo "<tr><th>Jednostka miary</th><td><input type='text' name='ewidencja_jednostka_miary' class='form-control' value='$dane_protokol[jednostka_miary_wykomplet_sprzetu]'></td></tr>";
+                                echo "<tr><th>Jednostka Użytkująca</th><td><select name='ewidencja_jednostka_uzytkujaca' class='form-control'>";
+                                echo PobierzJednostki($dane_protokol['jednostka_uzytkujaca']);
+                                echo "</select></td></tr>";
+                                echo "<tr><th>Rodzaj Ewidencji</th><td><select name='ewidencja_rodzaj_ewidencyjny' class='form-control'>";
+                                echo PobierzRodzajEwidencji('Wybierz z listy');
+                                echo"</select></td></tr>";
+                                echo "<tr><th>Źródło Finansowania</th><td><select name='ewidencja_zrodlo_finansowania' class='form-control'>";
+                                echo PobierzZrodloFinasowania('Rozkompletowanie');
+                                echo"</select></td></tr>";
+                                echo "<tr><th>Data Przyjęcia</th><td><input type='text' name='ewidencja_data_przyjecia' class='form-control' value='$nazwa_sprzetu_rozkompletowanego[1]' id='datepicker'></td></tr>";
+                                echo "<tr><th>Notatki/Uwagi</th><td><textarea name='ewidencja_uwagi' class='form-control'>$tresc_uwaga</textarea></td></tr>";
+                                echo "<input type='hidden' name='rozkompletowanie' value='$nrID'>";
+                                echo "<tr><th colspan='2'><input type='submit' name='przycisk_zapis' value='Dodaj do ewidencji' class='btn btn-danger form-control'></th></tr>";
+                                echo "</form></table>";
+                            }
+                        }
+
+                    }
+
                 }
 
                 elseif ($a=='zapisz')
@@ -93,8 +114,14 @@ include 'menu.php';
                     if(isset($_POST['przycisk_zapis']))
                     {
                         //dane  z POST
-                        $st_ewidencja_nazwa = trim($_POST['ewidencja_nazwa']);
+                        if($_POST['rozkompletowanie']!='')
+                        {
+                            $id_rekordu_rozkompletowanie = $_POST['rozkompletowanie'];
+                            $st_ewidencja_nr_ewidencyjny = trim($_POST['ewidencja_nr_ewidencyjny']);
+                            AktualizujRozkompletowanieSkladnik($id_rekordu_rozkompletowanie,$st_ewidencja_nr_ewidencyjny);
+                        }
                         $st_ewidencja_nr_ewidencyjny = trim($_POST['ewidencja_nr_ewidencyjny']);
+                        $st_ewidencja_nazwa = trim($_POST['ewidencja_nazwa']);
                         $st_ewidencja_nr_seryjny = trim($_POST['ewidencja_nr_seryjny']);
                         $st_ewidencja_wartosc = trim($_POST['ewidencja_wartosc']);
                         $st_ewidencja_jednostka_miary = trim($_POST['ewidencja_jednostka_miary']);

@@ -382,3 +382,24 @@ function PorownajNrAsygnat($id_asygnaty)
         }
     }
 }
+function PobierzNazweDateSprzetuZRozkompletowania($id_protokolu)
+{
+    $polaczenie = polaczenie_z_baza();
+    $nazwa_sprzetu[]='';
+    $pobierz_nazwe_sprzetu_z_protkolu = mysqli_query($polaczenie,"SELECT nazwa_srodka_trwalego,data_protokolu,nr_ewidencyjny FROM rozkompletowanie WHERE id ='$id_protokolu'")
+        or die("Blad przy pobierz_nazwe_sprzetu_z_protokolu".mysqli_query($polaczenie));
+    while ($nazwa = mysqli_fetch_array($pobierz_nazwe_sprzetu_z_protkolu))
+    {
+        $nazwa_sprzetu[0] = $nazwa['nazwa_srodka_trwalego'];
+        $nazwa_sprzetu[1] = $nazwa['data_protokolu'];
+        $nazwa_sprzetu[2] = $nazwa['nr_ewidencyjny'];
+    }
+
+    return $nazwa_sprzetu;
+}
+function AktualizujRozkompletowanieSkladnik($id_rekordu_rozkompletowanie,$st_ewidencja_nr_ewidencyjny)
+{
+    $polaczenie = polaczenie_z_baza();
+    $dodaj_numer_st = mysqli_query($polaczenie,"UPDATE rozkompletowanie_skladniki SET  nr_inwentarzowy_nowy = '$st_ewidencja_nr_ewidencyjny' WHERE id='$id_rekordu_rozkompletowanie'")
+        or die("Blad przy dodaj_numer_st".mysqli_error($polaczenie));
+}
