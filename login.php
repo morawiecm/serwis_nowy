@@ -104,7 +104,7 @@ if(!$_SESSION['logged']) {
                 <input type="password" class="form-control" placeholder="Hasło" name="password">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span> ';
 ?>
-                <p></p>
+                <p>Test aplikacji! Brak userow!</p>
                 <?php
                 if($blad!=0){
 

@@ -56,8 +56,8 @@ elseif ($a=='edycja')
         echo"</form></table>";
         echo"<table class='table table-bordered'>";
         echo"<tr><td colspan='5' class='text-bold text-center'> ROZKOMPLETOWANIE:$protokol_glowny[nr_ewidencyjny] - $protokol_glowny[nazwa_srodka_trwalego] </td></tr>";
-        $pobierz_skladniki_rozkompletowania($polaczenie,"SELECT nazwa_wykomplet_sprzetu,wartosc_wykomplet_sprzetu,nr_inwentarzowy_nowy FROM rozkompletowanie_skladniki WHERE id_protokolu = '$protokol_glowny[id]'")
-            or die("Blad przy pobierz_skladniki_rozkompletowania".mysqli_error($polaczenie));
+
+        $pobierz_skladniki_rozkompletowania = mysqli_query($polaczenie,"SELECT nazwa_wykomplet_sprzetu,wartosc_wykomplet_sprzetu,nr_inwentarzowy_nowy,id FROM rozkompletowanie_skladniki WHERE id_protokolu = '$protokol_glowny[id]'") or die("Blad przy pobierz_skladniki_rozkompletowania".mysqli_error($polaczenie));
         $liczba_skladnikow_rozkompletowania = mysqli_num_rows($pobierz_skladniki_rozkompletowania);
         echo"<tr><td colspan='5' class='text-center'>SKŁADNIKI PROTOKOŁU($liczba_skladnikow_rozkompletowania):</td></tr>";
         if($liczba_skladnikow_rozkompletowania>0)
@@ -65,7 +65,8 @@ elseif ($a=='edycja')
             echo "<tr><th>Nr iwnetarzowy</th><th>Nazwa sprzetu</th><th>Wartośc</th><th>Akcja</th></tr>";
             while ($skladnik_rozkompletowania = mysqli_fetch_array($pobierz_skladniki_rozkompletowania))
             {
-                echo"<tr><td></td><td></td><td></td><td></td></tr>";
+                $wartosc_format = number_format($skladnik_rozkompletowania['wartosc_wykomplet_sprzetu'],2,'.','');
+                echo"<tr><td>$skladnik_rozkompletowania[nr_inwentarzowy_nowy]</td><td>$skladnik_rozkompletowania[nazwa_wykomplet_sprzetu]</td><td>$wartosc_format zł</td><td><a HREF='protokol_rozkompletowania.php?a=edytuj_skladnik&id=$skladnik_rozkompletowania[id]' class='btn-xs btn-primary'>EDYTUJ</a><a href='protokol_rozkompletowania.php?a=usun_skladnik&id=$skladnik_rozkompletowania[id]' class='btn-xs btn-info'>USUŃ</a><a href='protokol_rozkompletowania.php?a=dodaj_skladnik&id=$skladnik_rozkompletowania[id]' class='btn-xs btn-success'>DODAJ DO BAZY</a></td></tr>";
             }
         }
         echo"</table>";
