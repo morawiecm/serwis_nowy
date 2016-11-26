@@ -149,6 +149,40 @@ elseif ($a=='akceptacja')
 {
 
 }
+elseif ($a=='edytuj_skladnik')
+{
+    echo NaglowekStrony("Protokół rozkompletowania","Edycja składnika","Edycja składnika - PR");
+    echo "<table class='table table-bordered'><form method='post' action='protokol_rozkompletowania.php?a=zapisz_skladnik'>";
+    $pobierz_skladnik_rozkompletowania = mysqli_query($polaczenie,"SELECT 
+    nr_inwentarzowy_nowy,
+    jednostka_miary_wykomplet_sprzetu,
+      nr_seryjny,
+        nr_protokolu,
+          wartosc_wykomplet_sprzetu,
+            nazwa_wykomplet_sprzetu,
+              model_dodatkowy_opis,
+              jednostka_uzytkujaca
+    FROM rozkompletowanie_skladniki WHERE id = '$nrID'")
+    or die("Blad przy pobierz_skladnik_rozkompletowania".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_skladnik_rozkompletowania)>0)
+    {
+        while ($skladnik = mysqli_fetch_array($pobierz_skladnik_rozkompletowania))
+        {
+            $wartosc = number_format($skladnik['wartosc_wykomplet_sprzetu'],2,'.','');
+            echo"<tr><th>Nazwa:</th><td><input type='text' name='nazwa' value='$skladnik[nazwa_wykomplet_sprzetu] $skladnik[model_dodatkowy_opis]' class='form-control'></td></tr>";
+            echo "<tr><th>Nr seryjny</th><td><input type='text' value='$skladnik[nr_seryjny]' class='form-control' name='nr_seryjny'></td></tr>";
+            echo "<tr><th>Nr ewidencyjny nowy</th><td>$skladnik[nr_inwentarzowy_nowy]</td></tr>";
+            echo "<tr><th>Jednostka miary</th><td><input type='text' name='jed_miary' value='$skladnik[jednostka_miary_wykomplet_sprzetu]' class='form-control'></td></tr>";
+            echo "<tr><th>Wartość</th><td><input type='text' name='wartosc' value='$wartosc' class='form-control'></td></tr>";
+            echo "<tr><th>Jednostka uzytkujaca po</th><td><select name='jednostka_uzytkujaca' class='form-control'>";
+            echo PobierzJednostki($skladnik['jednostka_uzytkujaca']);
+            echo"</select></td></tr>";
+        }
+    }
+    echo"<tr><td colspan='2'><input type='hidden' name='id_rozkompletowanie_skladnik' value='$nrID'><input type='submit' value='Aktualizuj składnik' class='btn btn-warning form-control'></td></tr>";
+    echo"</form></table>";
+
+}
 else
 {
     echo NaglowekStrony("Protokół rozkompletowania","Lista dokumentów","Lista dokumentów");
