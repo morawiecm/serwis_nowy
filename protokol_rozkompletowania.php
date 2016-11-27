@@ -64,6 +64,25 @@ if($a=='dodaj')
     echo "</table></form>";
 
 }
+elseif ($a=='zapisz_protokol')
+{
+    echo NaglowekStrony("Protokół rozkompletowania","Tworzenie dokumentu","Dodawanie składników protokołu rozkompletowania");
+
+    //dane z POST
+    $protokol_nr=$_POST['protokol_nr'];
+    $protokol_data =$_POST['protokol_data'];
+    $protokol_komisja_1=$_POST['protokol_komisja_1'];
+    $protokol_komisja_2=$_POST['protokol_komisja_2'];
+    $protokol_komisja_3=$_POST['protokol_komisja_3'];
+    $protokol_nazwa_glowna=$_POST['protokol_nazwa_glowna'];
+    $protokol_wartosc_glowna=$_POST['protokol_wartosc_glowna'];
+    $protokol_na_stanie_glowna=$_POST['protokol_na_stanie_glowna'];
+
+    $zapisz_protokol_glowny = mysqli_query($polaczenie,"INSERT INTO rozkompletowanie (id, nr_protokolu, data_protokolu, czlonek_komisji_1, czlonek_komisji_2, czlonek_komisji_3,
+    nazwa_srodka_trwalego, nr_ewidencyjny, wartosc_orginalna, jednostka_uzytkujaca_orginal, 
+    wartosc_pomniejszona, jednostka_uzytkujaca_1, wartosc_wykompletowanego_sprzetu, jednostka_uzytkujaca_2, nazwa_wykompletowanego_sprzetu, dodatkowy_opis,
+    nr_seryjny_wykompletowanego_sprzetu, utworzyl, nowy_numer_inwentarzowy2, data_edycji, kto_edytowal, nr_protokolu2, akceptacja, data_akceptacji, kto_zakceptowal, typ_protokolu) ");
+}
 elseif ($a=='edycja')
 {
     echo NaglowekStrony("Protokół rozkompletowania","Edycja dokumentu","Edycja dokumentów");
@@ -110,60 +129,6 @@ elseif ($a=='edycja')
 
 }
 
-
-
-
-/*
-echo"<tr><td colspan='2'><center><u><input type='submit' value='Zapisz zmiany w komisji'/></u></center></td></tr></form>";
-//dane ewidencyjne srodka trwalego
-echo"<tr><td colspan='2'><center><u>DANE EWIDENCYJNE:</u></center></td></tr>";
-echo"<form name='edycja_protokolu_rozkompletowania' method='POST' action='rozkompetowanie.php?a=edycja_zapisz_ewidencja'>";
-echo"<input type='hidden' name='id_prot' value='$epr[0]'/>";
-echo"<tr><td>Nr inwentarzowy:</td><td><input type='text' name='nr_ewidencyjny' disabled='disabled' value='$epr[10]'/></td></tr>";
-echo"<tr><td>Nazwa produktu:</td><td><input type='text' name='nazwa_srodka_trwalego' value='$epr[9]'/></td></tr>";
-echo"<tr><td>Na stanie:</td><td><input type='text' name='jednostka_uzytkujaca_orginal' disabled='disabled' value='$epr[12]'/>";
-echo"<tr><td>Wartośc orginalna sprzetu:</td><td><input type='text' name='wartosc_orginalna' value='$epr[11]'/>";
-echo"<tr><td>Jednostka użytkująca składnik po rozkompletowaniu:</td><td><select name='jednostka_uzytkujaca_1'><option value='$epr[14]'>$epr[14]</option>";
-$wartPomn=$epr[13];
-$lista_jednostek_1=mysql_query("SELECT * FROM `jednostki` ORDER BY `id` DESC") or die("Bład przy lista_jednostek_1".mysql_error());
-
-if(mysql_num_rows($lista_jednostek_1)>0)
-{
-    while($lj_1=mysql_fetch_array($lista_jednostek_1))
-    {
-        echo"<option value='$lj_1[1]'>$lj_1[1]</option>";
-    }
-}
-echo"</select></td></tr>";
-echo"<tr><td colspan='2'><center><u><input type='submit' value='Zapisz zmiany ewidencyjne'/></u></center></td></tr></form>";
-//rozkompletowanie
-echo"<tr><td colspan='2'><center><u>ROZKOMPLETOWANIE</u></center></td></tr>";
-//stary protokol
-if($epr[28]=='nowy')
-{
-//pobranie danych rozkompletowania
-$pobierzRozkompletowanieSkladniki=mysql_query("SELECT * FROM `rozkompletowanie_skladniki` WHERE `id_protokolu`='$idd'") or die("Bład przy pobierzRozkompletowanieSkladniki: ".mysql_error());
-if(mysql_num_rows($pobierzRozkompletowanieSkladniki)>0)
-{
-echo"</table><table><tr><td>Nr ewidencyjny nowy</td><td>Nazwa, model</td><td>Nr seryjny</td><td>Wartość</td><td>Jednostka użytkująca</td><td>Akcja</td></tr>";
-while($rozkompletowanieSkladniki=mysql_fetch_array($pobierzRozkompletowanieSkladniki))
-{
-    echo"<tr><td>$rozkompletowanieSkladniki[3]</td><td>$rozkompletowanieSkladniki[4] $rozkompletowanieSkladniki[8]</td><td>$rozkompletowanieSkladniki[9]</td><td>$rozkompletowanieSkladniki[6]</td><td>$rozkompletowanieSkladniki[7]</td><td>";
-    //dodanie nowego nr ewidencyjnego
-    if($rozkompletowanieSkladniki[3]=='')
-    {
-        if($sekcja=='Zespół Ewidencji Rozliczeń i Zaopatrzenia' || $uprawienia=='1')
-        {
-            $nazwaPelna=$rozkompletowanieSkladniki[4].' '.$rozkompletowanieSkladniki[8];
-            echo"<a href='rozkompetowanie.php?a=dodaj_nr_ewidencyjny&id=$rozkompletowanieSkladniki[0]&id2=$rozkompletowanieSkladniki[2]&nazwa=$nazwaPelna' class='button plain'>DODAJ NR EWID</a>";
-        }
-    }
-
-    //dalsza czesc akcji
-    echo"<a href='rozkompetowanie.php?a=edycja_skladnika&id=$rozkompletowanieSkladniki[0]' class='button plain'>EDYTUJ</a><a href='rozkompetowanie.php?a=usun_skladnik&id=$rozkompletowanieSkladniki[0]&id2=$rozkompletowanieSkladniki[1]&wart=$rozkompletowanieSkladniki[6]&wartPomn=$wartPomn' class='button plain'>USUŃ</a></td></tr>";
-}
-
-*/
 elseif ($a=='aktualizuj')
 {
 
