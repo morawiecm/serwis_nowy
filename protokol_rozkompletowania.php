@@ -2,6 +2,7 @@
 include 'config.php';
 include 'funkcje/funkcje_ewidencja.php';
 include 'funkcje/funkcje_historia.php';
+include 'funkcje/funkcje_uzytkownicy.php';
 check_login();
 // dane uzytkownika z sesji
 $user_data = get_user_data();
@@ -35,6 +36,32 @@ include 'menu.php';
 if($a=='dodaj')
 {
     echo NaglowekStrony("Protokół rozkompletowania","Tworzenie dokumentu","Tworzenie protokołu rozkompletowania");
+    echo "<table class='table table-bordered'><form method='post' action='protokol_rozkompletowania.php?a=zapisz_protokol'>";
+    if($nrID=='')
+    {
+        echo "<tr><th>Nr protokolu</th><td><input type='text' name='protokol_nr' class='form-control'></td></tr>";
+        echo "<tr><th>Data protokolu</th><td><input type='text' name='protokol_data' class='form-control' id = 'datepicker'></td></tr>";
+        echo "<tr><th colspan='2' class='text-center text-bold'>KOMISJA</th></tr>";
+        echo "<tr><th>Przewodniczący</th><td><select name='protokol_komisja_1' class='form-control'>";
+        echo PobierzUzytkownikow();
+        echo"</select></td></tr>";
+        echo "<tr><th>Komisja 1:</th><td><select name='protokol_komisja_2' class='form-control'>";
+        echo PobierzUzytkownikow();
+        echo"</select></td></tr>";
+        echo "<tr><th>Komisja 2:</th><td><select name='protokol_komisja_3' class='form-control'>";
+        echo PobierzUzytkownikow();
+        echo"</select></td></tr>";
+        echo "<tr><th colspan='2' class='text-center text-bold'>ROZKOMPLETOWANIE SPRZĘT:</th></tr>";
+        echo "<tr><th>Nazwa sprzętu:</th><td><input type='text' name='protokol_nazwa_glowna' value='' class='form-control'></td></tr>";
+        echo "<tr><th>Wartosc sprzętu</th><td><input type='text' name='protokol_wartosc_glowna' value='' class='form-control'></td></tr>";
+        echo "<tr><th>Na stanie</th><td><input type='text' name='protokol_na_stanie_glowna' value='' class='form-control'></td></tr>";
+        echo "<tr><th colspan='2'><input type='submit' value='Zapisz protokół i przejdź do dodania składników' class='btn btn-primary form-control'></th></tr>";
+    }
+    else
+    {
+
+    }
+    echo "</table></form>";
 
 }
 elseif ($a=='edycja')
@@ -152,7 +179,6 @@ elseif ($a=='akceptacja')
 elseif ($a=='edytuj_skladnik')
 {
     echo NaglowekStrony("Protokół rozkompletowania","Edycja składnika","Edycja składnika - PR");
-    echo "<table class='table table-bordered'><form method='post' action='protokol_rozkompletowania.php?a=zapisz_skladnik'>";
     $pobierz_skladnik_rozkompletowania = mysqli_query($polaczenie,"SELECT 
     nr_inwentarzowy_nowy,
     jednostka_miary_wykomplet_sprzetu,
@@ -166,10 +192,12 @@ elseif ($a=='edytuj_skladnik')
     or die("Blad przy pobierz_skladnik_rozkompletowania".mysqli_error($polaczenie));
     if(mysqli_num_rows($pobierz_skladnik_rozkompletowania)>0)
     {
+    echo "<table class='table table-bordered'><form method='post' action='protokol_rozkompletowania.php?a=zapisz_skladnik'>";
         while ($skladnik = mysqli_fetch_array($pobierz_skladnik_rozkompletowania))
         {
             $wartosc = number_format($skladnik['wartosc_wykomplet_sprzetu'],2,'.','');
-            echo"<tr><th>Nazwa:</th><td><input type='text' name='nazwa' value='$skladnik[nazwa_wykomplet_sprzetu] $skladnik[model_dodatkowy_opis]' class='form-control'></td></tr>";
+            echo"<tr><th>Nazwa:</th><td><input type='text' name='nazwa' value='$skladnik[nazwa_wykomplet_sprzetu]' class='form-control'></td></tr>";
+            echo"<tr><th>Opis dodatkowy:</th><td><input type='text' name='opis_dodatkowy' value='$skladnik[model_dodatkowy_opis]' class='form-control'></td></tr>";
             echo "<tr><th>Nr seryjny</th><td><input type='text' value='$skladnik[nr_seryjny]' class='form-control' name='nr_seryjny'></td></tr>";
             echo "<tr><th>Nr ewidencyjny nowy</th><td>$skladnik[nr_inwentarzowy_nowy]</td></tr>";
             echo "<tr><th>Jednostka miary</th><td><input type='text' name='jed_miary' value='$skladnik[jednostka_miary_wykomplet_sprzetu]' class='form-control'></td></tr>";
@@ -177,10 +205,29 @@ elseif ($a=='edytuj_skladnik')
             echo "<tr><th>Jednostka uzytkujaca po</th><td><select name='jednostka_uzytkujaca' class='form-control'>";
             echo PobierzJednostki($skladnik['jednostka_uzytkujaca']);
             echo"</select></td></tr>";
+            echo"<tr><td colspan='2'><input type='hidden' name='id_rozkompletowanie_skladnik' value='$nrID'><input type='submit' value='Aktualizuj składnik' class='btn btn-warning form-control'></td></tr>";
+            echo"</form></table>";
         }
     }
-    echo"<tr><td colspan='2'><input type='hidden' name='id_rozkompletowanie_skladnik' value='$nrID'><input type='submit' value='Aktualizuj składnik' class='btn btn-warning form-control'></td></tr>";
-    echo"</form></table>";
+
+}
+elseif ($a=='zapisz_skladnik')
+{
+    echo NaglowekStrony("Protokół rozkompletowania","Aktualizacja składnika","Aktualizacja składnika rozkompletowanie");
+    //dane z POST
+    $nazwa = addslashes($_POST['nazwa']);
+    $opis_dodatkowy = addslashes($_POST['opis_dodatkowy']);
+    $nr_seryjny = $_POST['nr_seryjny'];
+    $jed_miary = $_POST['jed_miary'];
+    $wartosc = $_POST['wartosc'];
+    $jednostka_uzytkujaca = $_POST['jednostka_uzytkujaca'];
+    $id_rozkompletowanie_skladnik = $_POST['id_rozkompletowanie_skladnik'];
+
+    //zapis do bazy
+    $aktualizuj_skladnik_rozkompletowania = mysqli_query($polaczenie,"UPDATE rozkompletowanie_skladniki SET model_dodatkowy_opis ='$opis_dodatkowy',jednostka_uzytkujaca='$jednostka_uzytkujaca',jednostka_miary_wykomplet_sprzetu='$jed_miary',
+    wartosc_wykomplet_sprzetu='$wartosc',nazwa_wykomplet_sprzetu='$nazwa',nr_seryjny='$nr_seryjny' WHERE id = '$id_rozkompletowanie_skladnik'")
+        or die("Blad przy aktualizuj_skladnik_rozkompletowania".mysqli_error($polaczenie));
+    Przekierowanie("Zaktualizowano pomyślnie $nazwa, za chwilę zostaniesz przekierowany do Protokołów","protokol_rozkompletowania.php");
 
 }
 else

@@ -69,7 +69,7 @@ include 'menu.php';
                     else
                     {
                         echo NaglowekStrony("Ewidencja ","dodanie nowego składnika","Dodanie nowego składnika do bazy na podstawie protokołu rozkompletowania");
-                        $pobierz_dane_z_protokolu_rozkompletowania = mysqli_query($polaczenie,"SELECT nazwa_wykomplet_sprzetu,nr_seryjny,wartosc_wykomplet_sprzetu,jednostka_miary_wykomplet_sprzetu,
+                        $pobierz_dane_z_protokolu_rozkompletowania = mysqli_query($polaczenie,"SELECT nazwa_wykomplet_sprzetu,model_dodatkowy_opis,nr_seryjny,wartosc_wykomplet_sprzetu,jednostka_miary_wykomplet_sprzetu,
                         jednostka_uzytkujaca,nr_protokolu,id_protokolu
                         FROM rozkompletowanie_skladniki WHERE id = '$nrID'")
                             or die("Blad przy pobierz_dane_z_protokolu_rozkompletowania: ".mysqli_error($polaczenie));
@@ -83,7 +83,7 @@ include 'menu.php';
 
 
                                 echo "<table class='table table-bordered table-striped'><form action='srodek_trwaly.php?a=zapisz' method='post'>";
-                                echo "<tr><th>Nazwa</th><td><input type='text' name='ewidencja_nazwa' class='form-control' value='$dane_protokol[nazwa_wykomplet_sprzetu]'></td></tr>";
+                                echo "<tr><th>Nazwa</th><td><input type='text' name='ewidencja_nazwa' class='form-control' value='$dane_protokol[nazwa_wykomplet_sprzetu] $dane_protokol[model_dodatkowy_opis]'></td></tr>";
                                 echo "<tr><th>Nr Ewidencyjny</th><td><input type='text' name='ewidencja_nr_ewidencyjny' class='form-control'></td></tr>";
                                 echo "<tr><th>Nr Seryjny</th><td><input type='text' name='ewidencja_nr_seryjny' class='form-control' value='$dane_protokol[nr_seryjny]'></td></tr>";
                                 echo "<tr><th>Wartość</th><td><input type='text' name='ewidencja_wartosc' class='form-control' value='$wartosc_format'></td></tr>";
