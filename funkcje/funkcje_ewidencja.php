@@ -309,6 +309,32 @@ function PobierzNrAsygnaty()
     return $nr_asygnaty;
 }
 
+function PobierzNrProtokoluRozkompletowania()
+{
+    $polaczenie = polaczenie_z_baza();
+    $nr_asygnaty = '';
+
+    $pobierz_nr_asygnaty = mysqli_query($polaczenie,"SELECT tresc FROM ustawienia WHERE id ='4'") or die("Blad przy pobierz_nr_asygnaty".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_nr_asygnaty)>0)
+    {
+        while ($asygnatanr = mysqli_fetch_array($pobierz_nr_asygnaty))
+        {
+            $nr_asygnaty = $asygnatanr['tresc'];
+            // w przypadku gdy w bazie bedzie nr 0 zwieksz o 1 nr
+            if($nr_asygnaty =='0')
+            {
+                AktualizujNrAsygnaty($nr_asygnaty);
+            }
+        }
+    }
+    else
+    {
+        $nr_asygnaty = "Blad przy pobraniu nr! usunieto rekord w bazie";
+    }
+
+    return $nr_asygnaty;
+}
+
 function PobierzDateAsygnaty($id_asygnaty)
 {
     $polaczenie = polaczenie_z_baza();
@@ -358,6 +384,17 @@ function AktualizujNrAsygnaty($wartosc)
     //zaktualizuj dane w bazie
     $zwieksz_nr_asygnaty = mysqli_query($polaczenie,"UPDATE ustawienia SET tresc = '$nr_aktualny' WHERE id = 3")
     or die("Blad przy zwieksz_nr_asygnaty".mysqli_error($polaczenie));
+
+}
+function AktualizujNrProtokolRozkompletowania($wartosc)
+{
+    //zmienne
+    $polaczenie = polaczenie_z_baza();
+    $nr_aktualny = $wartosc;
+    $nr_aktualny++;
+    //zaktualizuj dane w bazie
+    $zwieksz_nr_asygnaty = mysqli_query($polaczenie,"UPDATE ustawienia SET tresc = '$nr_aktualny' WHERE id = 4")
+    or die("Blad przy function AktualizujNrProtokolRozkompletowania".mysqli_error($polaczenie));
 
 }
 function WyslijNaMagazyn($id_sprzetu)
