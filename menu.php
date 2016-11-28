@@ -147,6 +147,28 @@
             </li>
             <li class="treeview">
                 <a href="#">
+                    <i class="fa fa-share"></i> <span>MAGAZYNY</span>
+                    <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+                </a>
+                <ul class="treeview-menu">';
+                    $pobierz_magazyny = mysqli_query($polaczenie,"SELECT id,nazwa_skrocona FROM slownik_magazyn") or die("Blad przy pobierz_magazyny".mysqli_error($polaczenie));
+                    if(mysqli_num_rows($pobierz_magazyny)>0)
+                    {
+                        while ($mag = mysqli_fetch_array($pobierz_magazyny))
+                        {
+
+                            echo " <li><a href='magazyn.php?a=wyswietl&id=$mag[id]'><i class='fa fa-circle-o'></i> $mag[nazwa_skrocona]</a></li>";
+                        }
+                    }
+
+
+                echo'</ul>
+
+            </li>
+            <li class="treeview">
+                <a href="#">
                     <i class="fa fa-share"></i> <span>Słowniki</span>
                     <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
@@ -158,6 +180,7 @@
                     <li><a href="slownik_rodzaj_ewidencji.php"><i class="fa fa-circle-o"></i> Rodzaj Ewidencji</a></li>
                     <li><a href="slownik_jednostki.php"><i class="fa fa-circle-o"></i> Jednostki</a></li>
                     <li><a href="liczniki_stan.php"><i class="fa fa-circle-o"></i> Liczniki</a></li>
+                    <li><a href= "slownik_magazyn.php"><i class="fa fa-circle-o"></i> Magazyny</a></li>
                 </ul>
 
             </li>

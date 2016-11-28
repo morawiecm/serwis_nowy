@@ -419,12 +419,44 @@ function PorownajNrAsygnat($id_asygnaty)
         }
     }
 }
+function PobierzNazweMagazynu($nr_id)
+{
+    $polaczenie = polaczenie_z_baza();
+    $nazwa_mag[]='';
+    $pobierz_nazwe_magazynu = mysqli_query($polaczenie,"SELECT nazwa,nazwa_skrocona FROM slownik_magazyn WHERE id ='$nr_id'")
+    or die("Blad przy pobierz_nazwe_magazynu".mysqli_query($polaczenie));
+    while ($nazwa = mysqli_fetch_array($pobierz_nazwe_magazynu))
+    {
+        $nazwa_mag[0] = $nazwa['nazwa'];
+        $nazwa_mag[1] = $nazwa['nazwa_skrocona'];
+    }
+    return $nazwa_mag;
+}
+function PobierzDaneMagazyn($id_lp)
+{
+    $polaczenie = polaczenie_z_baza();
+    $nazwa_sprzetu[]='';
+    $pobierz_nazwe_sprzetu_z_protkolu = mysqli_query($polaczenie,"SELECT nr_inwentarzowy,nr_inwentarzowy_1,nr_inwentarzowy_2,nr_fabryczny,nazwa_sprzetu FROM baza WHERE id ='$id_lp'")
+    or die("Blad przy pobierz_nazwe_sprzetu_z_protokolu".mysqli_query($polaczenie));
+    while ($nazwa = mysqli_fetch_array($pobierz_nazwe_sprzetu_z_protkolu))
+    {
+        $nazwa_sprzetu[0] = $nazwa['nr_inwentarzowy'];
+        $nazwa_sprzetu[1] = $nazwa['nr_inwentarzowy_1'];
+        $nazwa_sprzetu[2] = $nazwa['nr_inwentarzowy_2'];
+        $nazwa_sprzetu[3] = $nazwa['nr_fabryczny'];
+        $nazwa_sprzetu[4] = $nazwa['nazwa_sprzetu'];
+
+    }
+
+    return $nazwa_sprzetu;
+}
+
 function PobierzNazweDateSprzetuZRozkompletowania($id_protokolu)
 {
     $polaczenie = polaczenie_z_baza();
     $nazwa_sprzetu[]='';
     $pobierz_nazwe_sprzetu_z_protkolu = mysqli_query($polaczenie,"SELECT nazwa_srodka_trwalego,data_protokolu,nr_ewidencyjny FROM rozkompletowanie WHERE id ='$id_protokolu'")
-        or die("Blad przy pobierz_nazwe_sprzetu_z_protokolu".mysqli_query($polaczenie));
+    or die("Blad przy pobierz_nazwe_sprzetu_z_protokolu".mysqli_query($polaczenie));
     while ($nazwa = mysqli_fetch_array($pobierz_nazwe_sprzetu_z_protkolu))
     {
         $nazwa_sprzetu[0] = $nazwa['nazwa_srodka_trwalego'];

@@ -145,7 +145,7 @@ include 'menu.php';
             }
             elseif ($a=='jednostki')
             {
-                $pobierz_dane_z_bazy = mysqli_query($polaczenie,"SELECT lp, jed_uzytkujaca FROM baza") or die("Blad przy pobierz_dane_z_bazy");
+                $pobierz_dane_z_bazy = mysqli_query($polaczenie,"SELECT lp, jed_uzytkujaca FROM baza WHERE id_jednoski IS NULL ") or die("Blad przy pobierz_dane_z_bazy");
                 if(mysqli_num_rows($pobierz_dane_z_bazy)>0)
                 {
                     while ($dane = mysqli_fetch_array($pobierz_dane_z_bazy))
