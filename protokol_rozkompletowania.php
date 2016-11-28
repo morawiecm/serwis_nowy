@@ -15,6 +15,7 @@ $uzytkownik_sekcja = $user_data['sekcja'];
 $uzytkownik_uprawnienia = $user_data['specialne'];
 $użytkownik_imie_nazwisko = $uzytkownik_imie . " " . $uzytkownik_nazwisko;
 $data_pelana  = date("Y-m-d H:i:s");
+$roz = trim($_REQUEST['roz']);
 $data_skrocona = date("Y-m-d");
 //dane z POST
 
@@ -37,29 +38,61 @@ if($a=='dodaj')
 {
     echo NaglowekStrony("Protokół rozkompletowania","Tworzenie dokumentu","Tworzenie protokołu rozkompletowania");
     echo "<table class='table table-bordered'><form method='post' action='protokol_rozkompletowania.php?a=zapisz_protokol'>";
-    if($nrID=='')
-    {
-        echo "<tr><th>Nr protokolu</th><td><input type='text' name='protokol_nr' class='form-control'></td></tr>";
-        echo "<tr><th>Data protokolu</th><td><input type='text' name='protokol_data' class='form-control' id = 'datepicker'></td></tr>";
-        echo "<tr><th colspan='2' class='text-center text-bold'>KOMISJA</th></tr>";
-        echo "<tr><th>Przewodniczący</th><td><select name='protokol_komisja_1' class='form-control'>";
-        echo PobierzUzytkownikow();
-        echo"</select></td></tr>";
-        echo "<tr><th>Komisja 1:</th><td><select name='protokol_komisja_2' class='form-control'>";
-        echo PobierzUzytkownikow();
-        echo"</select></td></tr>";
-        echo "<tr><th>Komisja 2:</th><td><select name='protokol_komisja_3' class='form-control'>";
-        echo PobierzUzytkownikow();
-        echo"</select></td></tr>";
-        echo "<tr><th colspan='2' class='text-center text-bold'>ROZKOMPLETOWANIE SPRZĘT:</th></tr>";
-        echo "<tr><th>Nazwa sprzętu:</th><td><input type='text' name='protokol_nazwa_glowna' value='' class='form-control'></td></tr>";
-        echo "<tr><th>Wartosc sprzętu</th><td><input type='text' name='protokol_wartosc_glowna' value='' class='form-control'></td></tr>";
-        echo "<tr><th>Na stanie</th><td><input type='text' name='protokol_na_stanie_glowna' value='' class='form-control'></td></tr>";
-        echo "<tr><th colspan='2'><input type='submit' value='Zapisz protokół i przejdź do dodania składników' class='btn btn-primary form-control'></th></tr>";
-    }
-    else
-    {
 
+        if($nrID=='') {
+
+
+            $pobierz_dane_do_rozkompletowania = mysqli_query($polaczenie, "SELECT lp, nazwa_sprzetu,wartosc,jed_uzytkujaca FROM baza WHERE lp = '$roz'")
+            or die("Blad przy pobierz_dane_do_rozkompletowania" . mysqli_error($polaczenie));
+            while ($dane_sprzetu = mysqli_fetch_array($pobierz_dane_do_rozkompletowania)) {
+                $nr_protokolu_r = PobierzNrProtokoluRozkompletowania();
+                $nr_protokolu_rozkompletowania = $nr_protokolu_r . "/" . date("Y");
+
+                echo "<tr><th>Nr protokolu</th><td><input type='text' name='protokol_nr' class='form-control' value='$nr_protokolu_rozkompletowania'></td></tr>";
+                echo "<tr><th>Data protokolu</th><td><input type='text' name='protokol_data' class='form-control' id = 'datepicker' value='$data_skrocona'></td></tr>";
+                echo "<tr><th colspan='2' class='text-center text-bold'>KOMISJA</th></tr>";
+                echo "<tr><th>Przewodniczący</th><td><select name='protokol_komisja_1' class='form-control'>";
+                echo PobierzUzytkownikow();
+                echo "</select></td></tr>";
+                echo "<tr><th>Komisja 1:</th><td><select name='protokol_komisja_2' class='form-control'>";
+                echo PobierzUzytkownikow();
+                echo "</select></td></tr>";
+                echo "<tr><th>Komisja 2:</th><td><select name='protokol_komisja_3' class='form-control'>";
+                echo PobierzUzytkownikow();
+                echo "</select></td></tr>";
+                echo "<tr><th colspan='2' class='text-center text-bold'>ROZKOMPLETOWANIE SPRZĘT:</th></tr>";
+                echo "<tr><th>Nazwa sprzętu:</th><td><input type='text' name='protokol_nazwa_glowna' value='$dane_sprzetu[nazwa_sprzetu]' class='form-control'></td></tr>";
+                echo "<tr><th>Wartosc sprzętu</th><td><input type='text' name='protokol_wartosc_glowna' value='$dane_sprzetu[wartosc]' class='form-control'></td></tr>";
+                echo "<tr><th>Na stanie</th><td><input type='text' name='protokol_na_stanie_glowna' value='$dane_sprzetu[jed_uzytkujaca]' class='form-control'></td></tr>";
+                echo "<tr><th colspan='2'><input type='submit' value='Zapisz protokół i przejdź do dodania składników' class='btn btn-primary form-control'></th></tr>";
+            }
+        }
+
+    else {
+        $pobierz_dane_do_rozkompletowania = mysqli_query($polaczenie, "SELECT lp, nazwa_sprzetu,wartosc,jed_uzytkujaca FROM baza WHERE lp = '$roz'")
+        or die("Blad przy pobierz_dane_do_rozkompletowania" . mysqli_error($polaczenie));
+        while ($dane_sprzetu = mysqli_fetch_array($pobierz_dane_do_rozkompletowania)) {
+            $nr_protokolu_r = PobierzNrProtokoluRozkompletowania();
+            $nr_protokolu_rozkompletowania = $nr_protokolu_r . "/" . date("Y");
+
+            echo "<tr><th>Nr protokolu</th><td><input type='text' name='protokol_nr' class='form-control' value='$nr_protokolu_rozkompletowania'></td></tr>";
+            echo "<tr><th>Data protokolu</th><td><input type='text' name='protokol_data' class='form-control' id = 'datepicker' value='$data_skrocona'></td></tr>";
+            echo "<tr><th colspan='2' class='text-center text-bold'>KOMISJA</th></tr>";
+            echo "<tr><th>Przewodniczący</th><td><select name='protokol_komisja_1' class='form-control'>";
+            echo PobierzUzytkownikow();
+            echo "</select></td></tr>";
+            echo "<tr><th>Komisja 1:</th><td><select name='protokol_komisja_2' class='form-control'>";
+            echo PobierzUzytkownikow();
+            echo "</select></td></tr>";
+            echo "<tr><th>Komisja 2:</th><td><select name='protokol_komisja_3' class='form-control'>";
+            echo PobierzUzytkownikow();
+            echo "</select></td></tr>";
+            echo "<tr><th colspan='2' class='text-center text-bold'>ROZKOMPLETOWANIE SPRZĘT:</th></tr>";
+            echo "<tr><th>Nazwa sprzętu:</th><td><input type='text' name='protokol_nazwa_glowna' value='$dane_sprzetu[nazwa_sprzetu]' class='form-control'></td></tr>";
+            echo "<tr><th>Wartosc sprzętu</th><td><input type='text' name='protokol_wartosc_glowna' value='$dane_sprzetu[wartosc]' class='form-control'></td></tr>";
+            echo "<tr><th>Na stanie</th><td><input type='text' name='protokol_na_stanie_glowna' value='$dane_sprzetu[jed_uzytkujaca]' class='form-control'></td></tr>";
+            echo "<tr><th colspan='2'><input type='submit' value='Zapisz protokół i przejdź do dodania składników' class='btn btn-primary form-control'></th></tr>";
+        }
     }
     echo "</table></form>";
 
@@ -79,9 +112,8 @@ elseif ($a=='zapisz_protokol')
     $protokol_na_stanie_glowna=$_POST['protokol_na_stanie_glowna'];
 
     $zapisz_protokol_glowny = mysqli_query($polaczenie,"INSERT INTO rozkompletowanie (id, nr_protokolu, data_protokolu, czlonek_komisji_1, czlonek_komisji_2, czlonek_komisji_3,
-    nazwa_srodka_trwalego, nr_ewidencyjny, wartosc_orginalna, jednostka_uzytkujaca_orginal, 
-    wartosc_pomniejszona, jednostka_uzytkujaca_1, wartosc_wykompletowanego_sprzetu, jednostka_uzytkujaca_2, nazwa_wykompletowanego_sprzetu, dodatkowy_opis,
-    nr_seryjny_wykompletowanego_sprzetu, utworzyl, nowy_numer_inwentarzowy2, data_edycji, kto_edytowal, nr_protokolu2, akceptacja, data_akceptacji, kto_zakceptowal, typ_protokolu) ");
+    nazwa_srodka_trwalego, nr_ewidencyjny, wartosc_orginalna, jednostka_uzytkujaca_orginal,utworzyl,nr_protokolu2,typ_protokolu,dodatkowy_opis) VALUES ()")
+    or die("Blad przy zapisz_protokol_glowny".mysqli_error($polaczenie));
 }
 elseif ($a=='edycja')
 {

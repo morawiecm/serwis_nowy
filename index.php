@@ -517,7 +517,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo "<table class='table'>";
                     echo "<tr><th class='text-bold text-center'>Utwórz protokół:</th></tr>";
                     echo"<tr><td><a href='protokol_stanu_technicznego.php?a=dodaj_do_koszyka&id=$nrID' class='btn btn-info form-control'>Stanu technicznego</a></td></tr>";
-                    echo"<tr><td><a href='protokol_rozkompletowania.php?a=dodaj' class='btn btn-primary form-control'>Rozkompletowania</a></td></tr>";
+                    echo"<tr><td><a href='protokol_rozkompletowania.php?a=dodaj&roz=$nrID' class='btn btn-primary form-control'>Rozkompletowania</a></td></tr>";
                     echo"<tr><td><a href='#' class='btn btn-warning form-control'>Skompletowania</a></td></tr>";
                     echo "<tr><th class='text-bold text-center'>Utwórz Dokument:</th></tr>";
                     echo"<tr><td><a href='asygnata_koszyk.php?a=dodaj_do_koszyka&id=$nrID' class='btn btn-success form-control'>Asygnata</a></td></tr>";
