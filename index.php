@@ -675,9 +675,9 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
             
             <tr><td><input type="submit" class="btn btn-warning form-control" name="numer" value="Wyszukaj"></td>';
             //echo'<td><input type="submit" class="form-control btn btn-danger" name="dokument" value="Dokument"></td>';
-            echo'</tr></form></table>
-            
-            </div><!-- /.box-body -->
+            echo'</tr></form></table>';
+            echo '<p><h2 class="text-uppercase">system w fazie testowej, większosć funkcjonalności zostanie odblokowania na dniach, uwagi i błędy należy zgłaszać poprzez formularz "Zgłoś błąd", który znajduję się w prawym dolnym rogu</h2></p>';
+            echo '</div><!-- /.box-body -->
               </div><!-- /.box -->';
 
            /* echo '

@@ -99,6 +99,7 @@ if ($a == 'dodaj') {
     }
 
 } elseif ($a == 'zapisz') {
+        echo NaglowekStrony("Ewidencja ", "dodanie nowego składnika", "Zapisanie nowego składnika do bazy");
     if (isset($_POST['przycisk_zapis'])) {
         //dane  z POST
         if ($_POST['rozkompletowanie'] != '') {
@@ -137,6 +138,7 @@ if ($a == 'dodaj') {
         echo Przekierowanie("Bład nie powinno cię tu być, spróbuj ponownie", "index.php");
     }
 } elseif ($a == 'edytuj') {
+        echo NaglowekStrony("Ewidencja ", "Edycja składnika", "Edycja składnika");
     if ($nrID != '') {
 
         $pobierz_dane_ewidencyjne = mysqli_query($polaczenie, "SELECT nr_inwentarzowy, nazwa_sprzetu, nr_fabryczny, wartosc, jed_miary,
@@ -182,7 +184,7 @@ if ($a == 'dodaj') {
         echo "<table class='table table-bordered' id='example1'>";
         echo "<thead><tr><th>Nazwa jednostki</th><th>Kod jednostki</th><th>Akcja</th></tr></thead>";
         while ($wydzialy_stan = mysqli_fetch_array($pobierz_wydzialy_stan)) {
-            $stan_wydzialu = PoliczStanWydzialu($wydzialy_stan['id']);
+           // $stan_wydzialu = PoliczStanWydzialu($wydzialy_stan['id']);
             echo "<tr><td>$wydzialy_stan[nazwa]</td><td>$wydzialy_stan[kod_jednostki]</td>
                             <td>
                             <a href='export_wydzial.php?id=$wydzialy_stan[id]' class='btn-xs btn-success'>Export do Excela</a>
@@ -198,6 +200,7 @@ if ($a == 'dodaj') {
         echo Przekierowanie("Nie wybrano wydziału / jednostki, spróbuj ponownie", "srodek_trwaly.php?a=wydzialy");
     }
 } elseif ($a == 'aktualizuj') {
+        echo NaglowekStrony("Ewidencja ", "Aktualizacja składnika", "Aktualizacja składnika");
 
     if (isset($_POST['przycisk_aktualizuj'])) {
         //dane  z POST
