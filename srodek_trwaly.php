@@ -99,6 +99,7 @@ if ($a == 'dodaj') {
     }
 
 } elseif ($a == 'zapisz') {
+        echo NaglowekStrony("Ewidencja ", "dodanie nowego składnika", "Zapisanie nowego składnika do bazy");
     if (isset($_POST['przycisk_zapis'])) {
         //dane  z POST
         if ($_POST['rozkompletowanie'] != '') {
@@ -137,10 +138,11 @@ if ($a == 'dodaj') {
         echo Przekierowanie("Bład nie powinno cię tu być, spróbuj ponownie", "index.php");
     }
 } elseif ($a == 'edytuj') {
+        echo NaglowekStrony("Ewidencja ", "Edycja składnika", "Edycja składnika");
     if ($nrID != '') {
 
         $pobierz_dane_ewidencyjne = mysqli_query($polaczenie, "SELECT nr_inwentarzowy, nazwa_sprzetu, nr_fabryczny, wartosc, jed_miary,
-                        id_jednoski, zrodlo_finansowania, rodzaj_ewidencyjny, data_wprowadzenia, uwagi, notatki 
+                        id_jednoski, zrodlo_finansowania, rodzaj_ewidencyjny, data_wprowadzenia, uwagi, notatki,likwidacja,Podstawa,nr_dokmentu 
                         FROM baza WHERE lp = '$nrID'")
         or die("Bład przy pobierz_dane_ewidencyjne" . mysqli_error($polaczenie));
         if (mysqli_num_rows($pobierz_dane_ewidencyjne) > 0) {
@@ -161,7 +163,12 @@ if ($a == 'dodaj') {
                 echo "<tr><th>Źródło Finansowania</th><td><select name='ewidencja_zrodlo_finanosowania' class='form-control'>";
                 echo PobierzZrodloFinasowania($dane['zrodlo_finansowania']);
                 echo "</select></td></tr>";
-                echo "<tr><th>Data Przyjęcia</th><td><input type='text' name='ewidencja_data_przyjecia' class='form-control' id='datepicker' value='$dane[data_wprowadzenia]'></td></tr>";
+                echo "<tr><th>Data Przyjęcia</th><td><input type='text' name='ewidencja_data_przyjecia' class='form-control' id='datepicker2' value='$dane[data_wprowadzenia]'></td></tr>";
+                echo "<tr><th colspan='2' class='text-center'>LIKWIDACJA INFORMACJE (aby przywrocić, należy wyczyścić zawartość poniższych pól</th></tr>";
+
+                echo "<tr><th>Data likwidacji</th><td><input type='text' name='ewidencja_data_likwidacji' class='form-control' id='datepicker' value='$dane[likwidacja]'></td></tr>";
+                echo "<tr><th>Podstawa likwidacji</th><td><input type='text' name='ewidencja_jednostka_miary' class='form-control' value='$dane[Podstawa]'></td></tr>";
+                echo "<tr><th>Nr dokumentu</th><td><input type='text' name='ewidencja_jednostka_miary' class='form-control' value='$dane[nr_dokumentu]'></td></tr>";
                 echo "<tr><th>Uwagi/Notatki</th><td><textarea name='ewidencja_uwagi' class='form-control' rows='8'>$pole_uwaga</textarea></td></tr>";
                 echo "<tr><th colspan='2'><input type='hidden' value='$nrID' name='ewidencja_id_st'><input type='submit' name='przycisk_aktualizuj' value='Aktualizuj wpis w ewidencji' class='btn btn-warning form-control'></th></tr>";
                 echo "</form></table>";
@@ -182,7 +189,7 @@ if ($a == 'dodaj') {
         echo "<table class='table table-bordered' id='example1'>";
         echo "<thead><tr><th>Nazwa jednostki</th><th>Kod jednostki</th><th>Akcja</th></tr></thead>";
         while ($wydzialy_stan = mysqli_fetch_array($pobierz_wydzialy_stan)) {
-            $stan_wydzialu = PoliczStanWydzialu($wydzialy_stan['id']);
+           // $stan_wydzialu = PoliczStanWydzialu($wydzialy_stan['id']);
             echo "<tr><td>$wydzialy_stan[nazwa]</td><td>$wydzialy_stan[kod_jednostki]</td>
                             <td>
                             <a href='export_wydzial.php?id=$wydzialy_stan[id]' class='btn-xs btn-success'>Export do Excela</a>
@@ -198,6 +205,7 @@ if ($a == 'dodaj') {
         echo Przekierowanie("Nie wybrano wydziału / jednostki, spróbuj ponownie", "srodek_trwaly.php?a=wydzialy");
     }
 } elseif ($a == 'aktualizuj') {
+        echo NaglowekStrony("Ewidencja ", "Aktualizacja składnika", "Aktualizacja składnika");
 
     if (isset($_POST['przycisk_aktualizuj'])) {
         //dane  z POST

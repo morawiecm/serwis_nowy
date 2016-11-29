@@ -83,7 +83,7 @@ function Przekierowanie($komunikat,$strona)
                     setTimeout(function () {
                         window.location.href= '$strona'; // the redirect goes here
 
-                    },9000);
+                    },4500);
                         </script>";
 }
 session_start();

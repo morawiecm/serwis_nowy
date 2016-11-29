@@ -104,7 +104,6 @@ if(!$_SESSION['logged']) {
                 <input type="password" class="form-control" placeholder="Hasło" name="password">
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span> ';
 ?>
-                <p>Test aplikacji! Brak userow!</p>
                 <?php
                 if($blad!=0){
 
@@ -129,7 +128,7 @@ if(!$_SESSION['logged']) {
 
 
 
-        <a href="#" title="Zadzwoń na 79 11614 ">Nie pamiętam hasła</a><br>
+        <a href="#" title="Zadzwoń na 79 11645 ">Nie pamiętam hasła</a><br>
 
 
     </div><!-- /.login-box-body -->

@@ -35,7 +35,7 @@ echo"<table>
                             </thead>
                             <tbody>";
 $pobierzTabelecpv = mysqli_query($polaczenie, "SELECT nr_inwentarzowy, nr_inwentarzowy_1,nr_inwentarzowy_2,nazwa_sprzetu,nr_fabryczny,uwagi,notatki,wartosc
-FROM baza WHERE id_jednoski ='$nrID' AND Likwidacja LIKE '0000-00-00'") or die ("Blad przy pobierzTabelecpv " . mysqli_error($polaczenie));
+FROM baza WHERE id_jednoski ='$nrID' AND likwidacja IS NULL ") or die ("Blad przy pobierzTabelecpv " . mysqli_error($polaczenie));
 if (mysqli_num_rows($pobierzTabelecpv) > 0) {
     while ($tabelacpv = mysqli_fetch_array($pobierzTabelecpv)) {
 

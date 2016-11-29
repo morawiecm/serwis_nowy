@@ -183,6 +183,65 @@ include 'menu.php';
 
             </div><!-- /.box -->';
                 }
+                //wyszukaj po nazwie
+
+            $wyszukaj_po_nazwie = mysqli_query($polaczenie,"SELECT lp, nr_inwentarzowy, nr_inwentarzowy_1, nr_inwentarzowy_2, nr_fabryczny, nazwa_sprzetu, likwidacja FROM baza Where nazwa_sprzetu LIKE '%$numer_inwent%' ")
+            or die("Blad przy wyszukaj_po_nazwie".mysqli_query($polaczenie));
+            $licznik_po_nazwie = mysqli_num_rows($wyszukaj_po_nazwie);
+            echo ' <div class="box">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Wyszukiwanie - nazwa';
+                    echo " ($licznik_po_nazwie)";
+            echo '</h3>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
+                        <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
+                    </div>
+                </div>
+                <div class="box-body">';
+
+                if($licznik_po_nazwie>0)
+                {
+                    echo "<table class='table table-striped table-responsive'><tr><th>Status</th><th>Nr inwentarzowy</th><th>Nr seryjny</th><th>Nazwa</th><th>Akcja</th></tr>";
+                    while ($NrInwentarzowy = mysqli_fetch_array($wyszukaj_po_nazwie))
+                    {
+                        echo "<tr><td>";
+                        if ($NrInwentarzowy[6] > '1900-01-01') {
+                            echo '<div class="form-group has-error"><label class="control-label" for="inputError"><i class="fa fa-times-circle-o"></i></div>';
+                        } else {
+                            echo '<i class="fa fa-check"></i>';
+                        }
+                        if ($NrInwentarzowy[2] != '') {
+                            $ciag = $NrInwentarzowy[2];
+                            $podziel = substr($ciag, 0, 1);
+                            $podziel2 = substr($ciag, 1, 3);
+                            $podziel3 = substr($ciag, 4 - 8);
+                            $nr_stary_format = $podziel . '-' . $podziel2 . '-' . $podziel3;
+                        }
+
+                        if ($NrInwentarzowy[1] != 'NULL') {
+                            $aktualny_nr = $NrInwentarzowy[1];
+                        } else {
+                            $aktualny_nr = '';
+                        }
+                        if(isset($nr_stary_format))
+                        {
+                            echo "</td><td>$aktualny_nr $nr_stary_format</td><td>$NrInwentarzowy[4]</td><td>$NrInwentarzowy[5]</td><td><a href='index.php?a=wyswietl&id=$NrInwentarzowy[0]' class='btn btn-info'>Wybierz</a></td><td>";
+                        }
+                        else
+                        {
+                            echo "</td><td>$aktualny_nr</td><td>$NrInwentarzowy[4]</td><td>$NrInwentarzowy[5]</td><td><a href='index.php?a=wyswietl&id=$NrInwentarzowy[0]' class='btn btn-info'>Wybierz</a></td><td>";
+                        }
+
+                        echo "</td></tr>";
+                    }
+                    echo"</table>";
+
+                }
+            echo '</div><!-- /.box-body -->
+
+            </div><!-- /.box -->';
+
                 /*else {
                         echo '
                  <div class="alert alert-danger alert-dismissable">
@@ -431,7 +490,12 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo '<div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">';
                         echo "<li class='active'><a href='#tab_1' data-toggle='tab'>Informacje o Środku Trwałym</a></li>";
-                        echo "<li><a href='#tab_zdarzenia' data-toggle='tab'>Zdarzenia</a></li>";
+                        if($uzytkownik_sekcja =='Sekcja Wsparcia Merytorycznego i Technologii' || $uzytkownik_sekcja == 'Zespół Ewidencji Rozliczeń i Zaopatrzenia' )
+                        {
+                            echo "<li><a href='#tab_zdarzenia' data-toggle='tab'>Zdarzenia</a></li>";
+                        }
+                            echo "<li><a href='#tab_serwis' data-toggle='tab'>Serwis</a></li>";
+
                     if ($licznik_wyszukajHistoria > 0) {
                         //zakladka historia
                         echo "<li><a href='#tab_2' data-toggle='tab'>Historia ($licznik_wyszukajHistoria)</a></li>";
@@ -512,7 +576,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     // KONIEC - SKŁADNIKI INVEO
                         echo'</div>';
 
-
+                    //zakladka zdarzenia
                     echo '<div class="tab-pane" id="tab_zdarzenia">';
                     echo "<table class='table'>";
                     echo "<tr><th class='text-bold text-center'>Utwórz protokół:</th></tr>";
@@ -528,6 +592,26 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo"<tr><td><a href='srodek_trwaly.php?a=edytuj&id=$nrID' class='btn bg-black form-control'>Edytuj</a></td></tr>";
                     echo "</table>";
                     echo '</div>';
+
+                    //zakladka serwis
+                    echo '<div class="tab-pane" id="tab_serwis">';
+
+                    echo "<table class='table'>";
+                    echo "<tr><th class='text-bold text-center'>SERWIS:</th></tr>";
+                    echo"<tr><td><a href='#' class='btn bg-aqua-gradient form-control'>Utwórz Raport - nieaktywne</a></td></tr>";
+                    echo"<tr><td><a href='#' class='btn bg-fuchsia form-control'>Wpis Serwisowy / Uwaga / Notatka - nieaktywne</a></td></tr>";
+
+                    echo "<tr><th class='text-bold text-center'>Utwórz protokół:</th></tr>";
+                    echo"<tr><td><a href='protokol_stanu_technicznego.php?a=dodaj_do_koszyka&id=$nrID' class='btn btn-info form-control'>Stanu technicznego</a></td></tr>";
+                    echo"<tr><td><a href='protokol_rozkompletowania.php?a=dodaj&roz=$nrID' class='btn btn-primary form-control'>Rozkompletowania</a></td></tr>";
+                    //echo"<tr><td><a href='#' class='btn btn-warning form-control'>Skompletowania</a></td></tr>";
+                    echo "<tr><th class='text-bold text-center'>Zespół ewidencji:</th></tr>";
+                    //echo"<tr><td><a href='asygnata_koszyk.php?a=dodaj_do_koszyka&id=$nrID' class='btn btn-success form-control'>Asygnata</a></td></tr>";
+                    echo"<tr><td><a href='naklejka.php?a=srodek_trwaly&nr_inwentarzowy=$nr_inwent_naklejka&nazwa_srtw=$nazwa_naklejka' class='btn btn-danger form-control'>Naklejka</a></td></tr>";
+                    echo"<tr><td><a href='#' class='btn btn-info form-control'><span class='fa fa-truck'> Wyślij na Magazyn - nieaktywne</span></a></td></tr>";
+                    echo "</table>";
+                    echo '</div>';
+
                   echo'<div class="tab-pane" id="tab_2">';
                     if ($licznik_wyszukajHistoria > 0) {
                             echo"<table class='table table-bordered'>";
@@ -675,12 +759,12 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
             
             <tr><td><input type="submit" class="btn btn-warning form-control" name="numer" value="Wyszukaj"></td>';
             //echo'<td><input type="submit" class="form-control btn btn-danger" name="dokument" value="Dokument"></td>';
-            echo'</tr></form></table>
-            
-            </div><!-- /.box-body -->
+            echo'</tr></form></table>';
+            echo '<p><h2 class="text-uppercase">system w fazie testowej, większosć funkcjonalności zostanie odblokowania na dniach, uwagi i błędy należy zgłaszać poprzez formularz "Zgłoś błąd", który znajduję się w prawym dolnym rogu</h2></p>';
+            echo '</div><!-- /.box-body -->
               </div><!-- /.box -->';
 
-           /* echo '
+            echo '
                 <div class="box box-warning">
                 <div class="box-header with-border">
                   <h3 class="box-title">Lista Zmian</h3>
@@ -702,7 +786,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
             echo'</table>
             
             </div><!-- /.box-body -->
-              </div><!-- /.box -->';*/
+              </div><!-- /.box -->';
         }
         ?>
     </section>

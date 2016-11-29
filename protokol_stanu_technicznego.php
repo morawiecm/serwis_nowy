@@ -298,6 +298,10 @@ elseif ($a=='aktualizuj')
 }
 elseif ($a=='usun_skladnik')
 {
+    echo NaglowekStrony("Protokól Stanu Technicznego","Lista dokumentów","Lista dokumentów");
+    $usun_skladnik_z_bazy = mysqli_query($polaczenie,"DELETE FROM protokol_skladniki WHERE id = '$nrID'")
+        or die("Blad przy usun_skladnik_z_bazy".mysqli_error($polaczenie));
+    Przekierowanie("Usunueto protokol z bazy..","protokol_stanu_technicznego.php");
 
 }
 elseif ($a=='akceptacja')
@@ -311,7 +315,11 @@ else
     echo "<table class='table table-bordered' id = 'example1'>";
     echo "<thead><tr><th>Nr Protokołu</th><th>Data utworzenia</th><th>Nr seryjny</th><th>Nr inwentarzowy</th><th>Nazwa</th><th>Akcja</th></tr></thead>";
     //Pobranie zawartosci koszyka uzytkownika
-    $pobierz_koszyk_uzytkownika = mysqli_query($polaczenie,"SELECT protokol2.nr_protokolu,protokol2.data, RIGHT(protokol2.data,6) as rok, protokol_skladniki.nr_seryjny,protokol_skladniki.nr_ewidencyjny,protokol_skladniki.nazwa,protokol2.id,protokol2.id_protokolu FROM protokol2 INNER JOIN protokol_skladniki ON protokol2.id = protokol_skladniki.id_protokol") or die("Blad przy pobierz_koszyk_uzytkownika".mysqli_error($polaczenie));
+    $pobierz_koszyk_uzytkownika = mysqli_query($polaczenie,"SELECT protokol2.nr_protokolu,protokol2.data, RIGHT(protokol2.data,6) as rok, protokol_skladniki.nr_seryjny,protokol_skladniki.nr_ewidencyjny,
+    protokol_skladniki.nazwa,protokol2.id,protokol2.id_protokolu, protokol_skladniki.id as ajdi 
+    FROM protokol2 
+    INNER JOIN protokol_skladniki ON protokol2.id = protokol_skladniki.id_protokol")
+        or die("Blad przy pobierz_koszyk_uzytkownika".mysqli_error($polaczenie));
     if(mysqli_num_rows($pobierz_koszyk_uzytkownika)>0)
     {
         while ($protokol = mysqli_fetch_array($pobierz_koszyk_uzytkownika))
@@ -323,7 +331,9 @@ else
             }
             echo"<tr><td>$protokol[nr_protokolu] $rok</td><td>$protokol[data]</td><td>$protokol[nr_seryjny]</td><td>$protokol[nr_ewidencyjny]</td><td>$protokol[nazwa]</td>
             <td><a href='protokol_stanu_technicznego.php?a=edytuj&id=$protokol[id]' class='btn-xs btn-warning'>EDYTUJ</a>
-            <a href='fpdf17/generuj_protokol_st.php?a=generuj&id=$protokol[id]' class='btn-xs btn-success'>PDF</a></td></tr>";
+            <a href='fpdf17/generuj_protokol_st.php?a=generuj&id=$protokol[id]' class='btn-xs btn-success'>PDF</a>
+            <a href='protokol_stanu_technicznego.php?a=usun_skladnik&id=$protokol[ajdi]' class='btn-xs btn-danger'>USUŃ</a></td></tr>";
+
             //AKCEPTACJA
             $rok ='';
         }

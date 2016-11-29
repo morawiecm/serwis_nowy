@@ -14,6 +14,7 @@ $uzytkownik_wydzial = $user_data['wydzial'];
 $uzytkownik_sekcja = $user_data['sekcja'];
 $uzytkownik_uprawnienia=$user_data['specialne'];
 $użytkownik_imie_nazwisko=$uzytkownik_imie." ".$uzytkownik_nazwisko;
+$data_aktualna = date("Y-m-d H:i:s");
 //dane z POST
 
 
