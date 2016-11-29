@@ -147,12 +147,12 @@ include 'menu.php';
                 else
                 {
                     echo NaglowekStrony("Asygnata","Tworzenie dokumentu","Wybór z koszyka");
-                    $zapytanie_pobierz_elemnty_do_asygnaty = "SELECT baza.lp, baza.nazwa_sprzetu, baza.nr_inwentarzowy, baza.id_jednoski, baza.wartosc, asygnata_koszyk.uwaga
+                    $zapytanie_pobierz_elemnty_do_asygnaty = "SELECT baza.lp, baza.nazwa_sprzetu, baza.nr_inwentarzowy, baza.id_jednoski, baza.wartosc, asygnata_koszyk.uwaga,asygnata_koszyk.id
                     FROM asygnata_koszyk
                     INNER JOIN baza ON asygnata_koszyk.id_lp = baza.lp";
 
                     echo "<table class='table table-responsive table-bordered'><form action='asygnata_koszyk.php?a=generuj' method='post'>";
-                    echo "<thead><tr><th>Nr ewidencyjny</th><th>Nazwa</th><th>Na stanie</th><td>Wartosc</td><th>Uwagi</th><th>Wybierz</th></tr></thead>";
+                    echo "<thead><tr><th>Nr ewidencyjny</th><th>Nazwa</th><th>Na stanie</th><td>Wartosc</td><th>Uwagi</th><th>Wybierz</th><th>Akcja</th></tr></thead>";
                     $pobierz_skladniki_asygnaty  = mysqli_query($polaczenie, $zapytanie_pobierz_elemnty_do_asygnaty) or die("Blad przy pobierz_skladniki_asygnaty".mysqli_error($polaczenie));
                     if(mysqli_num_rows($pobierz_skladniki_asygnaty)>0)
                     {
@@ -160,7 +160,7 @@ include 'menu.php';
                         {
                             $wydzial_nazwa = PobierzNazweWydzialu($skladnik_asygnaty['id_jednoski']);
                             echo "<tr><td>$skladnik_asygnaty[nr_inwentarzowy]</td><td>$skladnik_asygnaty[nazwa_sprzetu]</td>
-                            <td>$wydzial_nazwa</td><td>$skladnik_asygnaty[wartosc]</td><td></td><td><input type='checkbox' name='id_sprzetu[]' value='$skladnik_asygnaty[lp]'></td></tr>";
+                            <td>$wydzial_nazwa</td><td>$skladnik_asygnaty[wartosc]</td><td></td><td><input type='checkbox' name='id_sprzetu[]' value='$skladnik_asygnaty[lp]'></td><td><a href='asygnata_koszyk.php?a=usun_z_koszyka&id=$skladnik_asygnaty[id]' class='btn-xs btn-danger'>USUŃ</a> </td></tr>";
                         }
                     }
                     else

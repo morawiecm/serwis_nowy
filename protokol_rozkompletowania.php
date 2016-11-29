@@ -15,10 +15,18 @@ $uzytkownik_sekcja = $user_data['sekcja'];
 $uzytkownik_uprawnienia = $user_data['specialne'];
 $użytkownik_imie_nazwisko = $uzytkownik_imie . " " . $uzytkownik_nazwisko;
 $data_pelana  = date("Y-m-d H:i:s");
-$roz = trim($_REQUEST['roz']);
 $data_skrocona = date("Y-m-d");
 //dane z POST
 
+
+if(isset($_REQUEST['roz']))
+{
+    $roz = trim($_REQUEST['roz']);
+}
+else
+{
+    $roz ='';
+}
 
 if ($uzytkownik_uprawnienia == 1) {
     $uprawienia = 'Administrator';
@@ -125,8 +133,8 @@ elseif ($a=='zapisz_protokol')
     echo "<tr><th>Wartosc</th><td><input type='text' name='wartosc' class='form-control'></td></tr>";
     echo "<tr><th>Jednostka po rozkompletowaniu</th><td><select name='jednostka' class='form-control'>";
     echo PobierzJednostki("Wybierz jednostke");
-    echo "</select></td><input name='id_protokolu' value='$nr_prot_nowy'></tr>";
-    echo "<tr><td colspan='2'><input type='submit' value='Dodaj składnik do protokołu' class='btn btn-warning'></td></tr>";
+    echo "</select></td><input type='hidden' name='id_protokolu' value='$nr_prot_nowy'></tr>";
+    echo "<tr><td colspan='2'><input type='submit' value='Dodaj składnik do protokołu' class='btn btn-warning form-control'></td></tr>";
 
 
     echo "</form></table>";

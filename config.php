@@ -6,7 +6,7 @@ define('DBUSER', 'root');
 define('DBPASS', 'em');
 define('DBNAME', 'baza_nowa');
 //Polaczenie MySQLi
-error_reporting(2);
+//error_reporting(2);
 $polaczenie=polaczenie_z_baza();
 
 $a='';
@@ -83,7 +83,7 @@ function Przekierowanie($komunikat,$strona)
                     setTimeout(function () {
                         window.location.href= '$strona'; // the redirect goes here
 
-                    },9000);
+                    },4500);
                         </script>";
 }
 session_start();

@@ -63,7 +63,7 @@ include 'menu.php';
                     if($a=='dodaj')
                     {
                         echo "<p>Dodawanie nowej jednostki do Słownika</p>";
-                        echo "<table class='table table-bordered'><form method='post' action='slownik_rodzaj_ewidencji.php?a=zapisz'>";
+                        echo "<table class='table table-bordered'><form method='post' action='slownik_jednostki.php?a=zapisz'>";
                         echo "<tr><th>Nazwa: </th><td><input type='text' name='nazwa' class='form-control'></td></tr>";
                         echo "<tr><th>Kod: </th><td><input type='text' name='kod' class='form-control'></td></tr>";
                         echo "<tr><th colspan='2'><input type='submit' name='przycisk_zapisz' class='btn btn-warning form-control' value='Zapisz'></th></tr>";
@@ -99,7 +99,7 @@ include 'menu.php';
                                 while ($edycja = mysqli_fetch_array($pobierz_jednostke))
                                 {
                                     echo "<p>Edycja Jednostki</p>";
-                                    echo "<table class='table table-bordered'><form method='post' action='slownik_rodzaj_ewidencji.php?a=aktualizuj'>";
+                                    echo "<table class='table table-bordered'><form method='post' action='slownik_jednostki.php?a=aktualizuj'>";
                                     echo "<tr><th>Nazwa:</th><td><input type='text' name='edycja_nazwa' class='form-control' value='$edycja[nazwa]'></td></tr>";
                                     echo "<tr><th>Kod</th><td><input type='text' name='edycja_kod' class='form-control' value='$edycja[kod_jednostki]'></td></tr>";
                                     echo "<tr><th colspan='2'><input type='hidden' name='id_rekordu' value='$nrID'><input type='submit' name='przycisk_aktualizuj' class='btn btn-warning form-control' value='Aktualizuj'></th></tr>";
@@ -160,8 +160,8 @@ include 'menu.php';
                             while ($rodzaj_ewidencji = mysqli_fetch_array($pobierz_jednostki))
                             {
                                 echo "<tr><td>$rodzaj_ewidencji[id]</td><td>$rodzaj_ewidencji[nazwa]</td><td>$rodzaj_ewidencji[kod_jednostki]</td><td>
-                                <a href='slownik_rodzaj_ewidencji.php?a=edycja&id=$rodzaj_ewidencji[id]' class='btn-sm btn-success'>Edytuj</a>
-                                <a href='slownik_rodzaj_ewidencji.php?a=usun&id=$rodzaj_ewidencji[id]' class='btn-sm btn-danger'>Usuń</a>
+                                <a href='slownik_jednostki.php?a=edycja&id=$rodzaj_ewidencji[id]' class='btn-sm btn-success'>Edytuj</a>
+                                <a href='slownik_jednostki.php?a=usun&id=$rodzaj_ewidencji[id]' class='btn-sm btn-danger'>Usuń</a>
                                 </td></tr>";
                             }
                         }
