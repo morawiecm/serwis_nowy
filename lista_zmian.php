@@ -1,85 +1,60 @@
 <?php
 include 'config.php';
-
-
+include 'funkcje/funkcje_ewidencja.php';
+include 'funkcje/funkcje_historia.php';
 check_login();
-
 // dane uzytkownika z sesji
 $user_data = get_user_data();
-$uzytkownik_imie=$user_data['imie'];
-$uzytkownik_nazwisko=$user_data['nazwisko'];
-$uzytkownik_nazwa=$user_data['user_name'];
-$uzytkownik_id=$user_data['user_id'];
-$uzytkownik_sekcja=$user_data['sekcja'];
-$uzytkownik_uprawnienia=$user_data['specialne'];
-$użytkownik_imie_nazwisko=$uzytkownik_imie." ".$uzytkownik_nazwisko;
+$uzytkownik_imie = $user_data['imie'];
+$uzytkownik_nazwisko = $user_data['nazwisko'];
+$uzytkownik_nazwa = $user_data['user_name'];
+$uzytkownik_id = $user_data['user_id'];
+$uzytkownik_wydzial = $user_data['wydzial'];
+$uzytkownik_sekcja = $user_data['sekcja'];
+$uzytkownik_uprawnienia = $user_data['specialne'];
+$użytkownik_imie_nazwisko = $uzytkownik_imie . " " . $uzytkownik_nazwisko;
+$data_pelana  = date("Y-m-d H:i:s");
+$data_skrocona = date("Y-m-d");
+//dane z POST
 
 
-if($uzytkownik_uprawnienia==1)
-{
-    $uprawienia='Administrator';
+if ($uzytkownik_uprawnienia == 1) {
+    $uprawienia = 'Administrator';
+} else {
+    $uprawienia = 'Użytkownik';
 }
-else
-{
-    $uprawienia='Użytkownik';
-}
 
+//print_r($_POST);
 
-?>
-<?php include 'gora.php';?>
-<?php
+include 'gora.php';
+include 'pasek.php';
 include 'menu.php';
-?>
 
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h1>
-            Lista zamian
-            <small></small>
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="#"><i class="fa fa-dashboard"></i>Lista zmian</a></li>
-            <li class="active">lista</li>
-        </ol>
-    </section>
 
-    <!-- Main content -->
-    <section class="content">
 
-        <!-- Default box -->
-        <div class="box">
-            <div class="box-header with-border">
-               
-                <div class="box-tools pull-right">
-                    <button class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse"><i class="fa fa-minus"></i></button>
-                    <button class="btn btn-box-tool" data-widget="remove" data-toggle="tooltip" title="Remove"><i class="fa fa-times"></i></button>
-                </div>
-            </div>
-            <div class="box-body">
-                <?php
-
-                if($a=='dodaj')
+if($a=='dodaj')
                 {
                     //Formularz dodawania do listy zmian
-                    echo"<table><form name='dodawanie_zmian' method='POST' action='lista_zmian.php?a=dodaj_zapisz' >";
-                    echo"<tr><td>Data</td><td><input type='text' name='data' class='datepicker' value='$data'/></td></tr>";
-                    echo"<tr><td>Opis</td><td><textarea name='opis' class='ckeditor'></textarea></td></tr>";
-                    echo"<tr><td colspan='2'><input type='submit' value='Dodaj' /></td></tr> ";
+                    echo NaglowekStrony("Lista zmian","zmiany","Dodanie wpisów do listy");
+                    echo"<table class='table table-bordered'><form name='dodawanie_zmian' method='POST' action='lista_zmian.php?a=dodaj_zapisz' >";
+                    echo"<tr><td>Data</td><td><input type='text' name='data' class='form-control' value='$data_skrocona' id='datepicker'/></td></tr>";
+                    echo"<tr><td>Opis</td><td><textarea name='opis' class='ckeditor form-control'></textarea></td></tr>";
+                    echo"<tr><td colspan='2'><input type='submit' value='Dodaj'  class='btn btn-primary form-control'/></td></tr> ";
                     echo"</form></table>";
                 }
                 elseif ($a=='dodaj_zapisz')
                 {
+                    echo NaglowekStrony("Lista zmian","zmiany","Dodanie wpisów do listy");
                     //Zrzut z POSTA
                     $data=$_POST['data'];
-                    $opis=$_POST['opis'];
+                    $opis=addslashes($_POST['opis']);
 
-                    $zapisBaza_lista_zmian=mysqli_query($polaczenie,"INSERT INTO `lista_zmian` (`id`,`data`,`opis`) VALUES ('','$data','$opis')")or die('Bład przy zapisBaza_lista_zmian'.mysqli_error($polaczenie));
+                    $zapisBaza_lista_zmian=mysqli_query($polaczenie,"INSERT INTO lista_zmian (data,opis) VALUES ('$data','$opis')")or die('Bład przy zapisBaza_lista_zmian'.mysqli_error($polaczenie));
                     echo"Dodano pomyślnie wpis <a href='lista_zmian.php'>Powrót</a>";
                 }
                 elseif($a=='edytuj')
                 {
+                    echo NaglowekStrony("Lista zmian","zmiany","Dodanie wpisów do listy");
                     $pobierz_dane_rekordu_z_bazy_lista_zmian=mysqli_query($polaczenie,"SELECT * FROM `lista_zmian` WHERE `id`='$nrID'") or die('Bład przy pobierz_dane_rekordu_z_bazy_lista_zmian'.mysqli_error($polaczenie));
                     if(mysqli_num_rows($pobierz_dane_rekordu_z_bazy_lista_zmian)>0)
                     {
@@ -95,7 +70,8 @@ include 'menu.php';
                 }
                 elseif($a=='zapisz_zmiany')
                 {
-                    //dane z POST3
+                    echo NaglowekStrony("Lista zmian","zmiany","Dodanie wpisów do listy");
+                    //dane z POST
                     $e_id=$_POST['e_id'];
                     $e_data=$_POST['e_data'];
                     $e_opis=$_POST['e_opis'];
@@ -106,6 +82,9 @@ include 'menu.php';
                 }
                 else
                 {
+                    echo NaglowekStrony("Lista zmian","zmiany","Dodanie wpisów do listy");
+
+
                     echo"<a href='lista_zmian.php?a=dodaj' class='btn btn-success'>Dodaj nowy wpis</a>";
                     echo "<table class='table table-striped table-bordered table-hover'>";
                     echo "<thead><tr><th>Data</th><th>Opis</th><th>Akcja</th></tr></thead>";
