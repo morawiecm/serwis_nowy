@@ -47,6 +47,15 @@ include 'menu.php';
                         Przekierowanie("Bledny nr ID ! Spróbuj jeszcze raz","index.php");
                     }
                 }
+                elseif ($a=='usun_z_koszyka')
+                {
+                    echo NaglowekStrony("Asygnata","Usuwanie pozycji ","Usuwanie pozycji z koszyka");
+                    $usun_z_koszyka_asyg = mysqli_query($polaczenie,"DELETE FROM asygnata_koszyk WHERE id = '$nrID'")
+                        or die("Blad przy usun_z_koszyka_asyg".mysqli_error($polaczenie));
+                    Przekierowanie("Uusnueto pozycje z koszyka, nastąpi przekierowanie","asygnata_koszyk");
+
+                }
+
                 elseif ($a=='generuj')
                 {
                     echo NaglowekStrony("Asygnata","Tworzenie dokumentu","Szczegóły dokumentu");
