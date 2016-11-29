@@ -431,6 +431,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo '<div class="nav-tabs-custom">
                 <ul class="nav nav-tabs">';
                         echo "<li class='active'><a href='#tab_1' data-toggle='tab'>Informacje o Środku Trwałym</a></li>";
+                        if($uzytkownik_sekcja =='Sekcja Wsparcia Merytorycznego i Technologii' || $uzytkownik_sekcja == 'Zespół Ewidencji Rozliczeń i Zaopatrzenia' )
                         echo "<li><a href='#tab_zdarzenia' data-toggle='tab'>Zdarzenia</a></li>";
                     if ($licznik_wyszukajHistoria > 0) {
                         //zakladka historia
