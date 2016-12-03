@@ -10,6 +10,12 @@ $user_data = get_user_data();
 $rozWart=0;
 //dane z posta
 
+//require('/var/www/html/fpdf17/mc_table.php');              podglad
+//require($_SERVER['DOCUMENT_ROOT']."/fpdf17/mc_table.php"); generuj
+require('mc_table.php');
+$pdf = new PDF_MC_Table();
+
+
 if($a=='podglad'){
 
 
@@ -59,16 +65,13 @@ if($a=='podglad'){
 
 
 
-    require('/var/www/html/fpdf17/mc_table.php');
+
 
     $prefix="9999";
     $id_protokolu2="$nrID"."$prefix";
 //generowanie pdfa
-    class PDF extends FPDF
-    {
 
-    }
-    $pdf=new PDF_MC_Table();
+
 
 
 
@@ -311,28 +314,17 @@ elseif($a=='generuj'){
 
 
 
-    require($_SERVER['DOCUMENT_ROOT']."/fpdf17/mc_table.php");
+
 
     $prefix="9999";
     $id_protokolu2="$kod_kreskowy"."$prefix";
 //generowanie pdfa
-    class PDF extends FPDF
-    {
-        function Footer()
-        {
-            // Position at 1.5 cm from bottom
-            $this->SetY(-15);
-            // Arial italic 8
-            $this->SetFont('Arial','I',8);
-            // Page number
-            $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
-        }
-    }
 
 
 
 
-    $pdf=new PDF_MC_Table();
+
+   // $pdf=new PDF_MC_Table();
 //$pdf= new PDF();
     $pdf->AliasNbPages('{totalPages}');
     $pdf->AddPage('P','A4');

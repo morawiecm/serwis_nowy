@@ -177,6 +177,65 @@ function PobierzJednostki($wartosc)
     return $lista;
 }
 
+function PobierzKategoriePST($wartosc)
+{
+    $nazwa_jednostki=$wartosc;
+    $nazwa_jednostki2=$wartosc;
+    $polaczenie = polaczenie_z_baza();
+    $lista='';
+
+    if($nazwa_jednostki!='')
+    {
+        $pobierz_jednostke = mysqli_query($polaczenie,"SELECT nazwa FROM slownik_kategoria_pst WHERE nazwa LIKE '$wartosc' ORDER BY nazwa ASC")
+        or die("Blad przy pobierz_jednsotke".mysqli_error($polaczenie));
+        if(mysqli_num_rows($pobierz_jednostke)>0)
+        {
+            while ($jednostka = mysqli_fetch_array($pobierz_jednostke))
+            {
+                $nazwa_jednostki .= "<option selected='selected'>$jednostka[nazwa]</option>";
+                $lista.=$nazwa_jednostki;
+            }
+        }
+        elseif (mysqli_num_rows($pobierz_jednostke)==0)
+        {
+            $pobierz_jednostke2 = mysqli_query($polaczenie,"SELECT nazwa FROM slownik_kategoria_pst ORDER BY nazwa ASC")
+            or die("Blad przy pobierz_jednsotke".mysqli_error($polaczenie));
+            if(mysqli_num_rows($pobierz_jednostke2)>0)
+            {
+                while ($jednostka2 = mysqli_fetch_array($pobierz_jednostke2))
+                {
+                    $nazwa_jednostki2 .= "<option selected='selected'>$jednostka2[nazwa]</option>";
+                    $lista.=$nazwa_jednostki2;
+                }
+            }
+        }
+        else
+        {
+            $nazwa_jednostki .="<option value='$wartosc'>Brak kategorii lub została usunięta</option>";
+            $lista.=$nazwa_jednostki;
+        }
+    }
+
+
+    $pobierz_jednostki = mysqli_query($polaczenie,"SELECT nazwa FROM slownik_kategoria_pst ORDER BY nazwa ASC")
+    or die("Blad przy pobierz_jednsotke".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_jednostki)>0)
+    {
+        while ($jednostka = mysqli_fetch_array($pobierz_jednostki))
+        {
+            $lista.= "<option>$jednostka[nazwa]</option>";
+        }
+    }
+    else
+    {
+        $lista .= "<option value='$wartosc'>Brak dodanych kategorii w bazie, dodaj w słowniku</option>";
+    }
+
+
+    return $lista;
+}
+
+
 function PoliczStanWydzialu($id_wydzialu)
 {
     $stan = 0;
@@ -195,7 +254,7 @@ function PobierzNazweWydzialu($id_wydzialu)
     $polaczenie = polaczenie_z_baza();
 
     $pobierz_nazwe_wydzialu  =  mysqli_query($polaczenie,"SELECT nazwa FROM jednostki WHERE id = '$id_wydzialu'")
-        or die("Bład przy pobierz_nazwe_wydzialu");
+    or die("Bład przy pobierz_nazwe_wydzialu");
     if(mysqli_num_rows($pobierz_nazwe_wydzialu)>0)
     {
         while ($wydzial = mysqli_fetch_array($pobierz_nazwe_wydzialu))
@@ -209,6 +268,29 @@ function PobierzNazweWydzialu($id_wydzialu)
     }
 
     return $nazwa_wydzialu;
+}
+
+function PobierzNumerProtokolu($id_protokolu)
+{
+    $numer_prot = "";
+
+    $polaczenie = polaczenie_z_baza();
+
+    $pobierz_nazwe_wydzialu  =  mysqli_query($polaczenie,"SELECT nr_protokolu FROM rozkompletowanie WHERE id = '$id_protokolu'")
+    or die("Bład przy pobierz_nazwe_wydzialu");
+    if(mysqli_num_rows($pobierz_nazwe_wydzialu)>0)
+    {
+        while ($wydzial = mysqli_fetch_array($pobierz_nazwe_wydzialu))
+        {
+            $numer_prot = $wydzial['nr_protokolu'];
+        }
+    }
+    else
+    {
+        $numer_prot = "Brak protokołu o podanym ID lub został usunięty";
+    }
+
+    return $numer_prot;
 }
 
 function PobierzNumerWydzialu($nazwa_wydzialu)

@@ -40,6 +40,9 @@
                 <a href="index.php">
                     <i class="fa fa-dashboard"></i><span>Strona Główna</span>
                 </a>
+                <a href="protokol_stanu_technicznego.php?a=koszyk">
+                    <i class="glyphicon glyphicon-shopping-cart"></i><span>Koszyk PST</span>
+                </a>
             </li>
 
 
@@ -129,8 +132,8 @@
             echo'
             
             <li class="header">EWIDENCJA</li>
-            <li><a href="asygnaty.php"><i class="fa fa-gear"></i> <span>ASYGNATY</span></a></li>
-            <li><a href="naklejka.php"><i class="fa fa-gear"></i> <span>Naklejki</span></a></li>
+            <li><a href="asygnaty.php"><i class="glyphicon glyphicon-duplicate"></i> <span>ASYGNATY</span></a></li>
+            <li><a href="naklejka.php"><i class="glyphicon glyphicon-barcode"></i> <span>Naklejki</span></a></li>
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-share"></i> <span>Protokoły</span>
@@ -181,11 +184,12 @@
                     <li><a href="slownik_jednostki.php"><i class="fa fa-circle-o"></i> Jednostki</a></li>
                     <li><a href="liczniki_stan.php"><i class="fa fa-circle-o"></i> Liczniki</a></li>
                     <li><a href= "slownik_magazyn.php"><i class="fa fa-circle-o"></i> Magazyny</a></li>
+                    <li><a href= "slownik_kategoria_pst.php"><i class="fa fa-circle-o"></i> Kategoria PST</a></li>
                 </ul>
 
             </li>
-            <li><a href="srodek_trwaly.php?a=wydzialy"><i class="fa fa-gear"></i> <span>Stany Wydziałów</span></a></li>
-            <li><a href="srodek_trwaly.php?a=dodaj"><i class="fa fa-gear"></i> <span>Dodaj Nowy</span></a></li>
+            <li><a href="srodek_trwaly.php?a=wydzialy"><i class="glyphicon glyphicon-th-list"></i> <span>Stany Wydziałów</span></a></li>
+            <li><a href="srodek_trwaly.php?a=dodaj"><i class="glyphicon glyphicon-plus"></i> <span>Dodaj Nowy</span></a></li>
 ';
             }
             if($uzytkownik_sekcja == 'Sekcja Wsparcia Merytorycznego i Technologii')
@@ -196,7 +200,7 @@
             <li><a href="uzytkownicy.php"><i class="fa fa-circle-o text-red"></i> <span>Użytkownicy</span></a></li>';
             if($uzytkownik_id == 1)
             {
-                echo'<li><a href="zglos_blad.php?a=pokaz_zgloszenia_status"><i class="fa fa-gear"></i> <span>Zgłoszenia</span></a></li>
+                echo'<li><a href="zglos_blad.php?a=pokaz_zgloszenia_status"><i class="glyphicon glyphicon-wrench"></i> <span>Zgłoszenia</span></a></li>
             <li><a href="uzytkownicy_grupa.php"><i class="fa fa-circle-o text-yellow"></i> <span>Użytkownicy Grupy</span></a></li>
             <li><a href="import_danych.php"><i class="fa fa-circle-o text-yellow"></i> <span>Import danych Serwis1.0</span></a></li>';
             }

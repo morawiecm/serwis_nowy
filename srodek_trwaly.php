@@ -183,6 +183,7 @@ if ($a == 'dodaj') {
 
 } elseif ($a == 'wydzialy') {
     echo NaglowekStrony("Ewidencja ", " ", "Stany wydziałów");
+    echo "<p><a href='export_wydzial.php' class='btn bg-olive'>Generuj plik Excel dla całej bazy</a></p>";
     $zapytanie_pobierz_wydzialy = "SELECT id, nazwa,kod_jednostki FROM jednostki WHERE aktywny = 0 AND kod_jednostki NOT LIKE  '666'";
     $pobierz_wydzialy_stan = mysqli_query($polaczenie, $zapytanie_pobierz_wydzialy) or die("Blad przy pobierz_wydzialy_stan" . mysqli_query($polaczenie));
     if (mysqli_num_rows($pobierz_wydzialy_stan) > 0) {
@@ -193,6 +194,7 @@ if ($a == 'dodaj') {
             echo "<tr><td>$wydzialy_stan[nazwa]</td><td>$wydzialy_stan[kod_jednostki]</td>
                             <td>
                             <a href='export_wydzial.php?id=$wydzialy_stan[id]' class='btn-xs btn-success'>Export do Excela</a>
+                            <a href='fpdf17/generuj_wydzial.php?id=$wydzialy_stan[id]' class='btn-xs btn-danger'>Export do PDF</a>
                             </td></tr>";
         }
         echo "</table>";
