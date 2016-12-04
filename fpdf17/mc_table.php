@@ -12,6 +12,15 @@ function EAN13($x, $y, $barcode, $h=10, $w=.35)
 {
 	$this->Barcode($x,$y,$barcode,$h,$w,13);
 }
+	function Footer()
+    {
+        // Position at 1.5 cm from bottom
+        $this->SetY(-15);
+        // Arial italic 8
+        $this->SetFont('Arial','I',8);
+        // Page number
+        $this->Cell(0,10,'Strona '.$this->PageNo().'/{nb}',0,0,'C');
+    }
 
 function UPC_A($x, $y, $barcode, $h=16, $w=.35)
 {

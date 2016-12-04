@@ -151,13 +151,9 @@ elseif ($a=='formularz')
     echo "<tr><th>Data na protokole:</th><td><input type='text' name='protokol_data' id='datepicker' value='$data_skrocona' class='form-control'></td></tr>";
     echo "<tr><th>Koszt naprawy:</th><td><input type='text' name='protokol_koszt' value='nieoplacalny' class='form-control'></td></tr>";
     echo "<tr><th>Stan techniczny</th><td><input type='text' name='protokol_stan_techniczny' value='Uszkodzona elektronika' class='form-control'></td></tr>";
-    echo "<tr><th>Kategoria</th><td><select name='protokol_kategoria' class='form-control'>
-            <option value='I - Sprzęt nowy'>I - Sprzęt nowy</option>
-            <option value='II - Sprzęt używany nie wymagający naprawy'>II - Sprzęt używany nie wymagający naprawy</option>
-            <option value='III - Sprzęt używany wymagający naprawy'>III - Sprzęt używany wymagający naprawy</option>
-            <option value='IV - Przewidywany jednostkowy koszt remontu: koszt naprawy przekracza wartość rynkową - nieopłacalny' selected>IV - Przewidywany jednostkowy koszt remontu: koszt naprawy przekracza wartość rynkową - nieopłacalny</option>
-            <option value='IV - Oprogramowanie przestarzałe nie spełnia wymogów Polityki Bezpieczeństwa'>IV - Oprogramowanie przestarzałe nie spełnia wymogów Polityki Bezpieczeństwa</option>
-    </select></td></tr>";
+    echo "<tr><th>Kategoria</th><td><select name='protokol_kategoria' class='form-control'>";
+    echo PobierzKategoriePST('Wybierz z listy');
+    echo "</select></td></tr>";
     echo "<tr><th>Opinia co do dalszego przeznaczenia</th><td><input type='text' name='protokol_opinia' class='form-control' value='zdjąć ze stanu, wybrakować, upłynnić lub wyzłomować'></td></tr>";
     echo "<tr><th rowspan='3'>Wybierz osoby do komisji:</th><td>1.<select name='protokol_komisja1' class='form-control'>";
     echo PobierzUzytkownikow();
@@ -313,12 +309,13 @@ else
     echo NaglowekStrony("Protokól Stanu Technicznego","Lista dokumentów","Lista dokumentów");
     echo "<p><a href='protokol_stanu_technicznego.php?a=koszyk' class='btn btn-info'>KOSZYK</a> </p>";
     echo "<table class='table table-bordered' id = 'example1'>";
-    echo "<thead><tr><th>Nr Protokołu</th><th>Data utworzenia</th><th>Nr seryjny</th><th>Nr inwentarzowy</th><th>Nazwa</th><th>Akcja</th></tr></thead>";
+    echo "<thead><tr><th>ID</th><th>Nr Protokołu</th><th>Data utworzenia</th><th>Nr seryjny</th><th>Nr inwentarzowy</th><th>Nazwa</th><th>Akcja</th></tr></thead>";
     //Pobranie zawartosci koszyka uzytkownika
     $pobierz_koszyk_uzytkownika = mysqli_query($polaczenie,"SELECT protokol2.nr_protokolu,protokol2.data, RIGHT(protokol2.data,6) as rok, protokol_skladniki.nr_seryjny,protokol_skladniki.nr_ewidencyjny,
     protokol_skladniki.nazwa,protokol2.id,protokol2.id_protokolu, protokol_skladniki.id as ajdi 
     FROM protokol2 
-    INNER JOIN protokol_skladniki ON protokol2.id = protokol_skladniki.id_protokol")
+    INNER JOIN protokol_skladniki ON protokol2.id = protokol_skladniki.id_protokol
+    ORDER BY protokol2.id DESC ")
         or die("Blad przy pobierz_koszyk_uzytkownika".mysqli_error($polaczenie));
     if(mysqli_num_rows($pobierz_koszyk_uzytkownika)>0)
     {
@@ -329,7 +326,7 @@ else
                 $rok = substr($protokol['rok'],0,3);
                 $rok = $protokol['id_protokolu'].$rok;
             }
-            echo"<tr><td>$protokol[nr_protokolu] $rok</td><td>$protokol[data]</td><td>$protokol[nr_seryjny]</td><td>$protokol[nr_ewidencyjny]</td><td>$protokol[nazwa]</td>
+            echo"<tr><td>$protokol[ajdi]</td><td>$protokol[nr_protokolu] $rok</td><td>$protokol[data]</td><td>$protokol[nr_seryjny]</td><td>$protokol[nr_ewidencyjny]</td><td>$protokol[nazwa]</td>
             <td><a href='protokol_stanu_technicznego.php?a=edytuj&id=$protokol[id]' class='btn-xs btn-warning'>EDYTUJ</a>
             <a href='fpdf17/generuj_protokol_st.php?a=generuj&id=$protokol[id]' class='btn-xs btn-success'>PDF</a>
             <a href='protokol_stanu_technicznego.php?a=usun_skladnik&id=$protokol[ajdi]' class='btn-xs btn-danger'>USUŃ</a></td></tr>";

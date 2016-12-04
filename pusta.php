@@ -57,11 +57,25 @@ elseif ($a=='akceptacja')
 }
 else
 {
+    echo NaglowekStrony("Asygnata","Edycja dokumentu","Edycja wpsiów na  dokumencie");
 
-    echo '</div>';
-    //koniec - zakladka wszystkie
+    $jedostka = Array();
+    $licznik =0;
+    $pobierz_jednostki = mysqli_query($polaczenie,"SELECT id,nazwa FROM jednostki") or die(mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_jednostki)>0)
+    {
+        while ($jed = mysqli_fetch_array($pobierz_jednostki))
+        {
+            $jednostka[$licznik]['id']=$jed['id'];
+            $jednostka[$licznik]['nazwa']=$jed['nazwa'];
+            $licznik++;
+        }
+    }
 
-    echo '</div>';
+    $jednostka_nazwa = array_search('4',array_column($jednostka,'id'));
+    $jednostka_nazwa_pelna = $jednostka[$jednostka_nazwa]['nazwa'];
+    echo $jednostka_nazwa_pelna;
+
 
 }
 ?>

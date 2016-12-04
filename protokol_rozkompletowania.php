@@ -54,6 +54,7 @@ if($a=='dodaj')
             or die("Blad przy pobierz_dane_do_rozkompletowania" . mysqli_error($polaczenie));
             while ($dane_sprzetu = mysqli_fetch_array($pobierz_dane_do_rozkompletowania)) {
                 $nr_protokolu_r = PobierzNrProtokoluRozkompletowania();
+                AktualizujNrProtokolRozkompletowania($nr_protokolu_r);
                 $nr_protokolu_rozkompletowania = $nr_protokolu_r . "/" . date("Y");
 
                 echo "<tr><th>Nr protokolu</th><td><input type='text' name='protokol_nr' class='form-control' value='$nr_protokolu_rozkompletowania'></td></tr>";
@@ -80,6 +81,7 @@ if($a=='dodaj')
         or die("Blad przy pobierz_dane_do_rozkompletowania" . mysqli_error($polaczenie));
         while ($dane_sprzetu = mysqli_fetch_array($pobierz_dane_do_rozkompletowania)) {
             $nr_protokolu_r = PobierzNrProtokoluRozkompletowania();
+            AktualizujNrProtokolRozkompletowania($nr_protokolu_r);
             $nr_protokolu_rozkompletowania = $nr_protokolu_r . "/" . date("Y");
 
             echo "<tr><th>Nr protokolu</th><td><input type='text' name='protokol_nr' class='form-control' value='$nr_protokolu_rozkompletowania'></td></tr>";
@@ -111,9 +113,9 @@ elseif ($a=='zapisz_protokol')
     //dane z POST
     $protokol_nr=$_POST['protokol_nr'];
     $protokol_data =$_POST['protokol_data'];
-    $protokol_komisja_1=$_POST['protokol_komisja_1'];
-    $protokol_komisja_2=$_POST['protokol_komisja_2'];
-    $protokol_komisja_3=$_POST['protokol_komisja_3'];
+    $protokol_komisja_1=PobierzImieNazwisko($_POST['protokol_komisja_1']);
+    $protokol_komisja_2=PobierzImieNazwisko($_POST['protokol_komisja_2']);
+    $protokol_komisja_3=PobierzImieNazwisko($_POST['protokol_komisja_3']);
     $protokol_nazwa_glowna=$_POST['protokol_nazwa_glowna'];
     $protokol_wartosc_glowna=$_POST['protokol_wartosc_glowna'];
     $protokol_na_stanie_glowna=$_POST['protokol_na_stanie_glowna'];
@@ -130,6 +132,7 @@ elseif ($a=='zapisz_protokol')
     echo "<table class='table table-bordered'><form method='post' action='protokol_rozkompletowania.php?a=zapisz_skladniki_roz'>";
     echo "<tr><th>Nazwa</th><td><input type='text' name='nazwa' class='form-control'></td></tr>";
     echo "<tr><th>Nr Seryjny</th><td><input type='text' name='seryjny' class='form-control'></td></tr>";
+    echo "<tr><th>Jednostka miary</th><td><input type='text' name='jm' class='form-control'></td></tr>";
     echo "<tr><th>Wartosc</th><td><input type='text' name='wartosc' class='form-control'></td></tr>";
     echo "<tr><th>Jednostka po rozkompletowaniu</th><td><select name='jednostka' class='form-control'>";
     echo PobierzJednostki("Wybierz jednostke");
@@ -143,9 +146,39 @@ elseif ($a=='zapisz_protokol')
 elseif ($a=='zapisz_skladniki_roz')
 {
     echo NaglowekStrony("Protokół rozkompletowania","Tworzenie dokumentu","Zapisywanie składników protokołu rozkompletowania");
-var_dump($_POST);
-Przekierowanie("Dodano do protokolu skladnik,","index.php");
+
+    $nazwa=addslashes($_POST['nazwa']);
+    $seryjny=$_POST['seryjny'];
+    $wartosc=$_POST['wartosc'];
+    $jm=$_POST['jm'];
+    $jednostka=$_POST['jednostka'];
+    $jednostka_nazwa = PobierzNazweWydzialu($jednostka);
+    $id_protokolu=$_POST['id_protokolu'];
+    $nr_protokolu = PobierzNumerProtokolu($id_protokolu);
+
+    $zapisz_skladnik_rozkompletowania = mysqli_query($polaczenie,"INSERT INTO rozkompletowanie_skladniki (id_protokolu, nr_protokolu, nazwa_wykomplet_sprzetu, 
+    jednostka_miary_wykomplet_sprzetu, wartosc_wykomplet_sprzetu, jednostka_uzytkujaca, nr_seryjny)
+    VALUES ('$id_protokolu','$nr_protokolu','$nazwa','$jm','$wartosc','$jednostka_nazwa','$seryjny')") or die("Blad przyzapisz_skladnik_rozkopletowania".mysqli_error($polaczenie));
+    echo "<p>Dodano skladnik: $nazwa. Dodaj kolejny ? <a href='protokol_rozkompletowania.php?a=dodaj_kolejny_skladnik&id=$id_protokolu'>TAK</a>  <a href='index.php'>NIE</a></p>";
 }
+
+elseif ($a=='dodaj_kolejny_skladnik')
+{
+    echo NaglowekStrony("Protokół rozkompletowania","Tworzenie dokumentu","Dodawanie składników protokołu rozkompletowania");
+    echo "<table class='table table-bordered'><form method='post' action='protokol_rozkompletowania.php?a=zapisz_skladniki_roz'>";
+    echo "<tr><th>Nazwa</th><td><input type='text' name='nazwa' class='form-control'></td></tr>";
+    echo "<tr><th>Nr Seryjny</th><td><input type='text' name='seryjny' class='form-control'></td></tr>";
+    echo "<tr><th>Jednostka miary</th><td><input type='text' name='jm' class='form-control'></td></tr>";
+    echo "<tr><th>Wartosc</th><td><input type='text' name='wartosc' class='form-control'></td></tr>";
+    echo "<tr><th>Jednostka po rozkompletowaniu</th><td><select name='jednostka' class='form-control'>";
+    echo PobierzJednostki("Wybierz jednostke");
+    echo "</select></td><input type='hidden' name='id_protokolu' value='$nrID'></tr>";
+    echo "<tr><td colspan='2'><input type='submit' value='Dodaj składnik do protokołu' class='btn btn-warning form-control'></td></tr>";
+
+
+    echo "</form></table>";
+}
+
 elseif ($a=='edycja')
 {
     echo NaglowekStrony("Protokół rozkompletowania","Edycja dokumentu","Edycja dokumentów");
