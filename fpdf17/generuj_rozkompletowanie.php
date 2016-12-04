@@ -405,7 +405,7 @@ elseif($a=='generuj'){
     $pdf->SetFont('arial_ce','',9);
     $pdf->SetWidths(array(65,35,30,45));
 //ROZKOMLPETOWANA ORGINAL
-    $pdf->Row(array($nazwa_sprzetu,$nr_ewidencyjny,$wartosc2.' z³',$wydzial11));
+    $pdf->Row(array($nazwa_sprzetu,$nr_ewidencyjny,$wartosc2.' z³',$wydzial));
 //WYKOMPLETOWANIE
 //pobranie skladnikow wykompletowania:
     $pobranieSkladnikowWykompletowania=mysqli_query($polaczenie,"SELECT * FROM `rozkompletowanie_skladniki` WHERE `id_protokolu`='$nrID'") or die("B³ad przy pobraniu danych pobranieSkladnikowWykompletowania: ".mysqli_error($polaczenie));

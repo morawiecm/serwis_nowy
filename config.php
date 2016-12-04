@@ -32,6 +32,28 @@ function polaczenie_z_baza()
     return $polaczenie;
 }
 
+function sprawdzHasloPolityka($text)
+{
+    $prawidlowe=true;
+    $ilosc_znakow= mb_strlen($text, 'UTF-8');
+    $wielkich_znakow=similar_text($text,strtolower($text));
+    $wielkich_znakow_liczba=$ilosc_znakow-$wielkich_znakow;
+    $znaki_specjalne=preg_match('/[#@$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]/', $text);
+    if($ilosc_znakow<=7)
+    {
+        $prawidlowe = false;
+    }
+    if($wielkich_znakow_liczba==0)
+    {
+        $prawidlowe = false;
+    }
+    if($znaki_specjalne== 0)
+    {
+        $prawidlowe = false;
+    }
+    return $prawidlowe;
+}
+
 function NaglowekStrony($tytul_1_duzy,$tytul_1_maly,$tytul_ramki)
 {
     $naglowek ="";

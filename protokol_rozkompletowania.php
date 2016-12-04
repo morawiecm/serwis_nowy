@@ -113,9 +113,9 @@ elseif ($a=='zapisz_protokol')
     //dane z POST
     $protokol_nr=$_POST['protokol_nr'];
     $protokol_data =$_POST['protokol_data'];
-    $protokol_komisja_1=$_POST['protokol_komisja_1'];
-    $protokol_komisja_2=$_POST['protokol_komisja_2'];
-    $protokol_komisja_3=$_POST['protokol_komisja_3'];
+    $protokol_komisja_1=PobierzImieNazwisko($_POST['protokol_komisja_1']);
+    $protokol_komisja_2=PobierzImieNazwisko($_POST['protokol_komisja_2']);
+    $protokol_komisja_3=PobierzImieNazwisko($_POST['protokol_komisja_3']);
     $protokol_nazwa_glowna=$_POST['protokol_nazwa_glowna'];
     $protokol_wartosc_glowna=$_POST['protokol_wartosc_glowna'];
     $protokol_na_stanie_glowna=$_POST['protokol_na_stanie_glowna'];
@@ -153,7 +153,7 @@ elseif ($a=='zapisz_skladniki_roz')
     $jm=$_POST['jm'];
     $jednostka=$_POST['jednostka'];
     $jednostka_nazwa = PobierzNazweWydzialu($jednostka);
-    $id_protokolu=['id_protokolu'];
+    $id_protokolu=$_POST['id_protokolu'];
     $nr_protokolu = PobierzNumerProtokolu($id_protokolu);
 
     $zapisz_skladnik_rozkompletowania = mysqli_query($polaczenie,"INSERT INTO rozkompletowanie_skladniki (id_protokolu, nr_protokolu, nazwa_wykomplet_sprzetu, 

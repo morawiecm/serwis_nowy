@@ -1,126 +1,130 @@
 <?php
 include 'config.php';
-//db_connect();
-
+include 'funkcje/funkcje_ewidencja.php';
+include 'funkcje/funkcje_historia.php';
+include 'funkcje/funkcje_uzytkownicy.php';
 check_login();
-
 // dane uzytkownika z sesji
 $user_data = get_user_data();
 $uzytkownik_imie = $user_data['imie'];
 $uzytkownik_nazwisko = $user_data['nazwisko'];
 $uzytkownik_nazwa = $user_data['user_name'];
 $uzytkownik_id = $user_data['user_id'];
+$uzytkownik_wydzial = $user_data['wydzial'];
 $uzytkownik_sekcja = $user_data['sekcja'];
 $uzytkownik_uprawnienia = $user_data['specialne'];
 $użytkownik_imie_nazwisko = $uzytkownik_imie . " " . $uzytkownik_nazwisko;
+$data_pelana  = date("Y-m-d H:i:s");
+$data_skrocona = date("Y-m-d");
 //dane z POST
 
-if (isset($_REQUEST['a']))
-{
-$a = trim($_REQUEST['a']);
-}
-else{
-$a='';
-}
-if (isset($_REQUEST['id']))
-{
-$nrID = trim($_REQUEST['id']);
-}
 
-if(isset($_POST['dokument']))
+if(isset($_REQUEST['roz']))
 {
-$dokument=$_POST['dokument'];
+    $roz = trim($_REQUEST['roz']);
 }
 else
 {
-$dokument='';
+    $roz ='';
 }
 
-
 if ($uzytkownik_uprawnienia == 1) {
-$uprawienia = 'Administrator';
+    $uprawienia = 'Administrator';
 } else {
-$uprawienia = 'Użytkownik';
+    $uprawienia = 'Użytkownik';
 }
 
 //print_r($_POST);
-?>
 
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
-
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Serwis 2.0 | Strona Główna</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <!-- Bootstrap 3.3.5 -->
-    <link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <!-- Ionicons -->
-    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="./dist/css/AdminLTE.min.css">
-    <!-- AdminLTE Skins. Choose a skin from the css/skins
-         folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="./dist/css/skins/_all-skins.min.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="./plugins/iCheck/flat/blue.css">
-    <!-- Morris chart -->
-    <link rel="stylesheet" href="./plugins/morris/morris.css">
-    <!-- jvectormap -->
-    <link rel="stylesheet" href="./plugins/jvectormap/jquery-jvectormap-1.2.2.css">
-    <!-- Date Picker -->
-    <link rel="stylesheet" href="./plugins/datepicker/datepicker3.css">
-    <!-- Daterange picker -->
-    <link rel="stylesheet" href="./plugins/daterangepicker/daterangepicker-bs3.css">
-    <!-- bootstrap wysihtml5 - text editor -->
-    <link rel="stylesheet" href="./plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
-<?php
+include 'gora.php';
+include 'pasek.php';
 include 'menu.php';
-?>
-
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-
-
-    <!-- Main content -->
-    <section class="content">
-<?php
-
-/**
- * @author mariusz morawiec
- * @copyright 2012
- */
- 
 
 
 
+if($a=='zmien_haslo')
+{
+echo NaglowekStrony("Profil użytkownika","Hasło","Zmiana hasła użytkownika");
+    if (isset($_POST['przycisk_zmien_haslo'])) {
+        if (isset($_POST['stare_haslo']) && isset($_POST['nowe_haslo']) && isset($_POST['nowe_haslo2'])) {
+            //dane z POST oczyszczone
+            $stare_haslo = clear($_POST['stare_haslo']);
+            $nowe_haslo = clear($_POST['nowe_haslo']);
+            $nowe_haslo2 = clear($_POST['nowe_haslo2']);
 
+            if ($nowe_haslo == $nowe_haslo2) {
+                $spelnia_polityke = sprawdzHasloPolityka($nowe_haslo2);
+                if ($spelnia_polityke == true) {
+                    $stare_haslo = codepass($stare_haslo);
+                    $nowe_haslo = codepass($nowe_haslo);
+                    $nowe_haslo2 = codepass($nowe_haslo2);
+                } else {
+                    echo '<div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                        Hasło nie spełnia polityki..
+                  </div>';
+                }
+            }
+            if ($nowe_haslo == $nowe_haslo2 && $spelnia_polityke == true) {
+                $pobierz_daneUzytkownika = mysqli_query($polaczenie, "SELECT user_password FROM users WHERE user_id='$uzytkownik_id'") or die("Blad przy pobierz_daneUzytkownika" . mysqli_error($polaczenie));
+                if (mysqli_num_rows($pobierz_daneUzytkownika) == 1) {
+                    while ($haslo_baza = mysqli_fetch_array($pobierz_daneUzytkownika)) {
+                        $haslo = $haslo_baza['user_password'];
+                        if ($haslo == $stare_haslo) {
+                            $aktualna_data = date("Y-m-d");
+                            $zapiszNoweHaslo = mysqli_query($polaczenie, "UPDATE users SET user_password='$nowe_haslo2', data_zmiany_hasla='$aktualna_data' WHERE user_id='$uzytkownik_id'")
+                            or die("Bład przy zapiszNoweHaslo" . mysqli_error($polaczenie));
+                            echo '<div class="alert alert-success alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                                    Hasło zostsło zmienione!..<a href="index.php">POWRÓT</a> 
+                                     </div>';
+                            ?>
+                            <script>
+                                setTimeout(function () {
+                                    window.location.href = 'index.php'; // the redirect goes here
 
+                                }, 3000);
+                            </script><?php
+                        }
+                    }
+                } else {
+                    echo '<div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                        Blad nie znaleziono użytkownika o podanym id..
+                  </div>';
+                }
+            }
+        } else {
+            echo '<div class="alert alert-danger alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h4><i class="icon fa fa-ban"></i> Alert!</h4>
+                        Wszystkie pola muszą być wypełnione..
+                  </div>';
+        }
+    } else {
+        //var_dump($_POST);
+        echo "<p>Hasło musi spełniać następujace wymogi:</p>";
+        echo "<p>- Musi mieć min 8 znaków</p>";
+        echo "<p>- Musi posiadać jedną wielką literę</p>";
+        echo "<p>- Musi posiadać znak specjalny</p>";
+        echo "<p>- Musi posiadać conajmniej jedną cyfrę</p>";
+        echo "<p>- Nie może sie powtarzać</br></p>";
+        echo "<table class='table'><form name='edycja_hasla' method='post' action='profil.php?a=zmien_haslo'>";
+        echo "<tr><th>Podaj stare hasło:</th><td><input type='password' name='stare_haslo' class='form-control'></td></tr>";
+        echo "<tr><th>Podaj nowe hasło:</th><td><input type='password' name='nowe_haslo' class='form-control'></td></tr>";
+        echo "<tr><th>Powtórz nowe hasło:</th><td><input type='password' name='nowe_haslo2' class='form-control'></td></tr>";
+        echo "<tr><th colspan='2'><input type='submit' value='Zmien hasło' class='btn btn-danger form-control' name='przycisk_zmien_haslo'></th>";
+        echo "</form></table>";
+    }
 
+}
+else{
 
-// wyświetlamy początek prostej tabelki
- 
-// filtrujemy id oraz rzutujemy je na int
-$_GET['id'] = (int)clear($_GET['id']);
- 
-// pobieramy dane usera z podanego id
-$user_data = get_user_data($_GET['id']);
- 
- 
+echo NaglowekStrony("Profil użytkownika","Informacje","Dane użytkownika: informacje");
+
 // sprawdzamy czy znalazło użytkownika
 // jeśli nie to wyświetlamy komunikat
 // a jeśli tak to wyświetlamy wszystkie jego dane
@@ -129,8 +133,8 @@ if($user_data === false) {
     echo '<p>Niestety, taki użytkownik nie istnieje.</p>
         <p>[<a href="index.php">Powrót</a>]</p>';
 } else {
-    echo '<h2>Profil użytkownika</h2>
-        <p>Login: <b>'.$user_data['user_name'].'</b></p>
+    echo '<h2>Profil użytkownika</h2>';
+        /*
         <P>Typ konta:';
         if($user_data['specialne']!='1')
         {
@@ -139,65 +143,34 @@ if($user_data === false) {
         else{
             echo(' administrator');
         }
-        echo'</p>
-        <p>Imię i nazwsko:'.$user_data['imie'].' '.$user_data['nazwisko'].'</p>
-        <p>Email: '.$user_data['user_email'].'</p>
-        <p>Data rejestracji: '.date("d.m.Y, H:i", $user_data['user_regdate']).'</p>
-        <p>Data ostatniego logowania: '.(empty($user_data['user_website']) ? 'brak' : $user_data['user_website']).' IP: '.$user_data['ip_a'].'</p>
-        <p>Wydział: '.(empty($user_data['user_from']) ? 'brak' : $user_data['user_from']).'</p>
-        <p>Sekcja: '.(empty($user_data['sekcja']) ? 'brak' : $user_data['sekcja']).'</p>
-        <p><a href="edit.php" class="btn btn-success">Zmiana danych</a></p>';
-        
+        */
+        echo'<table class="table table-bordered">
+
+        <tr><th>Login:</th><td class="text-bold">'.$user_data['user_name'].'</td></tr>
+        <tr><th>Imię i nazwsko:</th><td>'.$użytkownik_imie_nazwisko.'</td></tr>
+        <tr><th>Email:</th><td> '.$user_data['user_email'].'</td></tr>
+        <tr><th>Data rejestracji:</th><td> '.date("d.m.Y, H:i", $user_data['user_regdate']).'</td></tr>
+        <tr><th>Data ostatniego logowania:</th><td> '.(empty($user_data['user_website']) ? 'brak' : $user_data['user_website']).' IP: '.$user_data['logowanie_ip'].'</td></tr>
+        <tr><th>Wydział:</th><td> '.(empty($user_data['wydzial']) ? 'brak' : $user_data['wydzial']).'</td></tr>
+        <tr><th>Sekcja:</th><td> '.(empty($user_data['sekcja']) ? 'brak' : $user_data['sekcja']).'</td></tr>
+        <tr><td colspan =2><a href="profil.php?a=zmien_haslo" class="btn btn-success form-control">Zmiana hasla</a></td></tr>';
+        echo "</table>";
+
+}
 }
 
 ?>
-    </section><!-- /.content -->
-</div><!-- /.content-wrapper -->
-<footer class="main-footer">
-    <div class="pull-right hidden-xs">
-        <b>Wersja Progamu</b> 2.0
-    </div>
-    <strong>Oprogramowanie stworzyl <a href="#">Mariusz Morawiec</a>.</strong> tel. 79 11614
-</footer>
-<?php include 'bok.php'; ?>
-</div><!-- ./wrapper -->
 
-<!-- jQuery 2.1.4 -->
-<script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
-<!-- jQuery UI 1.11.4 -->
-<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
-<script>
-    $.widget.bridge('uibutton', $.ui.button);
-</script>
-<!-- Bootstrap 3.3.5 -->
-<script src="./bootstrap/js/bootstrap.min.js"></script>
-<!-- Morris.js charts -->
-<script src="./plugins/raphael/raphael-min.js"></script>
-<script src="./plugins/morris/morris.min.js"></script>
-<!-- Sparkline -->
-<script src="./plugins/sparkline/jquery.sparkline.min.js"></script>
-<!-- jvectormap -->
-<script src="./plugins/jvectormap/jquery-jvectormap-1.2.2.min.js"></script>
-<script src="./plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-<!-- jQuery Knob Chart -->
-<script src="./plugins/knob/jquery.knob.js"></script>
-<!-- daterangepicker -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
-<script src="./plugins/daterangepicker/daterangepicker.js"></script>
-<!-- datepicker -->
-<script src="plugins/datepicker/bootstrap-datepicker.js"></script>
-<!-- Bootstrap WYSIHTML5 -->
-<script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-<!-- Slimscroll -->
-<script src="plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<!-- FastClick -->
-<script src="plugins/fastclick/fastclick.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/app.min.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<!--<script src="dist/js/pages/dashboard.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="dist/js/demo.js"></script>
-</body>
-</html>
+
+</div>
+<!-- /.box-body -->
+
+</div>
+<!-- /.box -->
+
+</section>
+<!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+
+<?php include'dol.php'; ?>
