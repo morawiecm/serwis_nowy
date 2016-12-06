@@ -588,8 +588,8 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo"<tr><td><a href='naklejka.php?a=srodek_trwaly&nr_inwentarzowy=$nr_inwent_naklejka&nazwa_srtw=$nazwa_naklejka' class='btn btn-danger form-control'>Naklejka</a></td></tr>";
                     echo "<tr><th class='text-bold text-center'>Magazyn:</th></tr>";
                     echo"<tr><td><a href='#' class='btn btn-info form-control'><span class='fa fa-truck'> Wyślij na Magazyn</span></a></td></tr>";
-                    echo"<tr><td><a href='#' class='btn btn-info form-control'>Wyślij na Magazyn</a></td></tr>";
-                    echo"<tr><td><a href='srodek_trwaly.php?a=edytuj&id=$nrID' class='btn bg-black form-control'>Edytuj</a></td></tr>";
+                    echo"<tr><td><a href='srodek_trwaly.php?a=dodaj&id=$nrID' class='btn btn-info form-control'>Utwórz nowy na podstawie</a></td></tr>";
+                    echo"<tr><td><a href='srodek_trwaly.php?a=edytuj&id=$nrID&nowy=tak' class='btn bg-black form-control'>Edytuj</a></td></tr>";
                     echo "</table>";
                     echo '</div>';
 

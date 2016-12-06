@@ -61,41 +61,87 @@ if ($a == 'dodaj') {
         echo "<tr><th colspan='2'><input type='submit' name='przycisk_zapis' value='Dodaj do ewidencji' class='btn btn-danger form-control'></th></tr>";
         echo "</form></table>";
     } else {
-        echo NaglowekStrony("Ewidencja ", "dodanie nowego składnika", "Dodanie nowego składnika do bazy na podstawie protokołu rozkompletowania");
-        $pobierz_dane_z_protokolu_rozkompletowania = mysqli_query($polaczenie, "SELECT nazwa_wykomplet_sprzetu,model_dodatkowy_opis,nr_seryjny,wartosc_wykomplet_sprzetu,jednostka_miary_wykomplet_sprzetu,
-                        jednostka_uzytkujaca,nr_protokolu,id_protokolu
-                        FROM rozkompletowanie_skladniki WHERE id = '$nrID'")
+        if(!isset($_REQUEST['nowy']))
+        {
+
+        echo NaglowekStrony("Ewidencja ", "dodanie nowego składnika", "Dodanie nowego składnika do bazy na podstawie innego składnika");
+        $pobierz_dane_z_bazy = mysqli_query($polaczenie, "SELECT nazwa_sprzetu,wartosc,uwagi,data_wprowadzenia,jed_miary,id_jednoski,rodzaj_ewidencyjny,zrodlo_finansowania
+                        FROM baza WHERE lp = '$nrID'")
         or die("Blad przy pobierz_dane_z_protokolu_rozkompletowania: " . mysqli_error($polaczenie));
-        if (mysqli_num_rows($pobierz_dane_z_protokolu_rozkompletowania) > 0) {
-            while ($dane_protokol = mysqli_fetch_array($pobierz_dane_z_protokolu_rozkompletowania)) {
-                $nazwa_sprzetu_rozkompletowanego = PobierzNazweDateSprzetuZRozkompletowania($dane_protokol['id_protokolu']);
-                $wartosc_format = number_format($dane_protokol['wartosc_wykomplet_sprzetu'], 2, '.', '');
-                $tresc_uwaga = "Wyceniono i przyjęto na stan: $dane_protokol[jednostka_uzytkujaca], na podstawie Protokołu rozkompletowania: $dane_protokol[nr_protokolu] z dnia $nazwa_sprzetu_rozkompletowanego[1].(Rozkompletowanie: $nazwa_sprzetu_rozkompletowanego[2] - $nazwa_sprzetu_rozkompletowanego[0])";
+        if (mysqli_num_rows($pobierz_dane_z_bazy) > 0) {
+            while ($dane_protokol = mysqli_fetch_array($pobierz_dane_z_bazy)) {
+                $wartosc_format = number_format($dane_protokol['wartosc'], 2, '.', '');
+                $tresc_uwaga =$dane_protokol['uwagi'];
+                $nazwa_jednostka = PobierzNazweWydzialu($dane_protokol['id_jednoski']);
 
 
                 echo "<table class='table table-bordered table-striped'><form action='srodek_trwaly.php?a=zapisz' method='post'>";
-                echo "<tr><th>Nazwa</th><td><input type='text' name='ewidencja_nazwa' class='form-control' value='$dane_protokol[nazwa_wykomplet_sprzetu] $dane_protokol[model_dodatkowy_opis]'></td></tr>";
+                echo "<tr><th>Nazwa</th><td><input type='text' name='ewidencja_nazwa' class='form-control' value='$dane_protokol[nazwa_sprzetu]'></td></tr>";
                 echo "<tr><th>Nr Ewidencyjny</th><td><input type='text' name='ewidencja_nr_ewidencyjny' class='form-control'></td></tr>";
-                echo "<tr><th>Nr Seryjny</th><td><input type='text' name='ewidencja_nr_seryjny' class='form-control' value='$dane_protokol[nr_seryjny]'></td></tr>";
+                echo "<tr><th>Nr Seryjny</th><td><input type='text' name='ewidencja_nr_seryjny' class='form-control' value=''></td></tr>";
                 echo "<tr><th>Wartość</th><td><input type='text' name='ewidencja_wartosc' class='form-control' value='$wartosc_format'></td></tr>";
-                echo "<tr><th>Jednostka miary</th><td><input type='text' name='ewidencja_jednostka_miary' class='form-control' value='$dane_protokol[jednostka_miary_wykomplet_sprzetu]'></td></tr>";
+                echo "<tr><th>Jednostka miary</th><td><input type='text' name='ewidencja_jednostka_miary' class='form-control' value='$dane_protokol[jed_miary]'></td></tr>";
                 echo "<tr><th>Jednostka Użytkująca</th><td><select name='ewidencja_jednostka_uzytkujaca' class='form-control'>";
-                echo PobierzJednostki($dane_protokol['jednostka_uzytkujaca']);
+                echo PobierzJednostki($nazwa_jednostka);
                 echo "</select></td></tr>";
                 echo "<tr><th>Rodzaj Ewidencji</th><td><select name='ewidencja_rodzaj_ewidencyjny' class='form-control'>";
-                echo PobierzRodzajEwidencji('Wybierz z listy');
+                echo PobierzRodzajEwidencji($dane_protokol['rodzaj_ewidencyjny']);
                 echo "</select></td></tr>";
                 echo "<tr><th>Źródło Finansowania</th><td><select name='ewidencja_zrodlo_finansowania' class='form-control'>";
-                echo PobierzZrodloFinasowania('Rozkompletowanie');
+                echo PobierzZrodloFinasowania($dane_protokol['zrodlo_finansowania']);
                 echo "</select></td></tr>";
-                echo "<tr><th>Data Przyjęcia</th><td><input type='text' name='ewidencja_data_przyjecia' class='form-control' value='$nazwa_sprzetu_rozkompletowanego[1]' id='datepicker'></td></tr>";
+                echo "<tr><th>Data Przyjęcia</th><td><input type='text' name='ewidencja_data_przyjecia' class='form-control' value='$dane_protokol[data_wprowadzenia]' id='datepicker'></td></tr>";
                 echo "<tr><th>Notatki/Uwagi</th><td><textarea name='ewidencja_uwagi' class='form-control'>$tresc_uwaga</textarea></td></tr>";
-                echo "<input type='hidden' name='rozkompletowanie' value='$nrID'>";
                 echo "<tr><th colspan='2'><input type='submit' name='przycisk_zapis' value='Dodaj do ewidencji' class='btn btn-danger form-control'></th></tr>";
                 echo "</form></table>";
             }
         }
+        }
+        else
+        {
+            echo NaglowekStrony("Ewidencja ", "Edycja składnika", "Edycja składnika");
+            if ($nrID != '') {
 
+                $pobierz_dane_ewidencyjne = mysqli_query($polaczenie, "SELECT nr_inwentarzowy, nazwa_sprzetu, nr_fabryczny, wartosc, jed_miary,
+                        id_jednoski, zrodlo_finansowania, rodzaj_ewidencyjny, data_wprowadzenia, uwagi, notatki,likwidacja,Podstawa,nr_dokmentu 
+                        FROM baza WHERE lp = '$nrID'")
+                or die("Bład przy pobierz_dane_ewidencyjne" . mysqli_error($polaczenie));
+                if (mysqli_num_rows($pobierz_dane_ewidencyjne) > 0) {
+                    while ($dane = mysqli_fetch_array($pobierz_dane_ewidencyjne)) {
+                        $pole_uwaga = stripslashes($dane['uwagi'] . "" . $dane['notatki']);
+                        echo "<table class='table table-bordered table-striped'><form action='srodek_trwaly.php?a=aktualizuj' method='post'>";
+                        echo "<tr><th>Nazwa</th><td><input type='text' name='ewidencja_nazwa' class='form-control' value='$dane[nazwa_sprzetu]'></td></tr>";
+                        echo "<tr><th>Nr Ewidencyjny</th><td><input type='text' name='ewidencja_nr_ewidencyjny' class='form-control' value='$dane[nr_inwentarzowy]'></td></tr>";
+                        echo "<tr><th>Nr Seryjny</th><td><input type='text' name='ewidencja_nr_seryjny' class='form-control' value='$dane[nr_fabryczny]'></td></tr>";
+                        echo "<tr><th>Wartość</th><td><input type='text' name='ewidencja_wartosc' class='form-control' value='$dane[wartosc]'></td></tr>";
+                        echo "<tr><th>Jednostka miary</th><td><input type='text' name='ewidencja_jednostka_miary' class='form-control' value='$dane[jed_miary]'></td></tr>";
+                        echo "<tr><th>Jednostka Użytkująca</th><td><select name='ewidencja_jednostka_uzytkujaca' class='form-control'>";
+                        echo PobierzJednostki($dane['id_jednoski']);
+                        echo "</select></td></tr>";
+                        echo "<tr><th>Rodzaj Ewidencji</th><td><select name='ewidencja_rodzaj_ewidencyjny' class='form-control'>";
+                        echo PobierzRodzajEwidencji($dane['rodzaj_ewidencyjny']);
+                        echo "</select></td></tr>";
+                        echo "<tr><th>Źródło Finansowania</th><td><select name='ewidencja_zrodlo_finanosowania' class='form-control'>";
+                        echo PobierzZrodloFinasowania($dane['zrodlo_finansowania']);
+                        echo "</select></td></tr>";
+                        echo "<tr><th>Data Przyjęcia</th><td><input type='text' name='ewidencja_data_przyjecia' class='form-control' id='datepicker2' value='$dane[data_wprowadzenia]'></td></tr>";
+                        echo "<tr><th colspan='2' class='text-center'>LIKWIDACJA INFORMACJE (aby przywrocić, należy wyczyścić zawartość poniższych pól</th></tr>";
+
+                        echo "<tr><th>Data likwidacji</th><td><input type='text' name='ewidencja_data_likwidacji' class='form-control' id='datepicker' value='$dane[likwidacja]'></td></tr>";
+                        echo "<tr><th>Podstawa likwidacji</th><td><input type='text' name='ewidencja_jednostka_miary' class='form-control' value='$dane[Podstawa]'></td></tr>";
+                        echo "<tr><th>Nr dokumentu</th><td><input type='text' name='ewidencja_jednostka_miary' class='form-control' value='$dane[nr_dokumentu]'></td></tr>";
+                        echo "<tr><th>Uwagi/Notatki</th><td><textarea name='ewidencja_uwagi' class='form-control' rows='8'>$pole_uwaga</textarea></td></tr>";
+                        echo "<tr><th colspan='2'><input type='hidden' value='$nrID' name='ewidencja_id_st'><input type='submit' name='przycisk_aktualizuj' value='Aktualizuj wpis w ewidencji' class='btn btn-warning form-control'></th></tr>";
+                        echo "</form></table>";
+                    }
+                } else {
+                    echo Przekierowanie("Błedny nr ID (ewidencyjny), spróbuj ponownie", "index.php");
+                }
+
+            } else {
+                echo Przekierowanie("Brak nr ID ewidycyjnego, spróbuj ponownie", "index.php");
+            }
+        }
     }
 
 } elseif ($a == 'zapisz') {
