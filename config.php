@@ -38,7 +38,7 @@ function sprawdzHasloPolityka($text)
     $ilosc_znakow= mb_strlen($text, 'UTF-8');
     $wielkich_znakow=similar_text($text,strtolower($text));
     $wielkich_znakow_liczba=$ilosc_znakow-$wielkich_znakow;
-    $znaki_specjalne=preg_match('/[#@$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]/', $text);
+    $znaki_specjalne=preg_match('/[!#@$%^&*()+=\-\[\]\';,.\/{}|":<>?~\\\\]/', $text);
     if($ilosc_znakow<=7)
     {
         $prawidlowe = false;
