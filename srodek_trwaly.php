@@ -157,6 +157,7 @@ if ($a == 'dodaj') {
         $st_ewidencja_nazwa = trim($_POST['ewidencja_nazwa']);
         $st_ewidencja_nr_seryjny = trim($_POST['ewidencja_nr_seryjny']);
         $st_ewidencja_wartosc = trim($_POST['ewidencja_wartosc']);
+        $st_ewidencja_wartosc = str_replace(",",".",$st_ewidencja_wartosc);
         $st_ewidencja_jednostka_miary = trim($_POST['ewidencja_jednostka_miary']);
         $st_ewidencja_jednostka_uzytkujaca = trim($_POST['ewidencja_jednostka_uzytkujaca']);
         $st_ewidencja_rodzaj_ewidencyjny = trim($_POST['ewidencja_rodzaj_ewidencyjny']);
@@ -261,6 +262,7 @@ if ($a == 'dodaj') {
         $st_ewidencja_nr_ewidencyjny = trim($_POST['ewidencja_nr_ewidencyjny']);
         $st_ewidencja_nr_seryjny = trim($_POST['ewidencja_nr_seryjny']);
         $st_ewidencja_wartosc = trim($_POST['ewidencja_wartosc']);
+        $st_ewidencja_wartosc = str_replace(",",".",$st_ewidencja_wartosc);
         $st_ewidencja_jednostka_miary = trim($_POST['ewidencja_jednostka_miary']);
         $st_ewidencja_jednostka_uzytkujaca = trim($_POST['ewidencja_jednostka_uzytkujaca']);
         $st_ewidencja_rodzaj_ewidencyjny = trim($_POST['ewidencja_rodzaj_ewidencyjny']);
