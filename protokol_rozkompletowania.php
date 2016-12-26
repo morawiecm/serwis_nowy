@@ -296,15 +296,15 @@ else
     echo NaglowekStrony("Protokół rozkompletowania","Lista dokumentów","Lista dokumentów");
 
 
-    $pobierz_rozkompletowania = mysqli_query($polaczenie,"SELECT id,nr_protokolu,data_protokolu,akceptacja FROM rozkompletowanie ORDER BY id ASC ")
+    $pobierz_rozkompletowania = mysqli_query($polaczenie,"SELECT id,nr_protokolu,data_protokolu,akceptacja,nr_ewidencyjny,nazwa_srodka_trwalego FROM rozkompletowanie ORDER BY id ASC ")
         or die("Blad przy pobierz_rozkompletowania: ".mysqli_error($polaczenie));
     echo "<table class='table table-bordered' id='example1'>";
-    echo "<thead><tr><th>Nr protokołu</th><th>Data protokolu</th><th>Akcja</th></tr></thead>";
+    echo "<thead><tr><th>Nr protokołu</th><th>Data protokolu</th><th>Nr ewidencyjny</th><th>Akcja</th><th>Nazwa</th></tr></thead>";
     if(mysqli_num_rows($pobierz_rozkompletowania)>0)
     {
         while ($protokol=mysqli_fetch_array($pobierz_rozkompletowania))
         {
-            echo "<tr><td>$protokol[nr_protokolu]</td><td>$protokol[data_protokolu]</td><td><a href='protokol_rozkompletowania.php?a=edycja&id=$protokol[id]' class='btn-xs btn-info'>Edycja</a><a href='fpdf17/generuj_rozkompletowanie.php?a=generuj&id=$protokol[id]' class='btn-xs btn-success'>PDF</a></td></tr>";
+            echo "<tr><td>$protokol[nr_protokolu]</td><td>$protokol[data_protokolu]</td><td>$protokol[nr_ewidencyjny]</td><td>$protokol[nazwa_srodka_trwalego]</td><td><a href='protokol_rozkompletowania.php?a=edycja&id=$protokol[id]' class='btn-xs btn-info'>Edycja</a><a href='fpdf17/generuj_rozkompletowanie.php?a=generuj&id=$protokol[id]' class='btn-xs btn-success'>PDF</a></td></tr>";
         }
     }
     echo "</table>";
