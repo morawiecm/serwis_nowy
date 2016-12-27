@@ -60,8 +60,8 @@ else
 
     echo "<table class='table table-bordered'><form method='post' action='liczniki_stan.php?a=aktualizuj'>";
     echo "<tr><th>Asygnaty:</th><td><input type='number' name='licznik_asygnaty' class='form-control' value='$licznik_tab[2]'></td></tr>";
-    echo "<tr><th>Protokół Stanu Techniczego:</th><td><input type='number' name='licznik_pst' class='form-control' value='$licznik_tab[4]'></td></tr>";
-    echo "<tr><th>Protokół Rozkompletowania:</th><td><input type='number' name='licznik_pr' class='form-control' value='$licznik_tab[3]'></td></tr>";
+    echo "<tr><th>Protokół Stanu Techniczego:</th><td><input type='number' name='licznik_pst' class='form-control' value='$licznik_tab[3]'></td></tr>";
+    echo "<tr><th>Protokół Rozkompletowania:</th><td><input type='number' name='licznik_pr' class='form-control' value='$licznik_tab[4]'></td></tr>";
     echo "<tr><td colspan='2'><input type='submit' value='Aktualizuj liczniki' class='btn btn-danger form-control'></td></tr>";
     echo "</form></table>";
 }

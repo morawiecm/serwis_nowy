@@ -191,6 +191,15 @@ elseif ($a=='akceptacja')
         Przekierowanie("Błedny nr ID, spróbuj jeszcze raz","asygnaty.php");
     }
 }
+elseif ($a=='usun')
+{
+    echo NaglowekStrony("Asygnaty","Usuniecie","Usuwanie asygnaty z systemu");
+
+    $usun_asygnate= mysqli_query($polaczenie,"DELETE FROM asygnata WHERE id ='$nrID'") or die(mysqli_error($polaczenie));
+
+    Przekierowanie("Usunięto asygnate z systemu.","asygnaty.php");
+}
+
 else
 {
     echo NaglowekStrony("Asygnaty","Lista","Lista asygnat");
