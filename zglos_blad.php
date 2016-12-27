@@ -65,7 +65,7 @@ include 'menu.php';
                 <?php
                 if($a=='pokaz_zgloszenia')
                 {
-                    if($uzytkownik_uprawnienia==1)
+                    if($uzytkownik_uprawnienia!=3)
                     {
                     $zapytaniePobierzZgloszenia="
                     SELECT bledy.id,
@@ -118,7 +118,7 @@ include 'menu.php';
                 }
                 elseif ($a=='pokaz_zgloszenie')
                 {
-                    if($uzytkownik_uprawnienia==1 && $nrID!='')
+                    if($nrID!='')
                     {
                         $zapytaniePobierzZgloszenia="
                     SELECT bledy.id,
@@ -180,7 +180,7 @@ include 'menu.php';
                 }
                 elseif ($a=='pokaz_zgloszenie_opis')
                 {
-                    if($uzytkownik_uprawnienia==1 && $nrID!='')
+                    if($nrID!='')
                     {
                         $zapytaniePobierzZgloszenia="
                     SELECT bledy.id,
@@ -288,7 +288,7 @@ include 'menu.php';
 
                 elseif ($a=='zapisz_odpowiedz')
                 {
-                    if($uzytkownik_uprawnienia==1)
+                    if($uzytkownik_uprawnienia!=3)
                     {
                         if(isset($_POST['przycisk_dodaj_odpowiedz']))
                         {
@@ -314,7 +314,7 @@ include 'menu.php';
 
                 elseif ($a=='zakoncz_zlecenie')
                 {
-                    if($uzytkownik_uprawnienia==1 && $nrID!='')
+                    if($nrID!='')
                     {
 
                             $zamknij_zlecenie=mysqli_query($polaczenie,"UPDATE bledy SET zakonczone='1', data_zakonczenia='$data_aktualna' WHERE id='$nrID'")
