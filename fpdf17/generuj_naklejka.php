@@ -25,6 +25,7 @@ if($a=='naklejka')
     $podziel1=substr($tekst,0,26);
     $podziel2=substr($tekst,26,26);
     $podziel3=substr($tekst,52,26);
+    ob_start();
     include('code39.php');
     $pdf = new PDF_Code39();
     $pdf->AddPage('l',array(50,25));
@@ -47,6 +48,7 @@ if($a=='naklejka')
     $pdf->Text(5.4,21,$podziel3);
     $pdf->Close();
     $pdf->Output();
+    ob_end_flush();
 }
 
 ?>
