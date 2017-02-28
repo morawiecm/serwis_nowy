@@ -2,7 +2,7 @@
     <div class="pull-right hidden-xs">
         <b>Wersja Progamu</b> 2.0  <a href="zglos_blad.php">Zgłoś bład</a>
     </div>
-    <strong>Oprogramowanie stworzył:<a href="#">Mariusz Morawiec</a>.</strong> tel 79 11614
+    <strong>Oprogramowanie stworzył:<a href="mailto:mariusz@morawiec.org?subject=Kontakt%20Serwis.KWP%202.0">Mariusz Morawiec</a>.</strong>
 </footer>
 
 <!-- Control Sidebar -->

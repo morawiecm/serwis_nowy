@@ -1,6 +1,7 @@
 <?php
 include 'config.php';
 include './funkcje/funkcje_index.php';
+include './funkcje/funkcje_ewidencja.php';
 
 
 
@@ -585,7 +586,8 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo"<tr><td><a href='#' class='btn btn-warning form-control'>Skompletowania</a></td></tr>";
                     echo "<tr><th class='text-bold text-center'>Utwórz Dokument:</th></tr>";
                     echo"<tr><td><a href='asygnata_koszyk.php?a=dodaj_do_koszyka&id=$nrID' class='btn btn-success form-control'>Asygnata</a></td></tr>";
-                    echo"<tr><td><a href='naklejka.php?a=srodek_trwaly&nr_inwentarzowy=$nr_inwent_naklejka&nazwa_srtw=$nazwa_naklejka' class='btn btn-danger form-control'>Naklejka</a></td></tr>";
+                    $nr_naklejka=PobierzNrInwentarzowyNaklejka($nrID);
+                    echo"<tr><td><a href='naklejka.php?a=srodek_trwaly&nr_inwentarzowy=$nr_naklejka&nazwa_srtw=$nazwa_naklejka' class='btn btn-danger form-control'>Naklejka</a></td></tr>";
                     echo "<tr><th class='text-bold text-center'>Magazyn:</th></tr>";
                     echo"<tr><td><a href='#' class='btn btn-info form-control'><span class='fa fa-truck'> Wyślij na Magazyn</span></a></td></tr>";
                     echo"<tr><td><a href='srodek_trwaly.php?a=dodaj&id=$nrID' class='btn btn-info form-control'>Utwórz nowy na podstawie</a></td></tr>";
@@ -606,8 +608,9 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     echo"<tr><td><a href='protokol_rozkompletowania.php?a=dodaj&roz=$nrID' class='btn btn-primary form-control'>Rozkompletowania</a></td></tr>";
                     //echo"<tr><td><a href='#' class='btn btn-warning form-control'>Skompletowania</a></td></tr>";
                     echo "<tr><th class='text-bold text-center'>Zespół ewidencji:</th></tr>";
+                    $nr_naklejka=PobierzNrInwentarzowyNaklejka($nrID);
                     //echo"<tr><td><a href='asygnata_koszyk.php?a=dodaj_do_koszyka&id=$nrID' class='btn btn-success form-control'>Asygnata</a></td></tr>";
-                    echo"<tr><td><a href='naklejka.php?a=srodek_trwaly&nr_inwentarzowy=$nr_inwent_naklejka&nazwa_srtw=$nazwa_naklejka' class='btn btn-danger form-control'>Naklejka</a></td></tr>";
+                    echo"<tr><td><a href='naklejka.php?a=srodek_trwaly&nr_inwentarzowy=$nr_naklejka&nazwa_srtw=$nazwa_naklejka' class='btn btn-danger form-control'>Naklejka</a></td></tr>";
                     echo"<tr><td><a href='#' class='btn btn-info form-control'><span class='fa fa-truck'> Wyślij na Magazyn - nieaktywne</span></a></td></tr>";
                     echo "</table>";
                     echo '</div>';
@@ -775,7 +778,7 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                 <div class="box-body">
             <table class="table table-striped">
             <tr><th>Data</th><th>Opis</th></tr>';
-            $pobierz_listeZmian=mysqli_query($polaczenie,"SELECT data, opis FROM lista_zmian")or die("Blad przy pobierz_listeZmian".mysqli_error($polaczenie));
+            $pobierz_listeZmian=mysqli_query($polaczenie,"SELECT data, opis FROM lista_zmian ORDER BY id DESC") or die("Blad przy pobierz_listeZmian".mysqli_error($polaczenie));
             if(mysqli_num_rows($pobierz_listeZmian))
             {
                 while ($listaZmian=mysqli_fetch_array($pobierz_listeZmian)){

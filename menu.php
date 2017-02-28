@@ -44,6 +44,7 @@
                     <i class="glyphicon glyphicon-shopping-cart"></i><span>Koszyk PST</span>
                 </a>
             </li>
+                <li><a href="zglos_blad.php?a=pokaz_zgloszenia"><i class="glyphicon glyphicon-wrench"></i> <span>Zgłoszenia</span></a></li>
 
 
 

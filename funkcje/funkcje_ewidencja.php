@@ -73,6 +73,44 @@ function PobierzSposobLikwidacji($wartosc)
     return $lista_rozwijana;
 }
 
+function PobierzNrInwentarzowyNaklejka($id_rekordu)
+{
+    $polaczenie = polaczenie_z_baza();
+
+    $nr_inw1='';
+    $nr_inw2='';
+    $nr_inw3='';
+    $numer='';
+
+    $pobierz_nr_inwentarzowe = mysqli_query($polaczenie,"SELECT nr_inwentarzowy,nr_inwentarzowy_1,nr_inwentarzowy_2 FROM baza WHERE lp = '$id_rekordu'")
+        or die("Blad przy pobierz_nr_inwentarzowe".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_nr_inwentarzowe)>0)
+    {
+        while ($nr_inwent = mysqli_fetch_array($pobierz_nr_inwentarzowe))
+        {
+            $nr_inw1=$nr_inwent['nr_inwentarzowy'];
+            $nr_inw2=$nr_inwent['nr_inwentarzowy_1'];
+            $nr_inw3=$nr_inwent['nr_inwentarzowy_2'];
+        }
+    }
+    if($nr_inw1!='')
+    {
+        $numer = $nr_inw1;
+    }
+    else
+    {
+        if($nr_inw3!='')
+        {
+            $numer = $nr_inw3;
+        }
+        else
+        {
+            $numer= substr($nr_inw2,0,1)."-".substr($nr_inw2,1,3)."-".substr($nr_inw2,4);
+        }
+    }
+    return $numer;
+}
+
 /** Funkcja tworzaca liste rozwijaną (tabela slownik_rodzaj_ewidencji)
  *  z możliością przeciążenia wartości
  * - wartośc podana jako parametr będzie na 1 miescu  listy rozwijanej
