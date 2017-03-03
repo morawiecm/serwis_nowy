@@ -476,7 +476,16 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     //suma licznikow spis + raport
                     $liczniki_spis_raport = $licznik_spis + $licznik_raporty;
                     //historia
-                    $wyszukaj_historia = mysqli_query($polaczenie, "SELECT * FROM historia WHERE nr_inwentarzowy='$dane[1]' OR nr_inwentarzowy='$dane[2]'") or die("blad przy wyszukaj_historia" . mysqli_error($polaczenie));
+                    if($dane[1]=='')
+                    {
+                        $nr_in=$dane[2];
+                    }
+                    else
+                    {
+                        $nr_in=$dane[1];
+                    }
+
+                    $wyszukaj_historia = mysqli_query($polaczenie, "SELECT * FROM historia WHERE nr_inwentarzowy='$nr_in' or id_srodka_trwalego ='$dane[0]'") or die("blad przy wyszukaj_historia" . mysqli_error($polaczenie));
                     $licznik_wyszukajHistoria = mysqli_num_rows($wyszukaj_historia);
                     // materialy ekspoloatacyjne - drukarki
                     $wyszukaj_wymiane_materialow = mysqli_query($polaczenie, "SELECT * FROM historia WHERE nr_inwentarzowy='$dane[1]' AND kod='6'") or die(mysqli_error($polaczenie));
@@ -558,6 +567,8 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                     // KONIEC - DANA BAZA INVEO
 
                     // SKŁADNIKI INVEO
+                    if(isset($id_inveo))
+                    {
 
                     $pobierzDaneOskladniki_inveo = mysqli_query($polaczenie, "SELECT id, STS_LP, STS_OPIS FROM `inveo_skladniki` WHERE STS_ST_ID='$id_inveo'")
                     or die("blad przy pobierzDaneSkladnik_inveo" . mysqli_error($polaczenie));
@@ -567,11 +578,13 @@ LIKE '$numer_inwent%'") or die("Blad przy wyszukaj_uwagi" . mysqli_error($polacz
                         while ($skladnikiInveo = mysqli_fetch_array($pobierzDaneOskladniki_inveo)) {
                             echo "<tr><td>$skladnikiInveo[STS_LP]</td><td colspan='2'>$skladnikiInveo[STS_OPIS]</td><td>
                             <a class='btn-sm btn-info' href='naklejka.php?a=skladnik_inveo&id=$skladnikiInveo[id]&nr_inwentarzowy=$nr_inwent_naklejka'>NAKLEJKA</a> 
-                            <a class='btn-sm bg-purple'>ROZKOMPLETOWANIE</a>
+                            <a class='btn-sm bg-purple' href='protokol_rozkompletowania.php?a=dodaj&roz=$nrID&skladnik_inveo=$skladnikiInveo[id]'>ROZKOMPLETOWANIE</a>
                             <a class='btn-sm btn-danger'>USUŃ</a>
                             </td></tr>";
                         }
                     }
+                    }
+
                     echo "</table>";
 
                     // KONIEC - SKŁADNIKI INVEO

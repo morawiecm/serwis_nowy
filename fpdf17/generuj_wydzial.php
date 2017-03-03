@@ -77,10 +77,11 @@ $wartosc_format =0.00;
                 $nr_inwentarzowy_2 = iconv('utf-8','windows-1250',$skladniki_asygnaty['nr_inwentarzowy_2']);
                 $wartosc = $skladniki_asygnaty['wartosc'];
                 $wartosc= number_format($wartosc,2,'.','');
-                $wartosc_format  = number_format($skladniki_asygnaty['wartosc'],'2','.',' ');
+                $wartosc_format  = number_format($skladniki_asygnaty['wartosc'],'2','.',' ')." z³";
                 $razem += $wartosc;
+                $nr_inwentarzowy_1_format = FormatujNumerInwentarzowy2($nr_inwentarzowy_1);
 
-            $pdf->Row(array($lp,$nazwa_sprzetu,$nr_fabryczny,$nr_inwentarzowy,$nr_inwentarzowy_1,$nr_inwentarzowy_2,$wartosc_format));
+            $pdf->Row(array($lp,$nazwa_sprzetu,$nr_fabryczny,$nr_inwentarzowy,$nr_inwentarzowy_1_format,$nr_inwentarzowy_2,$wartosc_format));
             }
 
 

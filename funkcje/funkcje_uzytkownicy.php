@@ -124,10 +124,31 @@ function PobierzImieNazwisko($id_uzytkownika)
     return $imie_nazwisko;
 }
 
+function PobierzImieNazwiskoID($id_uzytkownika)
+{
+    $polaczenie= polaczenie_z_baza();
+    $imie_nazwisko_id='';
+    $pobierz_imie_i_nazwisko_id=mysqli_query($polaczenie,"SELECT imie, nazwisko FROM users WHERE user_id='$id_uzytkownika'")
+    or die("Bład przy pobierz_imie_i_nazwisko".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_imie_i_nazwisko_id)>0)
+    {
+        while ($dane=mysqli_fetch_array($pobierz_imie_i_nazwisko_id))
+        {
+            $imie_nazwisko_id ="<option value='".$id_uzytkownika."' selected='selected'/>".$dane['nazwisko']." ".$dane['imie']."</option>";
+        }
+    }
+    else
+    {
+        $imie_nazwisko_id="Bład pobierania danych uzytkownika!";
+    }
+    return $imie_nazwisko_id;
+}
+/*
 function PobierzUzytkownikow()
 {
     $polaczenie= polaczenie_z_baza();
     $id_imie_nazwisko='';
+
     $pobierz_imie_i_nazwisko=mysqli_query($polaczenie,"SELECT user_id, imie, nazwisko FROM users WHERE aktywny='0' ORDER BY nazwisko ASC")
     or die("Bład przy pobierz_imie_i_nazwisko".mysqli_error($polaczenie));
     if(mysqli_num_rows($pobierz_imie_i_nazwisko)>0)
@@ -143,7 +164,55 @@ function PobierzUzytkownikow()
     }
     return $id_imie_nazwisko;
 }
-
+*/
+function PobierzUzytkownikow($id_uzytkownika=0)
+{
+    $polaczenie= polaczenie_z_baza();
+    $id_imie_nazwisko='';
+    if($id_uzytkownika!='')
+    {
+        $id_imie_nazwisko=PobierzImieNazwiskoID($id_uzytkownika);
+    }
+    $pobierz_imie_i_nazwisko=mysqli_query($polaczenie,"SELECT user_id, imie, nazwisko FROM users WHERE aktywny='0' ORDER BY nazwisko ASC")
+    or die("Bład przy pobierz_imie_i_nazwisko".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_imie_i_nazwisko)>0)
+    {
+        while ($dane=mysqli_fetch_array($pobierz_imie_i_nazwisko))
+        {
+            $id_imie_nazwisko .="<option value='".$dane['user_id']."'>".$dane['nazwisko']." ".$dane['imie']."</option>";
+        }
+    }
+    else
+    {
+        $id_imie_nazwisko="Bład pobierania danych uzytkownika!";
+    }
+    return $id_imie_nazwisko;
+}
+/*
+function PobierzUzytkownikow($id_uzytkownika)
+{
+    $polaczenie= polaczenie_z_baza();
+    $id_imie_nazwisko='';
+    if($id_uzytkownika!='')
+    {
+        $id_imie_nazwisko=PobierzImieNazwiskoID($id_uzytkownika);
+    }
+    $pobierz_imie_i_nazwisko=mysqli_query($polaczenie,"SELECT user_id, imie, nazwisko FROM users WHERE aktywny='0' ORDER BY nazwisko ASC")
+    or die("Bład przy pobierz_imie_i_nazwisko".mysqli_error($polaczenie));
+    if(mysqli_num_rows($pobierz_imie_i_nazwisko)>0)
+    {
+        while ($dane=mysqli_fetch_array($pobierz_imie_i_nazwisko))
+        {
+            $id_imie_nazwisko .="<option value='".$dane['user_id']."'>".$dane['nazwisko']." ".$dane['imie']."</option>";
+        }
+    }
+    else
+    {
+        $id_imie_nazwisko="Bład pobierania danych uzytkownika!";
+    }
+    return $id_imie_nazwisko;
+}
+*/
 
 function PobierzKierownikow()
 {

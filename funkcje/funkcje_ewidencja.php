@@ -215,6 +215,51 @@ function PobierzJednostki($wartosc)
     return $lista;
 }
 
+function PobierzJednostkiNazwa($wartosc)
+{
+    $nazwa_jednostki = $wartosc;
+    $nazwa_jednostki2 = $wartosc;
+    $polaczenie = polaczenie_z_baza();
+    $lista = '';
+
+    if ($nazwa_jednostki != '') {
+        $pobierz_jednostke = mysqli_query($polaczenie, "SELECT nazwa, id FROM jednostki WHERE nazwa LIKE '$wartosc' ORDER BY nazwa ASC")
+        or die("Blad przy pobierz_jednsotke" . mysqli_error($polaczenie));
+        if (mysqli_num_rows($pobierz_jednostke) > 0) {
+            while ($jednostka = mysqli_fetch_array($pobierz_jednostke)) {
+                $nazwa_jednostki .= "<option selected='selected'>$jednostka[nazwa]</option>";
+                $lista .= $nazwa_jednostki;
+            }
+        } elseif (mysqli_num_rows($pobierz_jednostke) == 0) {
+            $pobierz_jednostke2 = mysqli_query($polaczenie, "SELECT nazwa, id FROM jednostki WHERE id LIKE '$wartosc' ORDER BY nazwa ASC")
+            or die("Blad przy pobierz_jednsotke" . mysqli_error($polaczenie));
+            if (mysqli_num_rows($pobierz_jednostke2) > 0) {
+                while ($jednostka2 = mysqli_fetch_array($pobierz_jednostke2)) {
+                    $nazwa_jednostki2 .= "<option selected='selected'>$jednostka2[nazwa]</option>";
+                    $lista .= $nazwa_jednostki2;
+                }
+            }
+        } else {
+            $nazwa_jednostki .= "<option value='$wartosc'>Brak jednostki lub została usunięta o kodzie : $wartosc</option>";
+            $lista .= $nazwa_jednostki;
+        }
+    }
+
+
+    $pobierz_jednostki = mysqli_query($polaczenie, "SELECT nazwa, id FROM jednostki WHERE aktywny = '0' ORDER BY nazwa ASC")
+    or die("Blad przy pobierz_jednsotke" . mysqli_error($polaczenie));
+    if (mysqli_num_rows($pobierz_jednostki) > 0) {
+        while ($jednostka = mysqli_fetch_array($pobierz_jednostki)) {
+            $lista .= "<option>$jednostka[nazwa]</option>";
+        }
+    } else {
+        $lista .= "<option value='$wartosc'>Brak dodanych jednostek w bazie dodaj w słowniku</option>";
+    }
+
+
+    return $lista;
+}
+
 function PobierzKategoriePST($wartosc)
 {
     $nazwa_jednostki=$wartosc;
@@ -591,4 +636,18 @@ function AktualizujRozkompletowanieSkladnik($id_rekordu_rozkompletowanie,$st_ewi
     $polaczenie = polaczenie_z_baza();
     $dodaj_numer_st = mysqli_query($polaczenie,"UPDATE rozkompletowanie_skladniki SET  nr_inwentarzowy_nowy = '$st_ewidencja_nr_ewidencyjny' WHERE id='$id_rekordu_rozkompletowanie'")
         or die("Blad przy dodaj_numer_st".mysqli_error($polaczenie));
+}
+
+function FormatujNumerInwentarzowy2($numer_inwentarzowy)
+{
+    $nr_inwentarzowy = $numer_inwentarzowy;
+    if($nr_inwentarzowy=='')
+    {
+        $nr_inwentarzowy='';
+    }
+    else
+    {
+        $nr_inwentarzowy= substr($nr_inwentarzowy,0,1)."-".substr($nr_inwentarzowy,1,3)."-".substr($nr_inwentarzowy,4,strlen($nr_inwentarzowy));
+    }
+    return $nr_inwentarzowy;
 }

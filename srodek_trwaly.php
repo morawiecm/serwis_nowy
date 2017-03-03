@@ -179,6 +179,12 @@ if ($a == 'dodaj') {
         //stwórz zapis w histori
         Historia("$st_dodane_id", 7, "$st_ewidencja_nazwa", "$data_aktualna_pelna", "$użytkownik_imie_nazwisko", "", "", "", "$st_ewidencja_nr_ewidencyjny", "", "$uzytkownik_wydzial - $uzytkownik_sekcja");
 
+        //wrzuc do koszyka asygnat
+
+        $id_wydzialu_asygnata = $st_ewidencja_jednostka_uzytkujaca;
+        $dodaj_do_koszyka_st = mysqli_query($polaczenie, "INSERT INTO asygnata_koszyk (id_lp, id_wydzialu, data_dodania, kto_dodal) VALUES 
+                        ('$st_dodane_id','$id_wydzialu_asygnata','$data_aktualna_pelna','$użytkownik_imie_nazwisko')");
+
         //po dodaniu przekieruj do drukowania naklejki
         Przekierowanie("Dodano pomyślnie: $st_ewidencja_nazwa o numerze_ewidencyjnym $st_ewidencja_nr_ewidencyjny. Zostaniesz przekierowany do naklejek", "naklejka.php");
     } else {

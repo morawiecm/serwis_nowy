@@ -14,6 +14,7 @@ $uzytkownik_wydzial = $user_data['wydzial'];
 $uzytkownik_sekcja = $user_data['sekcja'];
 $uzytkownik_uprawnienia = $user_data['specialne'];
 $użytkownik_imie_nazwisko = $uzytkownik_imie . " " . $uzytkownik_nazwisko;
+
 $data_pelana  = date("Y-m-d H:i:s");
 $data_skrocona = date("Y-m-d");
 //dane z POST
@@ -46,6 +47,16 @@ if($a=='dodaj')
 {
     echo NaglowekStrony("Protokół rozkompletowania","Tworzenie dokumentu","Tworzenie protokołu rozkompletowania");
     echo "<table class='table table-bordered'><form method='post' action='protokol_rozkompletowania.php?a=zapisz_protokol'>";
+        if(isset($_REQUEST['skladnik_inveo']))
+        {
+            $skladnik_rozkompletowania_temp = $_REQUEST['skladnik_inveo'];
+        }
+        else
+        {
+            $skladnik_rozkompletowania_temp = 0;
+        }
+        $_SESSION['skladnik_inveo_id'] = $skladnik_rozkompletowania_temp;
+
 
         if($nrID=='') {
 
@@ -61,7 +72,7 @@ if($a=='dodaj')
                 echo "<tr><th>Data protokolu</th><td><input type='text' name='protokol_data' class='form-control' id = 'datepicker' value='$data_skrocona'></td></tr>";
                 echo "<tr><th colspan='2' class='text-center text-bold'>KOMISJA</th></tr>";
                 echo "<tr><th>Przewodniczący</th><td><select name='protokol_komisja_1' class='form-control'>";
-                echo PobierzUzytkownikow();
+                echo PobierzUzytkownikow($uzytkownik_id);
                 echo "</select></td></tr>";
                 echo "<tr><th>Komisja 1:</th><td><select name='protokol_komisja_2' class='form-control'>";
                 echo PobierzUzytkownikow();
@@ -72,7 +83,9 @@ if($a=='dodaj')
                 echo "<tr><th colspan='2' class='text-center text-bold'>ROZKOMPLETOWANIE SPRZĘT:($dane_sprzetu[lp])$dane_sprzetu[nr_inwentarzowy]</th></tr>";
                 echo "<tr><th>Nazwa sprzętu:</th><td><input type='text' name='protokol_nazwa_glowna' value='$dane_sprzetu[nazwa_sprzetu]' class='form-control'></td></tr>";
                 echo "<tr><th>Wartosc sprzętu</th><td><input type='text' name='protokol_wartosc_glowna' value='$dane_sprzetu[wartosc]' class='form-control'></td></tr>";
-                echo "<tr><th>Na stanie</th><td><input type='text' name='protokol_na_stanie_glowna' value='$dane_sprzetu[jed_uzytkujaca]' class='form-control'></td></tr>";
+                echo "<tr><th>Na stanie</th><td><select name='protokol_na_stanie_glowna' class='form-control'>";
+                echo PobierzJednostkiNazwa($dane_sprzetu['jed_uzytkujaca']);
+                echo "</select></td></tr>";
                 echo "<tr><th colspan='2'><input type='hidden' name='ewidencyjny' value='$dane_sprzetu[nr_inwentarzowy]'><input type='hidden' name='id_lpp' value='$dane_sprzetu[lp]'><input type='submit' value='Zapisz protokół i przejdź do dodania składników' class='btn btn-primary form-control'></th></tr>";            }
         }
 
@@ -130,7 +143,23 @@ elseif ($a=='zapisz_protokol')
     $nr_prot_nowy = mysqli_insert_id($polaczenie);
 
     echo "<table class='table table-bordered'><form method='post' action='protokol_rozkompletowania.php?a=zapisz_skladniki_roz'>";
-    echo "<tr><th>Nazwa</th><td><input type='text' name='nazwa' class='form-control'></td></tr>";
+
+    if($_SESSION['skladnik_inveo_id']!=0)
+    {
+        $pobierz_skladnik_inveo = mysqli_query($polaczenie,"SELECT STS_OPIS FROM inveo_skladniki WHERE id = $_SESSION[skladnik_inveo_id]")
+            or die("Blad przy pobierz_skladnik_inveo: ".mysqli_error($polaczenie));
+        if(mysqli_num_rows($pobierz_skladnik_inveo)>0)
+        {
+            while ($dane_inveo = mysqli_fetch_array($pobierz_skladnik_inveo))
+            {
+                echo "<tr><th>Nazwa(Należy ręcznie przenieść nr seryjny)</th><td><input type='text' name='nazwa' value='$dane_inveo[STS_OPIS]' class='form-control'></td></tr>";
+            }
+        }
+    }
+    else
+    {
+        echo "<tr><th>Nazwa</th><td><input type='text' name='nazwa' class='form-control'></td></tr>";
+    }
     echo "<tr><th>Nr Seryjny</th><td><input type='text' name='seryjny' class='form-control'></td></tr>";
     echo "<tr><th>Jednostka miary</th><td><input type='text' name='jm' class='form-control'></td></tr>";
     echo "<tr><th>Wartosc</th><td><input type='text' name='wartosc' class='form-control'></td></tr>";
@@ -138,10 +167,8 @@ elseif ($a=='zapisz_protokol')
     echo PobierzJednostki("Wybierz jednostke");
     echo "</select></td><input type='hidden' name='id_protokolu' value='$nr_prot_nowy'></tr>";
     echo "<tr><td colspan='2'><input type='submit' value='Dodaj składnik do protokołu' class='btn btn-warning form-control'></td></tr>";
-
-
     echo "</form></table>";
-
+    unset($_SESSION['skladnik_inveo_id']);
 }
 elseif ($a=='zapisz_skladniki_roz')
 {
@@ -183,7 +210,7 @@ elseif ($a=='edycja')
 {
     echo NaglowekStrony("Protokół rozkompletowania","Edycja dokumentu","Edycja dokumentów");
     //var_dump($_POST);
-    $pobierz_dane_rozkompletowanie = mysqli_query($polaczenie,"SELECT nr_protokolu,id,data_protokolu,czlonek_komisji_1,czlonek_komisji_2,czlonek_komisji_3,nr_ewidencyjny,nazwa_srodka_trwalego  FROM rozkompletowanie WHERE id='$nrID'")
+    $pobierz_dane_rozkompletowanie = mysqli_query($polaczenie,"SELECT nr_protokolu,id,data_protokolu,czlonek_komisji_1,czlonek_komisji_2,czlonek_komisji_3,nr_ewidencyjny,nazwa_srodka_trwalego,jednostka_uzytkujaca_orginal  FROM rozkompletowanie WHERE id='$nrID'")
         or die("Blad przy pobierz_dane_rozkompletowanie".mysqli_error($polaczenie));
     while ($protokol_glowny = mysqli_fetch_array($pobierz_dane_rozkompletowanie))
     {
@@ -194,6 +221,7 @@ elseif ($a=='edycja')
         echo"<tr><td>Przewodniczący:</td><td><select name='czlonek_komisji_1' class='form-control'><option value='$protokol_glowny[czlonek_komisji_1]'>$protokol_glowny[czlonek_komisji_1]</option></select>";
         echo"<tr><td>Członek 1:</td><td><select name='czlonek_komisji_2' class='form-control'><option value='$protokol_glowny[czlonek_komisji_2]'>$protokol_glowny[czlonek_komisji_2]</option></select>";
         echo"<tr><td>Członek 2:</td><td><select name='czlonek_komisji_3' class='form-control'><option value='$protokol_glowny[czlonek_komisji_3]'>$protokol_glowny[czlonek_komisji_3]</option></select>";
+        echo"<tr><td>Na stanie:</td><td><select name='na_stanie' class='form-control'><option value='$protokol_glowny[jednostka_uzytkujaca_orginal]'>$protokol_glowny[jednostka_uzytkujaca_orginal]</option></select>";
         echo"<tr><td colspan='2'><input type='submit' value='Aktualizuj dane protokolu' class='btn btn-primary form-control'></td></tr>";
         echo"</form></table>";
         echo"<table class='table table-bordered'>";
